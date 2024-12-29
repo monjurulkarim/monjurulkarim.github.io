@@ -57,7 +57,7 @@
                         <a href="mailto:mmkarim@uw.edu">mmkarim@uw.edu</a>
                     </div>
 <!--                     <p class="lead mb-1">I am a Ph.D. student of Civil Engineering at the Stony Brook University working with <a href="https://sites.google.com/stonybrook.edu/rqin/home"> Dr. Ruwen Qin</a> and <a href="https://www.cs.stonybrook.edu/people/faculty/ZhaozhengYin">Dr. Zhaozheng Yin</a>.</p> -->
-                        <p class="lead mb-1">I am a Postdoctoral Scholar at University of Washington. I received my Ph.D. in Civil Engineering from Stony Brook University and M.S. in Systems Engineering from Missouri University of Science and Technology.</p>
+                        <p class="lead mb-1">I am a Postdoctoral Scholar at the Smart Transportation Applications and Research Lab <a href="http://www.uwstarlab.org/people.html"> (STAR Lab) </a> at the University of Washington in Seattle. I earned my Ph.D. in Civil Engineering from Stony Brook University and an M.S. in Systems Engineering from the Missouri University of Science and Technology.
                 
                     <p class="lead mb-5">
                      My research goal is to provide visual perception to the real world applications by achieving artificial intelligence. I am interested in solving large-scale visual recognition and prediction problems by developing novel deep learning approaches. My research experience includes but not limited to traffic accident anticipation, risk localization, object detection/segmentation, tracking, visual attention, and remote sensing.</p>
@@ -119,6 +119,31 @@
             <section class="resume-section" id="research">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Research Projects</h2>
+
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                      <div class="flex-grow-1">
+                          <h3 class="mb-0">Edge-AI Powered Real-Time Traffic Conflict Estimation at Urban Intersections</h3>
+                          <div class="subheading mb-3"></div>
+                          <!-- <video src="assets\img\Media1.mp4" alt="risk-localization" width=width="760" height="480"> -->
+                            <video width="760" height="480" controls autoplay loop muted>
+                              <source src="assets\img\Live_detection_UI.mp4" type="video/mp4">
+                                </video>
+                          <div class="subheading mb-3"></div>
+                          <p> <b>Abstract:</b> Traffic intersection safety is a growing concern in urbanizing areas with dense traffic and complex road-user interactions. Real-time conflict estimation is essential for reducing risks, yet existing cloud-based methods face challenges like high transmission costs, impractical data handling, and privacy issues due to centralized storage.
+
+                            To address these challenges, we propose an Edge-AI-based conflict estimation system for busy intersections. By processing data locally on edge devices, our approach reduces bandwidth usage, lowers reliance on expensive cloud infrastructure, minimizes centralized server loads, and enhances privacy by avoiding raw data storage.
+                            
+                            The system utilizes a roadside camera with an edge device running a lightweight, modified YOLOv8 model for real-time detection and the ByteTrack algorithm for object tracking. Camera calibration converts image coordinates into real-world coordinates, enabling the estimation of vehicle speed, heading, and future trajectory. Using this data, the system predicts potential conflicts by calculating speed, heading, distance, and time-to-collision (TTC) in real time, ensuring timely interventions with low latency.
+                            <a href='https://github.com/monjurulkarim/YOLOv8_Object_Tracking_TensorRT'><b> Project Link </b></a>
+                              <!-- <p> <h5> Project code will be uploaded very soon. </h5></p> -->
+<!--                                 <a href='https://github.com/monjurulkarim/DSTA'><b> Project Link </b></a> -->
+                          </p>
+                          <div class="subsubheading mb-0"><b> This resarch is supported by Leidos Inc.</b></div>
+                      </div>
+                      <!-- <div class="flex-shrink-0"><span class="text-primary">July 2010 - December 2011</span></div> -->
+                  </div>
+  <hr>
 
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                                 <div class="flex-grow-1">
@@ -262,7 +287,7 @@
                 <div class="resume-section-content">
                     <h2 class="mb-5">Publications</h2>
                     <div class="subheading mb-3">Journal Papers</div>
-                    <p> 1. <b>Karim, M.M. </b>, Qin, R., Wang, Y. (2024). Fusion-GRU: A Deep Learning Model for Future Bounding Box Prediction of Traffic Agents in Risky Driving Videos</i> Transportation Research Record </i>, <a href='https://journals.sagepub.com/doi/abs/10.1177/03611981241230540'> DOI </a></p>
+                    <p> 1. <b>Karim, M.M. </b>, Qin, R., Wang, Y. (2024). Fusion-GRU: A Deep Learning Model for Future Bounding Box Prediction of Traffic Agents in Risky Driving Videos,</i> Transportation Research Record </i>, <a href='https://journals.sagepub.com/doi/abs/10.1177/03611981241230540'> DOI </a></p>
                     <p> 2. <b>Karim, M.M. </b>, Qin, R., Yin, Z. (2023). An Attention-guided Multistream Feature Fusion Network for Localization of Risky Objects in Driving Videos, <i>IEEE Transaction on Intelligent Vehicles</i>, doi: 10.1109/TIV.2023.3275543. <a href='https://ieeexplore.ieee.org/abstract/document/10123114'> Preprint </a>| <a href='https://github.com/monjurulkarim/ROL_Dataset'> Code </a> </p>
                     <p> 3. <b>Karim, M.M. </b>,Li, Y., Qin, R., Yin, Z. (2022). A dynamic spatial-temporal attention network for early anticipation of traffic accidents. <i>IEEE Transaction on Intelligent Transportation Systems </i>vol. 23, no. 7, pp. 9590-9600. <a href="https://arxiv.org/abs/2106.10197"> Preprint </a>| <a href='https://github.com/monjurulkarim/DSTA'> Code </a> </p>
                     <p> 4. <b>Karim, M.M.</b>, Li, Y., Qin, R.(2022). Towards explainable artificial intelligence (XAI) for early anticipation of traffic accidents. <i>Transportation Research Record,</i> 2676(6), 743-755. <a href='https://arxiv.org/abs/2108.00273'> Preprint </a>| <a href='https://github.com/monjurulkarim/xai-accident'> Code </a> </p>

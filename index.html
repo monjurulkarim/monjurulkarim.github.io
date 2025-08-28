@@ -30,12 +30,13 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                     <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li> -->
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#research">Research</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#research">Research</a></li>                    
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#publications">Publications</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Teaching">Teaching</a></li>
                     <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li> -->
                     <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#talk">Invited Talk</a></li> -->
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#personal-project">Personal Projects</a></li>
                     <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://drive.google.com/file/d/1jcq1fAVDR_diUBetd99vsOKdnsZk8W2j/view" target="_blank">CV</a></li> -->
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#blog">blog</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
@@ -211,11 +212,11 @@
                             <div class="subheading mb-3"></div>
                             <p><b>Abstract:</b> Inspection  of  the  transportation  infrastructure,  such  as  bridges,  is  an  important  step  towards  the  preservation  andrehabilitation of the infrastructure for extending their service lives. The advancement of mobile robotic technology hasmade it possible to rapidly collect a large amount of inspection video data. Yet, the data are mainly images of complexscenes, wherein a bridge of various structural elements mix with a cluttered background. Assisting bridge inspectors inextracting structural elements of bridges from the big complex video data, and sorting them out by classes, will prepareinspectors for the element-wise inspection to determine the condition of bridges. This paper is motivated to developan assistive intelligence model for segmenting multiclass bridge elements from inspection videos captured by an aerialinspection platform. First, with a small initial training dataset labeled by inspectors, a Mask Region-based ConvolutionalNeural Network (Mask R-CNN) pre-trained on a large public dataset was transferred to the new task of multiclass bridgeelement segmentation. Then, the temporal coherence analysis attempts to recover false negative detections by thetransferred network. Finally, a semi-supervised self-training (S3T) algorithm was developed, which leverages inspectors’domain knowledge into the intelligence model by engaging them in refining the network iteratively.
     <div class="row">
-  <div class="column">
-    <img src="assets\img\bridge_inspect1.gif" alt="Snow" style="width:100%">
+  <div class="col-md-6">
+    <img src="assets\img\bridge_inspect1.gif" alt="Bridge Inspection Analysis 1" style="width:100%">
   </div>
-  <div class="column">
-    <img src="assets\img\bridge_inspect2.gif" alt="Forest" style="width:100%">
+  <div class="col-md-6">
+    <img src="assets\img\bridge_inspect2.gif" alt="Bridge Inspection Analysis 2" style="width:100%">
   </div>
                             </div>
 
@@ -501,6 +502,49 @@
             <hr class="m-0" />
 
 
+            <!-- Personal Project-->
+            <section class="resume-section" id="personal-project">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Personal Projects</h2>
+
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                      <div class="flex-grow-1">
+                          <h3 class="mb-0">CatchYourFerry – A Real-Time Ferry Alert System for the Puget Sound</h3>
+                          <div class="subheading mb-3"></div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <img src="assets\img\catchyourferry1.PNG" alt="CatchYourFerry Interface" style="width:100%">
+                            </div>
+                            <div class="col-md-6">
+                              <img src="assets\img\catchyourferry2.PNG" alt="CatchYourFerry Features" style="width:100%">
+                            </div>
+                          </div>
+                          <div class="subheading mb-3"></div>
+                          <p> <b>Description:</b> A full-stack web application that provides unlimited, real-time status updates and a waitlist for customizable email alerts for the Washington State Ferries system. The project was developed to solve a recurring community-wide problem by providing a faster and more user-centric way to access public WSDOT data.
+
+                          <p> <b>The Problem:</b> While living in the Puget Sound area, I observed the critical role the Washington State Ferries play in daily life and the significant community frustration surrounding service reliability. Through analyzing discussions in local online forums like r/Tacoma and r/Bremerton, I identified a clear need for a more accessible, user-friendly tool for accessing public WSDOT data. Users consistently expressed anxiety about wait times and ferry capacity, often having to "wait in line and hope for the best". This project was an exercise in applying my technical skills to solve a tangible, data-driven community problem.
+
+                          <p> <b>Tech Stack:</b> Backend: Python (Flask), PostgreSQL/SQLite | Frontend: HTML, CSS, Vanilla JavaScript | APIs: WSDOT API, Stripe API, Brevo API  
+                          <p> <b>Deployment:</b> Render, Supabase
+
+                          <p> <b>Key Features:</b>
+                          <ul>
+                            <li>Unlimited Status Checker: A free, fast, and mobile-friendly tool for checking real-time ferry departures, vessel status, and drive-up space availability</li>
+                            <li>Pro Feature Waitlist: A system to validate user demand for premium features</li>
+                            <li>Pro Features: Customizable, automated email alerts for user-selected routes based on triggers like low space availability or service delays</li>
+                            <li>User Authentication System: Secure login and account management for future Pro users</li>
+                          </ul>
+                          </p>
+                          <div class="subsubheading mb-0"><a href="https://catchyourferry.com" target="_blank"><b>Live Site: catchyourferry.com</b></a></div>
+                      </div>
+                      <!-- <div class="flex-shrink-0"><span class="text-primary">July 2010 - December 2011</span></div> -->
+                  </div>
+
+             <!-- End of Personal Projects-->                  
+
+
+
             <!-- Blog-->
             <section class="resume-section" id="blog">
                 <div class="resume-section-content">
@@ -579,9 +623,9 @@
 
             <!-- Other-->
             <section class="other-section" id="others">
-                <div class="sr-only", style="width:512px;height:224px>
+                <div class="sr-only" style="width:512px;height:224px">
                     <ul class="fa-ul mb-0">
-                    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=vd3ZRyx86nwX6pEXvK45MTWhDTJg0sx2mbg3BwhcQak&cl=ffffff&w=a",  width="512" height="224"></script>
+                    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=vd3ZRyx86nwX6pEXvK45MTWhDTJg0sx2mbg3BwhcQak&cl=ffffff&w=a"></script>
                     </ul>
                 </div>
             </section>

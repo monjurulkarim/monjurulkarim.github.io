@@ -16,6 +16,8 @@
 
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- Lightbox Gallery CSS -->
+        <link href="dist/css/lightboxgallery-min.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -40,9 +42,7 @@
                     <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="https://drive.google.com/file/d/1jcq1fAVDR_diUBetd99vsOKdnsZk8W2j/view" target="_blank">CV</a></li> -->
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#blog">blog</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="demo/gallery.html">Gallery</a></li>
-                    
-                    <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#gallery">Gallery</a></li> -->
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#gallery">Gallery</a></li>
                 </ul>
             </div>
         </nav>
@@ -177,7 +177,7 @@
                             <div class="subheading mb-3"></div>
                             <img src="assets\img\project3.PNG" alt="accident" width="512" height="640">
                             <div class="subheading mb-3"></div>
-                            <p> <b>Abstract:</b> The rapid advancement of sensor technologies and artificial intelligence are creating new opportunities for traffic safety enhancement. Dashboard cameras (dashcams) have been widely deployed on both human driving vehicles and automated driving vehicles. A computational intelligence model that can accurately and promptly predict accidents from the dashcam video will improve the preparedness for accident prevention. The spatial-temporal interaction of traffic agents is complex. Visual cues for predicting a future accident are embedded deeply in dashcam video data. Therefore, the early anticipation of traffic accidents remains a challenge. Inspired by the humans’ attention behavior in visually perceiving accident risks, this paper proposes a Dynamic Spatial-Temporal Attention (DSTA) network for the early accident anticipation from dashcam videos. The DSTA-network learns to select discriminative temporal segments of a video sequence with a Dynamic Temporal Attention (DTA) module. It also learns to focus on the informative spatial regions of frames with a Dynamic Spatial Attention (DSA) module. A Gated Recurrent Unit (GRU) network is trained jointly with the attention modules to predict the probability of a future accident.
+                            <p> <b>Abstract:</b> The rapid advancement of sensor technologies and artificial intelligence are creating new opportunities for traffic safety enhancement. Dashboard cameras (dashcams) have been widely deployed on both human driving vehicles and automated driving vehicles. A computational intelligence model that can accurately and promptly predict accidents from the dashcam video will improve the preparedness for accident prevention. The spatial-temporal interaction of traffic agents is complex. Visual cues for predicting a future accident are embedded deeply in dashcam video data. Therefore, the early anticipation of traffic accidents remains a challenge. Inspired by the humans' attention behavior in visually perceiving accident risks, this paper proposes a Dynamic Spatial-Temporal Attention (DSTA) network for the early accident anticipation from dashcam videos. The DSTA-network learns to select discriminative temporal segments of a video sequence with a Dynamic Temporal Attention (DTA) module. It also learns to focus on the informative spatial regions of frames with a Dynamic Spatial Attention (DSA) module. A Gated Recurrent Unit (GRU) network is trained jointly with the attention modules to predict the probability of a future accident.
 <!--                                 <p> <h5> Article of this project is under review. Project code will be uploaded after getting the paper acceptance decision. </h5></p> -->
 <!--                                 <a href='https://github.com/monjurulkarim/DSTA'><b> Project Link </b></a> -->
                             </p>
@@ -211,7 +211,7 @@
                             <div class="subheading mb-3"></div>
                             <img src="assets\img\fig_1_overview.png" alt="Overview" width="720" height="250">
                             <div class="subheading mb-3"></div>
-                            <p><b>Abstract:</b> Inspection  of  the  transportation  infrastructure,  such  as  bridges,  is  an  important  step  towards  the  preservation  andrehabilitation of the infrastructure for extending their service lives. The advancement of mobile robotic technology hasmade it possible to rapidly collect a large amount of inspection video data. Yet, the data are mainly images of complexscenes, wherein a bridge of various structural elements mix with a cluttered background. Assisting bridge inspectors inextracting structural elements of bridges from the big complex video data, and sorting them out by classes, will prepareinspectors for the element-wise inspection to determine the condition of bridges. This paper is motivated to developan assistive intelligence model for segmenting multiclass bridge elements from inspection videos captured by an aerialinspection platform. First, with a small initial training dataset labeled by inspectors, a Mask Region-based ConvolutionalNeural Network (Mask R-CNN) pre-trained on a large public dataset was transferred to the new task of multiclass bridgeelement segmentation. Then, the temporal coherence analysis attempts to recover false negative detections by thetransferred network. Finally, a semi-supervised self-training (S3T) algorithm was developed, which leverages inspectors’domain knowledge into the intelligence model by engaging them in refining the network iteratively.
+                            <p><b>Abstract:</b> Inspection  of  the  transportation  infrastructure,  such  as  bridges,  is  an  important  step  towards  the  preservation  andrehabilitation of the infrastructure for extending their service lives. The advancement of mobile robotic technology hasmade it possible to rapidly collect a large amount of inspection video data. Yet, the data are mainly images of complexscenes, wherein a bridge of various structural elements mix with a cluttered background. Assisting bridge inspectors inextracting structural elements of bridges from the big complex video data, and sorting them out by classes, will prepareinspectors for the element-wise inspection to determine the condition of bridges. This paper is motivated to developan assistive intelligence model for segmenting multiclass bridge elements from inspection videos captured by an aerialinspection platform. First, with a small initial training dataset labeled by inspectors, a Mask Region-based ConvolutionalNeural Network (Mask R-CNN) pre-trained on a large public dataset was transferred to the new task of multiclass bridgeelement segmentation. Then, the temporal coherence analysis attempts to recover false negative detections by thetransferred network. Finally, a semi-supervised self-training (S3T) algorithm was developed, which leverages inspectors'domain knowledge into the intelligence model by engaging them in refining the network iteratively.
     <div class="row">
   <div class="col-md-6">
     <img src="assets\img\bridge_inspect1.gif" alt="Bridge Inspection Analysis 1" style="width:100%">
@@ -302,8 +302,8 @@
                     <div class="subheading mb-3">Peer-Reviewed Conference Papers</div>
                     <p> 1. <b>Karim, M.M.</b>, Li, Y., Qin, R., Yin, Z. (2021). A system of vision sensor based deep neural networks for complex driving scene analysis in support of crashrisk assessment and prevention, <i>The 100th Transportation Research Board(TRB) Annual Meeting,</i> Virtual Meeting, January 5-29,2021. <a href='https://arxiv.org/abs/2106.10319'> Preprint </a> | <a href='https://github.com/monjurulkarim/vehicle_distance'> Code </a> </p>
                     <p> 2. <b>Karim, M.M.</b>, Dagli, CH. (2020). Sos meta-architecture selection for infrastructure inspection system using aerial drones. <i>In Proceeding of the 15th IEEE International Symposium on System of Systems Engineering (SoSE 2020).</i> Budapest, Hungary. June 2-4, 2020. <a href="https://ieeexplore.ieee.org/abstract/document/9130538"> DOI </a> </p>
-                    <p> 3. <b>Karim, M.M.</b>, Dagli, CH., & Qin, R. (2019). Modeling and simulation of a robotic bridge inspection system. <i>In Proceedings of the 2019 Complex Adaptive Systems Conference (CAS’19).</i> Malvern, PA. November 13-15, 2019.<a href="https://www.sciencedirect.com/science/article/pii/S1877050920304154"> DOI </a> </p>
-                    <p> 4. <b>Karim, M.M.</b>, Doell, D., Lingard, R., Yin, Z., Leu, MC., & Qin, R. (2019). A region-based deep learning algorithm for detecting and tracking objects in manufacturing plants. <i>In Proceedings of the 25th International Conference on Production Research (ICPR’19).</i> Chicago, IL. August 9-14, 2019.<a href="https://www.sciencedirect.com/science/article/pii/S235197892030353X"> DOI </a> | <a href='https://github.com/monjurulkarim/Tracking_manufacturing'> Code </a> </p>
+                    <p> 3. <b>Karim, M.M.</b>, Dagli, CH., & Qin, R. (2019). Modeling and simulation of a robotic bridge inspection system. <i>In Proceedings of the 2019 Complex Adaptive Systems Conference (CAS'19).</i> Malvern, PA. November 13-15, 2019.<a href="https://www.sciencedirect.com/science/article/pii/S1877050920304154"> DOI </a> </p>
+                    <p> 4. <b>Karim, M.M.</b>, Doell, D., Lingard, R., Yin, Z., Leu, MC., & Qin, R. (2019). A region-based deep learning algorithm for detecting and tracking objects in manufacturing plants. <i>In Proceedings of the 25th International Conference on Production Research (ICPR'19).</i> Chicago, IL. August 9-14, 2019.<a href="https://www.sciencedirect.com/science/article/pii/S235197892030353X"> DOI </a> | <a href='https://github.com/monjurulkarim/Tracking_manufacturing'> Code </a> </p>
                     <!-- <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technology advancements in the front-end web development world.</p> -->
                     <div class="subheading mb-3">Technical Reports</div>
                     <p> 1. Qin, R.,  Chen, G., Long, S.K., Yin, Z., Louis, S. <b> Karim, M.M. </b>, Zhao, T., (2020). A training framework of robotic operation and image analysis for decision-making in bridge inspection and preservation (Technical Report INSPIRE-006). USDOT INSPIRE University Transportation Center. <a href="https://inspire-utc.mst.edu/researchprojects/wd-1/"> Website </a> </p>
@@ -524,7 +524,7 @@
                           <div class="subheading mb-3"></div>
                           <p> <b>Description:</b> A full-stack web application that provides unlimited, real-time status updates and a waitlist for customizable email alerts for the Washington State Ferries system. The project was developed to solve a recurring community-wide problem by providing a faster and more user-centric way to access public WSDOT data.
 
-                          <p> <b>The Problem:</b> While living in the Puget Sound area, I observed the critical role the Washington State Ferries play in daily life and the significant community frustration surrounding service reliability. Through analyzing discussions in local online forums like r/Tacoma and r/Bremerton, I identified a clear need for a more accessible, user-friendly tool for accessing public WSDOT data. Users consistently expressed anxiety about wait times and ferry capacity, often having to "wait in line and hope for the best". This project was an exercise in applying my technical skills to solve a tangible, data-driven community problem.
+                          <p> <b>The Problem:</b> While living in the Puget Sound area, I observed the critical role that Washington State Ferries play in daily life and the significant community frustration surrounding service reliability. Through analyzing discussions in local online forums like r/Tacoma and r/Bremerton, I identified a clear need for a more accessible, user-friendly tool for accessing public WSDOT data. Users consistently expressed anxiety about wait times and ferry capacity, often having to "wait in line and hope for the best". This project was an exercise in applying my technical skills to solve a tangible, data-driven community problem.
 
                           <p> <b>Tech Stack:</b> Backend: Python (Flask), PostgreSQL/SQLite | Frontend: HTML, CSS, Vanilla JavaScript | APIs: WSDOT API, Stripe API, Brevo API  
                           <p> <b>Deployment:</b> Render, Supabase
@@ -546,6 +546,190 @@
 
 
 
+            <!-- Gallery Section -->
+            <section class="resume-section" id="gallery">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Gallery</h2>
+                    <div class="lightboxgallery-gallery clearfix">
+                        
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/FoT- Aug 24.jpg" data-title="USDOT Future of Transportation Summit - August 2024" data-alt="USDOT FoT Summit" data-desc="Honored to be invited to the USDOT Future of Transportation Summit at Washington D.C. to showcase our STAR Lab's MUST Sensor. Excited by the interest it received!">
+                            <div>
+                                <img src="demo/img/FoT- Aug 24.jpg" title="USDOT FoT Summit" alt="USDOT FoT Summit">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">USDOT Future of Transportation Summit - August 2024</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/AI in motion1.jpg" data-title="AI in Motion Symposium hosted by TxDOT - May 2024" data-alt="AI in Motion Symposium" data-desc="Delighted to be invited to present my AI research in transportation at TxDOT's 'AI in Motion: Shaping the Future of Mobility & Safety' Symposium, inspiring professionals to explore AI-driven solutions.">
+                            <div>
+                                <img src="demo/img/AI in motion1.jpg" title="AI in Motion Symposium" alt="AI in Motion Symposium">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">AI in Motion Symposium hosted by TxDOT - May 2024</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/AI in motion2.jpg" data-title="AI in Motion Symposium hosted by TxDOT - May 2024" data-alt="AI in Motion Symposium" data-desc="Delighted to be invited to present my AI research in transportation at TxDOT's 'AI in Motion: Shaping the Future of Mobility & Safety' Symposium, inspiring professionals to explore AI-driven solutions.">
+                            <div>
+                                <img src="demo/img/AI in motion2.jpg" title="AI in Motion Symposium" alt="AI in Motion Symposium">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">AI in Motion Symposium hosted by TxDOT - May 2024</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/UW_senator.jpeg" data-title="ARPA-I Listening tour-- September 2023" data-alt="PhD Graduation Party" data-desc="Behind the scenes with Robert Hampshire, Deputy Assistant Secretary for US DOT Research and Technology, post ARPA-I Listening tour at the University of Washington.">
+                            <div>
+                                <img src="demo/img/UW_senator.jpeg" title="PhD Graduation Party" alt="PhD Graduation Party">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">ARPA-I Listening tour- September 2023</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/Grad_party.jpg" data-title="PhD Graduation Party- June 2023" data-alt="PhD Graduation Party" data-desc="A snapshot from my PhD Graduation Party at my advisors house.">
+                            <div>
+                                <img src="demo/img/Grad_party.jpg" title="PhD Graduation Party" alt="PhD Graduation Party">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">PhD Graduation Party- June 2023</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/Phd_grad_nishu.jpg" data-title="PhD Graduation Ceremony- May 2023" data-alt="PhD Graduation Ceremony" data-desc="A snapshot from my PhD Graduation Ceremony.">
+                            <div>
+                                <img src="demo/img/Phd_grad_nishu.jpg" title="PhD Graduation Ceremony" alt="PhD Graduation Ceremony">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">PhD Graduation Ceremony- May 2023</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/hooding.png" data-title="Doctoral Hooding Ceremony- May 2023" data-alt="Doctoral Hooding Ceremony" data-desc="Proud moment after receiving my doctoral hood. Grateful for the journey.">
+                            <div>
+                                <img src="demo/img/hooding.png" title="Doctoral Hooding Ceremony" alt="Doctoral Hooding Ceremony">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Doctoral Hooding Ceremony- May 2023</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/dinner.jpg" data-title="Dinner with advisors - November 2022" data-alt="Dinner with advisors" data-desc="In the company of our beloved mentor and their family - a beautiful reminder of the impact of kindness, guidance, and support on our academic and personal journeys.">
+                            <div>
+                                <img src="demo/img/dinner.jpg" title="Dinner with advisors" alt="Dinner with advisors">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Dinner with advisors - November 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/award_2.jpg" data-title="Research Merit Award 2022 - March 2022" data-alt="Research Merit Award 2022" data-desc="Receiving 2022 CIV Research Merit Award for exceptional research performance and contributions from the Graduate Director of Civil Engineering Department.">
+                            <div>
+                                <img src="demo/img/award_2.jpg" title="Research Merit Award 2022" alt="Research Merit Award 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Research Merit Award 2022 - March 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/award_1.jpg" data-title="Research Merit Award 2022 - March 2022" data-alt="Research Merit Award 2022" data-desc="Proud moment after receiving 2022 CIV Research Merit Award for exceptional research performance and contributions.">
+                            <div>
+                                <img src="demo/img/award_1.jpg" title="Research Merit Award 2022" alt="Research Merit Award 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Research Merit Award 2022 - March 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/award_3.jpg" data-title="Research Merit Award 2022 - March 2022" data-alt="Research Merit Award 2022" data-desc="Proud moment on the stage with two of my fellow award winners after receiving 2022 CIV Research Merit Award for exceptional research performance and contributions.">
+                            <div>
+                                <img src="demo/img/award_3.jpg" title="Research Merit Award 2022" alt="Research Merit Award 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Research Merit Award 2022 - March 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/teaching_civ355_2.jpg" data-title="Teaching CIV 355 - March 2022" data-alt="Teaching CIV 355" data-desc="Teaching CIV 355 as a guest lecturer.">
+                            <div>
+                                <img src="demo/img/teaching_civ355_2.jpg" title="Teaching CIV 355" alt="Teaching CIV 355">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Teaching CIV 355 - March 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/trb_1.jpeg" data-title="TRB 2022 - January 2022" data-alt="TRB 2022" data-desc="Glad to attend the Transportation Research Board (TRB) 2022 Annual Meeting in person. Met so many transportation professionals and industry experts.">
+                            <div>
+                                <img src="demo/img/trb_1.jpeg" title="TRB 2022" alt="TRB 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">TRB 2022 - January 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/trb_2.jpeg" data-title="TRB 2022 - January 2022" data-alt="TRB 2022" data-desc="Explaining my poster to the audiences.">
+                            <div>
+                                <img src="demo/img/trb_2.jpeg" title="TRB 2022" alt="TRB 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">TRB 2022 - January 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/trb_5.jpeg" data-title="TRB 2022 - January 2022" data-alt="TRB 2022" data-desc="In front of the poster that I presented at TRB 2022 Annual Meeting to explain my paper on Explainable AI in Accident anticipation.">
+                            <div>
+                                <img src="demo/img/trb_5.jpeg" title="TRB 2022" alt="TRB 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">TRB 2022 - January 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/trb_6.jpeg" data-title="TRB 2022 - January 2022" data-alt="TRB 2022" data-desc="With my advisor Dr. Ruwen Qin in front of our poster">
+                            <div>
+                                <img src="demo/img/trb_6.jpeg" title="TRB 2022" alt="TRB 2022">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">TRB 2022 - January 2022</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/openhouse2021.jpg" data-title="Openhouse 2021" data-alt="Openhouse 2021" data-desc="Showcasing my research to undergraduate Civil Engineering students at Stony Brook University">
+                            <div>
+                                <img src="demo/img/openhouse2021.jpg" title="openhouse 2021" alt="openhouse 2021">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">openhouse 2021</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/capture2.jpg" data-title="October 2021" data-alt="-" data-desc="Teaching a class for the course CIV 555.">
+                            <div>
+                                <img src="demo/img/capture2.jpg" title="Fall 2021" alt="Fall 2021">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">Taking class - October 2021</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="lightboxgallery-gallery-item" target="_blank" href="demo/img/black.jpg" data-title="April 2020" data-alt="" data-desc="Photosession after conducting a workshop for a Pre-College Initiative (PCI) program organized by National Society of Black Engineers (NSBE) to demonstrate the driving simulator based research activities">
+                            <div>
+                                <img src="demo/img/black.jpg" title="2020" alt="">
+                                <div class="lightboxgallery-gallery-item-content">
+                                    <span class="lightboxgallery-gallery-item-title">PCI program 2020</span>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+
+
+
             <!-- Blog-->
             <section class="resume-section" id="blog">
                 <div class="resume-section-content">
@@ -555,11 +739,11 @@
                         <li>
                      <div class="leftcolumn">
                           <div class="card">
-                            <h3><a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank">I Built a self-hosted AI Meeting Note Taker That Runs 100% Offline — Here’s How You Can Too </a></h3>
+                            <h3><a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank">I Built a self-hosted AI Meeting Note Taker That Runs 100% Offline — Here's How You Can Too </a></h3>
                             <!-- <h5>A step-by-step guide to developing explainable AI to classify surface crack images with Pytorch. This is part 1 of 2 part series.</h5> -->
                             <p>By <a href="https://medium.com/@raju.monjurulkarim" target="_blank">Muhammad Monjurul Karim </a></p>
                             <img src="assets\img\ai-note.PNG" alt="ai-note-taker" width="512" height="250">
-                            <p> Let’s build a private, unlimited, and self-hosted AI-note taker with Python, Whisper, and Ollama..</p>
+                            <p> Let's build a private, unlimited, and self-hosted AI-note taker with Python, Whisper, and Ollama..</p>
                             <p><a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank">See more ... </a></p>
                           </div>
                         </div>
@@ -636,6 +820,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Third party plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Lightbox Gallery JS -->
+        <script src="dist/js/lightboxgallery-min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
 
@@ -677,8 +863,18 @@
                 console.error("Network error:", error);
             });
         });
-    </script>
-        </script>
 
+        <!-- Lightbox Gallery Initialization -->
+        jQuery(function($) {
+            $(document).on('click', '.lightboxgallery-gallery-item', function(event) {
+                event.preventDefault();
+                $(this).lightboxgallery({
+                    showCounter: true,
+                    showTitle: true,
+                    showDescription: true
+                });
+            });
+        });
+        </script>
     </body>
 </html>

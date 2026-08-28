@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>PrivateRedact — PII Redaction Software, 100% Offline — Muhammad Karim</title>
+    <meta name="description" content="PrivateRedact is offline PII redaction software. Redact PII from PDF, DOCX, and images with a local LLM — no cloud, no upload. Free trial, one-time license." />
+    <link rel="canonical" href="https://mkarim.us/apps/privateredact.html" />
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <!-- Bootstrap core CSS (matches site theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root { --primary: #bd5d38; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Muli, Roboto, "Helvetica Neue", Arial, sans-serif; color: #212529; }
+        h1, h2, h3, .navbar-brand { font-family: "Saira Extra Condensed", -apple-system, "Segoe UI", sans-serif; font-weight: 700; text-transform: uppercase; }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.2rem; }
+        .text-brand { color: var(--primary); }
+        .btn-brand { background-color: var(--primary); border-color: var(--primary); color: #fff; }
+        .btn-brand:hover { background-color: #a04e2e; border-color: #a04e2e; color: #fff; }
+        .hero { padding: 4.5rem 0 3rem; background: #f8f9fa; border-bottom: 1px solid #e9ecef; }
+        .section-pad { padding: 3.5rem 0; }
+        .step-num { display: inline-block; width: 2.2rem; height: 2.2rem; line-height: 2.2rem; text-align: center; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; margin-bottom: 0.75rem; }
+        .card { border: 1px solid #e9ecef; }
+        .feature-list li { margin-bottom: 0.5rem; }
+        .faq dt { font-weight: 700; margin-top: 1.25rem; }
+        .offline-box { background: #212529; color: #f8f9fa; border-radius: 0.5rem; padding: 2rem; }
+        .offline-box .check { color: #28a745; font-weight: 700; }
+        footer { background: #212529; color: #adb5bd; padding: 2.5rem 0; font-size: 0.95rem; }
+        footer a { color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://mkarim.us/">Muhammad Karim</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#offline">Why Offline</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/monjurulkarim/privateredact" target="_blank" rel="noopener">GitHub</a></li>
+                    <li class="nav-item"><a class="btn btn-brand ml-lg-2 my-1" href="https://monjurulkarim.gumroad.com/l/wqnyp" target="_blank" rel="noopener">Get a License</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="mb-2">Private<span class="text-brand">Redact</span></h1>
+                    <p class="lead font-weight-bold">Redact PII from documents — 100% offline, local LLM, no cloud.</p>
+                    <p class="mb-4">Offline PII redaction software for PDF, DOCX, images, and text. A hybrid regex + local LLM finds names, SSNs, diagnoses, and card numbers. You review every redaction. The exported file cannot be un-redacted. Nothing ever leaves your machine.</p>
+                    <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/wqnyp" target="_blank" rel="noopener">Buy a License — One-Time</a>
+                    <a class="btn btn-outline-dark btn-lg mb-2" href="https://github.com/monjurulkarim/privateredact/releases" target="_blank" rel="noopener">Free Trial Download</a>
+                    <p class="small text-muted mt-3 mb-0">Free to load, detect, and review. Export requires a one-time license. No subscription.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="offline-box">
+                        <h3 class="text-white mb-3" style="font-size:1.3rem;">The privacy model</h3>
+                        <p class="mb-1"><span class="check">✓</span> Your document never touches a server</p>
+                        <p class="mb-1"><span class="check">✓</span> The LLM runs locally (Ollama, one-click setup)</p>
+                        <p class="mb-1"><span class="check">✓</span> No account, no telemetry, no upload</p>
+                        <p class="mb-1"><span class="check">✓</span> Metadata and EXIF stripped on export</p>
+                        <p class="mb-0"><span class="check">✓</span> Post-export leak scan proves it</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What it does / who it's for -->
+    <section class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">What it does — and who it is for</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>PrivateRedact redacts personally identifiable information from documents automatically. Regex rules catch structured PII: SSNs, card numbers, IBANs, dates of birth. A local LLM catches the semantic PII that regex misses: names, addresses, diagnoses, codenames. It redacts only the value — <code>555-1234</code>, not the label <code>Phone:</code>, and never the whole line.</p>
+                    <p>Exports are real. PDF pages are rasterized and rebuilt, so there is no recoverable text layer underneath the black boxes. DOCX redaction edits the file in place and keeps Word formatting. A post-export leak scan re-OCRs the output and tells you exactly what survived.</p>
+                </div>
+                <div class="col-lg-6">
+                    <p><strong>Built for people who handle other people's data:</strong></p>
+                    <ul class="feature-list">
+                        <li>Law firms and paralegals preparing discovery or FOIA releases</li>
+                        <li>Healthcare and HR staff working under HIPAA / GDPR constraints</li>
+                        <li>Researchers sharing documents with PII scrubbed before publication</li>
+                        <li>Consultants and agencies that cannot put client files in a cloud tool</li>
+                        <li>Anyone redacting PII from a PDF before sending it to an LLM or a third party</li>
+                    </ul>
+                    <p class="mb-0">Compliance presets are included: HIPAA, PCI DSS, GDPR, HR, Employment, Legal, Financial, Vendor, and Names-Only.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">How it works — three steps</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">1</span>
+                    <h3 style="font-size:1.4rem;">Load</h3>
+                    <p>Drop in a text PDF, scanned/image PDF (OCR included), DOCX, TXT, or image. Password-protected PDFs are supported. The file is parsed on your machine — nothing is uploaded.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">2</span>
+                    <h3 style="font-size:1.4rem;">Detect &amp; review</h3>
+                    <p>The hybrid engine (regex + local LLM) marks PII in value-only spans with proportional boxes. You approve, edit, or reject every redaction before anything is finalized. You stay in control.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">3</span>
+                    <h3 style="font-size:1.4rem;">Export &amp; verify</h3>
+                    <p>Export a rasterized PDF (no recoverable text layer) or a format-preserving DOCX. Metadata is stripped by default. The post-export leak scan re-reads the output and reports what — if anything — survived.</p>
+                </div>
+            </div>
+            <p class="mb-0">See the full walkthrough (load → detect → review → export → leak scan): <a href="https://youtu.be/XtSbOfy0b18" target="_blank" rel="noopener">demo video on YouTube</a>.</p>
+        </div>
+    </section>
+
+    <!-- Why offline -->
+    <section id="offline" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Why 100% offline matters</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Cloud redaction defeats itself</h3>
+                    <p>Most "secure redaction" tools are web apps. To redact a private document, you first upload the exact document you are trying to protect — to a server you do not control, under policies you cannot audit. For law firms, clinics, HR departments, and agencies, that alone can violate a confidentiality obligation.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Naive desktop tools fail the other way</h3>
+                    <p>Many free PDF tools black out the <em>rendering</em>, not the text. The characters underneath the black rectangle stay selectable, copyable, and removable. That is how "redacted" government PDFs leak. PrivateRedact rebuilds the page as an image-level export, so there is nothing underneath to recover.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">The LLM is local, not a cloud API</h3>
+                    <p>PrivateRedact uses a local model (via Ollama, offered as a click-gated one-click install on first run) for semantic PII detection. You get LLM-grade recall for names, diagnoses, and addresses — with the network cable effectively unplugged. Regex-only mode also works without any model.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Trust is verified, not promised</h3>
+                    <p>After export, the app re-OCRs the output file and reports exactly what (if anything) survived. It never claims "clean" on a failed scan. Metadata — PDF Info/XMP, DOCX properties, image EXIF — is stripped by default.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">Features</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>Reads anything</strong> — text PDFs, scanned/image PDFs (Tesseract OCR), DOCX, TXT, images</li>
+                        <li><strong>Hybrid detection</strong> — regex for SSN, cards, IBAN, DOB + local LLM for semantic PII</li>
+                        <li><strong>Value-only spans</strong> — redacts the value, not the label or the whole line</li>
+                        <li><strong>Secure rasterized PDF export</strong> — no recoverable text layer underneath</li>
+                        <li><strong>Format-preserving DOCX</strong> — edits OOXML in place, Word formatting kept</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>Post-export leak scan</strong> — re-OCRs output and reports survivors</li>
+                        <li><strong>Metadata stripping</strong> — PDF Info/XMP, DOCX props, image EXIF (default on)</li>
+                        <li><strong>Compliance presets</strong> — HIPAA, PCI DSS, GDPR, HR, Legal, Financial, and more</li>
+                        <li><strong>Encrypted PDF I/O</strong> — password-protected input and optional encrypted output</li>
+                        <li><strong>Signed + notarized macOS build</strong> — no Gatekeeper warnings</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="small text-muted mb-0">Platforms: macOS (Apple Silicon) and Windows (x64). ~8 GB RAM minimum — the app picks the model size automatically. Intel Macs and Linux are on the roadmap.</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Frequently asked questions</h2>
+            <dl class="mb-0">
+                <dt>How do I redact a PDF without Adobe Pro?</dt>
+                <dd>Load the PDF into PrivateRedact, let the hybrid engine mark PII, review the proposed redactions, and export. You get a rasterized PDF with the sensitive values permanently removed — no Adobe subscription needed. This is the main reason most buyers choose it over Acrobat's redaction workflow.</dd>
+
+                <dt>Is my document uploaded anywhere?</dt>
+                <dd>No. PrivateRedact is 100% offline. Detection, OCR, the local LLM, and export all run on your machine. There is no account and no upload step. You can verify with your firewall or by going offline entirely — the app still works.</dd>
+
+                <dt>Can a redacted PDF made with PrivateRedact be un-redacted?</dt>
+                <dd>No. Export rasterizes each page and rebuilds the PDF, so the text layer underneath the black boxes no longer exists. There is nothing to select, copy, or peel back. The post-export leak scan re-checks the file and reports anything that survived.</dd>
+
+                <dt>What makes it different from other PII redaction software?</dt>
+                <dd>Three things. First, detection runs fully offline — a local LLM, not a cloud API, so the document never leaves your machine. Second, it redacts value-only spans instead of whole lines, so the document stays readable. Third, every export is verified with an automatic leak scan instead of a "trust me" claim.</dd>
+
+                <dt>Does it work on scanned documents and images?</dt>
+                <dd>Yes. Scanned and image-based PDFs go through built-in OCR (Tesseract), with an optional vision-model double-check on low-quality scans. JPG/PNG images, DOCX, and plain text files are also supported.</dd>
+
+                <dt>Which PII types does it catch?</dt>
+                <dd>Structured formats by regex: SSNs, payment card numbers, IBANs, dates of birth. Semantic PII by local LLM: names, addresses, diagnoses, codenames, and similar context-dependent identifiers. Compliance presets (HIPAA, PCI DSS, GDPR, HR, Legal, Financial, Vendor, Names-Only) tune the detection scope per use case.</dd>
+
+                <dt>What platforms are supported?</dt>
+                <dd>macOS on Apple Silicon (signed and notarized) and Windows x64. You need about 8 GB RAM; the app selects the model size automatically. Intel Mac and Linux builds are planned.</dd>
+
+                <dt>How much does it cost?</dt>
+                <dd>The trial is free: load, detect, and review real documents at no cost. Exporting requires a one-time license from Gumroad — pay once, use forever, no subscription.</dd>
+
+                <dt>Does it remove metadata?</dt>
+                <dd>Yes. PDF Info and XMP, DOCX core/app properties, and image EXIF are stripped by default on export. This is a common way "redacted" files still leak author names and paths.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section-pad bg-light">
+        <div class="container text-center">
+            <h2 class="mb-3">Redact your first document today</h2>
+            <p class="lead mb-4">Download free, run your real documents through detection and review, and buy a one-time license only when you are ready to export.</p>
+            <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/wqnyp" target="_blank" rel="noopener">Get a License on Gumroad</a>
+            <a class="btn btn-outline-dark btn-lg mb-2" href="https://github.com/monjurulkarim/privateredact/releases" target="_blank" rel="noopener">Free Trial Download</a>
+        </div>
+    </section>
+
+    <!-- FAQ structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "How do I redact a PDF without Adobe Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Load the PDF into PrivateRedact, review the proposed redactions from its hybrid regex + local LLM engine, and export. The output is a rasterized PDF with sensitive values permanently removed — no Adobe subscription needed."}},
+        {"@type": "Question", "name": "Is my document uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. PrivateRedact is 100% offline. Detection, OCR, the local LLM, and export all run on your machine. There is no account and no upload step."}},
+        {"@type": "Question", "name": "Can a redacted PDF made with PrivateRedact be un-redacted?", "acceptedAnswer": {"@type": "Answer", "text": "No. Export rasterizes each page and rebuilds the PDF, so no text layer exists underneath the redaction boxes. A post-export leak scan re-checks the file and reports anything that survived."}},
+        {"@type": "Question", "name": "What makes it different from other PII redaction software?", "acceptedAnswer": {"@type": "Answer", "text": "Detection runs fully offline with a local LLM, redaction is value-only instead of whole-line, and every export is verified with an automatic post-export leak scan."}},
+        {"@type": "Question", "name": "Does it work on scanned documents and images?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Scanned and image-based PDFs are handled by built-in OCR (Tesseract), with an optional vision-model double-check on low-quality scans. Images, DOCX, and TXT are also supported."}},
+        {"@type": "Question", "name": "Which PII types does it catch?", "acceptedAnswer": {"@type": "Answer", "text": "Regex catches SSNs, card numbers, IBANs, and dates of birth. A local LLM catches semantic PII such as names, addresses, and diagnoses. Compliance presets include HIPAA, PCI DSS, GDPR, HR, Legal, Financial, Vendor, and Names-Only."}},
+        {"@type": "Question", "name": "What platforms are supported?", "acceptedAnswer": {"@type": "Answer", "text": "macOS on Apple Silicon (signed and notarized) and Windows x64. About 8 GB RAM minimum. Intel Mac and Linux builds are planned."}},
+        {"@type": "Question", "name": "How much does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "The trial is free to load, detect, and review. Exporting requires a one-time Gumroad license — no subscription."}},
+        {"@type": "Question", "name": "Does it remove metadata?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. PDF Info and XMP, DOCX core/app properties, and image EXIF are stripped by default on export."}}
+      ]
+    }
+    </script>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Muhammad Monjurul Karim</h3>
+                    <p class="mb-0">Postdoctoral Scholar, STAR Lab, University of Washington. Traffic safety, computer vision, edge AI. I build privacy-first, offline AI tools.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Product</h3>
+                    <p class="mb-1"><a href="https://github.com/monjurulkarim/privateredact" target="_blank" rel="noopener">GitHub repository</a></p>
+                    <p class="mb-1"><a href="https://github.com/monjurulkarim/privateredact/releases" target="_blank" rel="noopener">Free trial download</a></p>
+                    <p class="mb-0"><a href="https://monjurulkarim.gumroad.com/l/wqnyp" target="_blank" rel="noopener">License on Gumroad</a></p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Site</h3>
+                    <p class="mb-1"><a href="https://mkarim.us/">Home</a></p>
+                    <p class="mb-1"><a href="https://monjurulkarim.gumroad.com/" target="_blank" rel="noopener">All products on Gumroad</a></p>
+                    <p class="mb-0"><a href="mailto:mmkarim@uw.edu">mmkarim@uw.edu</a></p>
+                </div>
+            </div>
+            <hr style="border-color:#495057;" />
+            <p class="mb-0 small">© 2026 Muhammad Monjurul Karim. PrivateRedact — offline PII redaction software.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

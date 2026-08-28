@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How to Redact a PDF Without Adobe Pro — Muhammad Karim</title>
+    <meta name="description" content="Redact a PDF without Adobe Pro: Preview markup limits, online tool risks, and a 100% offline workflow that finds PII and can't be un-redacted." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 28, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Redact a PDF Without Adobe Pro</h1>
+
+        <p>You need to redact a PDF, and you don't own Adobe Acrobat Pro. So: how to redact a PDF without Adobe Pro? You have four real options: macOS Preview markup, free online tools, paid desktop software, and offline tools with built-in PII detection. Each works. Each fails in a specific way. This post shows where the failure lines are, so you can pick based on how sensitive the document is.</p>
+
+        <p>I build document-privacy tooling (<a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>), so I'll be blunt about what my own tool does and doesn't fix. But first, the free options &mdash; because for many jobs, they're fine.</p>
+
+        <h2>Why most redaction fails silently</h2>
+
+        <p>Redaction is not drawing a black box. A PDF stores text as a text layer under the visual page. Cover the text with a black rectangle and the words are still in the file. Anyone can select-all, copy, and paste your &ldquo;redacted&rdquo; text into a new document.</p>
+
+        <pre><code># On a badly "redacted" PDF, the secret never left the file:
+pdftotext redacted.pdf - | grep -i ssn
+# 512-55-9821</code></pre>
+
+        <p>This is the most common redaction failure. It has shipped in court filings, government releases, and at least one well-known congressional report. Adobe's own documentation is explicit: proper redaction removes the content, then you apply the mark. Their <a href="https://helpx.adobe.com/acrobat/using/removing-sensitive-content-pdfs.html" target="_blank" rel="noopener">redaction guide</a> covers it &mdash; but it requires Acrobat Pro.</p>
+
+        <p>So the question &ldquo;how do I do this without Adobe Pro&rdquo; becomes: which tool actually <em>removes</em> content, and which just paints over it?</p>
+
+        <h2>Option 1: macOS Preview markup &mdash; free, on every Mac</h2>
+
+        <p>Preview's markup tool draws opaque shapes over text. For a PDF exported as an image (a flat raster), this is a genuine redaction &mdash; there is no text layer under the box, so nothing can be extracted.</p>
+
+        <p>For a normal text PDF, it is not a redaction. It's a cover-up:</p>
+
+        <ol>
+            <li>Open the PDF in Preview.</li>
+            <li>Show the Markup toolbar (Shift+Cmd+A).</li>
+            <li>Draw a filled rectangle over each sensitive item.</li>
+        </ol>
+
+        <p>The limitation: on many PDFs, the black box is an annotation or overlay object. The text underneath is untouched. Someone can open the file in Acrobat or a PDF editor, delete the rectangle, and read the original text. This has leaked real documents more than once. If you use Preview markup on a text PDF, the safe move is to print to PDF first (File &rarr; Print &rarr; PDF &rarr; Save as PDF), which flattens the page to an image, then mark up that flattened copy.</p>
+
+        <p>Preview also has no search-based redaction. You find every name, phone number, and account number by eye. On a 40-page document, you will miss one.</p>
+
+        <h2>Option 2: Free online redaction tools (free, but read this)</h2>
+
+        <p>Sites like Smallpdf, iLovePDF, Sejda, and PDFescape let you drag a PDF into a browser and black out regions. The tools are convenient and mostly do remove text properly.</p>
+
+        <p>The problem is upstream of the redaction: you upload the document to someone else's server. If the PDF contains patient data, client records, or HR files, you have just transmitted it to a third party to avoid buying a $20 tool. For regulated data (HIPAA, GDPR, client confidentiality), that upload can itself be the disclosure event. &ldquo;We deleted it after processing&rdquo; is a promise, not a control.</p>
+
+        <p>My rule: online tools are fine for documents you'd also be comfortable emailing to a stranger. If you wouldn't, don't upload it.</p>
+
+        <h2>Option 3: Paid desktop tools (Adobe Pro alternatives)</h2>
+
+        <p>If you redact daily and need bates numbering, court-compliant workflows, or team licensing: dedicated products like CaseGuard, Redactable, or PDF Redactor do the job. Adobe's own comparison shows what Pro-tier redaction includes. Expect $10&ndash;50/month per seat. Good tools, real cost &mdash; priced for teams that redact all day, not for a researcher sending a report twice a month.</p>
+
+        <h2>Option 4: PrivateRedact &mdash; offline redaction that finds the PII for you</h2>
+
+        <p>For the privacy-sensitive case, I built <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> around three requirements: nothing leaves the machine, nothing findable survives export, and the tool &mdash; not my eyeballs &mdash; finds the sensitive items.</p>
+
+        <ul>
+            <li><strong>100% offline.</strong> The redaction engine runs locally on your Mac (Apple Silicon) or Windows PC. No upload, ever.</li>
+            <li><strong>A local LLM finds semantic PII.</strong> Regex catches structured data &mdash; SSNs, card numbers, IBANs, dates of birth. Names, addresses, and diagnoses don't follow patterns. PrivateRedact runs a local LLM over the document to catch those. This is the step every regex-only redactor skips.</li>
+            <li><strong>Rasterized export.</strong> Exported pages are flattened to images. There is no text layer to copy and no hidden object to peel back. The redaction cannot be reversed.</li>
+            <li><strong>Post-export leak scan.</strong> After export, the tool re-scans the output and warns if any sensitive text survived.</li>
+            <li><strong>OCR built in</strong> (Tesseract), so scanned paper documents work too.</li>
+            <li><strong>Metadata stripping</strong>: PDF Info/XMP, DOCX properties, image EXIF.</li>
+            <li><strong>Compliance presets</strong>: HIPAA, PCI DSS, GDPR, HR, Legal, Financial, Vendor, Names-Only &mdash; so &ldquo;redact everything a hospital record shouldn't share&rdquo; is one dropdown.</li>
+        </ul>
+
+        <p>It handles PDF, DOCX, TXT, and images. Needs ~8 GB RAM. The binary is signed and notarized. There's a free trial on the GitHub releases page; a license is available <a href="https://monjurulkarim.gumroad.com/l/wqnyp" target="_blank" rel="noopener">on Gumroad</a> if it earns its keep.</p>
+
+        <h2>How to redact a PDF without Adobe Pro: which option for which job?</h2>
+
+        <table>
+            <thead><tr><th>Situation</th><th>Use</th></tr></thead>
+            <tbody>
+                <tr><td>Image-only PDF or flattened copy, a few boxes, macOS</td><td>Preview markup</td></tr>
+                <tr><td>Non-sensitive doc, fast, any OS</td><td>Online tool</td></tr>
+                <tr><td>Team workflows, bates numbering, daily volume</td><td>Paid desktop suite</td></tr>
+                <tr><td>Sensitive docs, scans, PII you can't afford to miss</td><td>Offline tool with LLM detection</td></tr>
+            </tbody>
+        </table>
+
+        <p>The honest summary: Preview works if the file is already flat. Online tools work if the document was never sensitive. Everything else &mdash; real PII, real consequences &mdash; needs removal + verification, which is what offline tools exist for.</p>
+
+        <h2>FAQ</h2>
+
+        <h3>Can I redact a PDF without Adobe Acrobat Pro?</h3>
+        <p>Yes. Preview markup works on flattened/image PDFs, online tools handle non-sensitive documents, and offline desktop tools like PrivateRedact redact sensitive files without any upload.</p>
+
+        <h3>Does blacking out text in Preview actually redact it?</h3>
+        <p>Only if the PDF has no extractable text under the box &mdash; i.e., it's already an image. On a text PDF, the markup is an overlay and the text underneath can be recovered. Flatten first (print to PDF), then mark up.</p>
+
+        <h3>How do I redact a PDF for free without uploading it?</h3>
+        <p>Use an offline tool. PrivateRedact runs entirely on your machine and offers a free trial. Preview markup on a flattened copy also works for small jobs.</p>
+
+        <h3>What PII do regex-based redaction tools miss?</h3>
+        <p>Names, physical addresses, and diagnoses &mdash; anything without a fixed format. That's why PrivateRedact adds a local LLM pass on top of regex: patterns catch SSNs and card numbers, the LLM catches the rest.</p>
+
+        <h3>Can a redacted PDF be un-redacted?</h3>
+        <p>If the redaction was a drawn box or annotation over live text: yes, trivially. If the pages were rasterized on export &mdash; as PrivateRedact does &mdash; there is no text left to recover.</p>
+
+        <footer class="site">
+            <span>&copy; 2026 <a href="https://mkarim.us/">Muhammad Karim, Ph.D.</a></span>
+            <span><a href="mailto:raju.monjurulkarim@gmail.com">raju.monjurulkarim@gmail.com</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

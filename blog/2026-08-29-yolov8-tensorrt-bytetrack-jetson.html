@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Running YOLOv8 + TensorRT + ByteTrack on a Jetson — Muhammad Karim</title>
+    <meta name="description" content="Field notes on YOLOv8 TensorRT + ByteTrack on a Jetson Orin Nano: engine export, FP16, RTSP capture, calibration — and the mistakes that cost days." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 29, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Running YOLOv8 + TensorRT + ByteTrack on a Jetson</h1>
+
+        <p>Detecting and tracking road users on an edge device sounds like a solved problem &mdash; until you actually try to run YOLOv8 TensorRT with ByteTrack on a Jetson. The public material splits into two kinds: READMEs that assume everything already works, and forum threads where someone's engine file won't load. This post is the middle ground &mdash; field notes from our lab's deployed pipeline: what runs, in what order, and which mistakes cost days.</p>
+
+        <p>The code is public: <a href="https://github.com/monjurulkarim/YOLOv8_Object_Tracking_TensorRT" target="_blank" rel="noopener">YOLOv8_Object_Tracking_TensorRT</a>, built in STAR Lab for object detection, tracking, and conflict point estimation on live video streams. It captures from cameras, files, or RTSP with OpenCV, detects with a YOLOv8 TensorRT engine, tracks with BYTETrack, computes speed, heading, and distance per track, estimates conflict points and time-to-collision, ships results over UDP, and serves a small Flask web app for visualization. Target hardware: Jetson Orin Nano. It builds on <a href="https://github.com/nabang1010/YOLO_Object_Tracking_TensorRT" target="_blank" rel="noopener">nabang1010's pipeline</a> and <a href="https://github.com/triple-Mu/YOLOv8-TensorRT" target="_blank" rel="noopener">triple-Mu's YOLOv8-TensorRT exporter</a> &mdash; credit where due.</p>
+
+        <h2>The stack, and why not DeepStream</h2>
+
+        <p>NVIDIA's DeepStream is the production answer: GStreamer plumbing, nvstreammux, batching, tracker plugins. If you are shipping a fixed pipeline to 500 cameras, use it. For research &mdash; custom association logic, TTC experiments, odd input sources &mdash; a plain Python loop around a TensorRT engine is easier to change, and the performance penalty at YOLOv8n scale on an Orin is tolerable. That tradeoff is the whole architectural decision.</p>
+
+        <h2>Step 1 &mdash; Export the engine (on the Jetson)</h2>
+
+        <p>Two viable paths.</p>
+
+        <p><strong>The one-liner (current Ultralytics API):</strong></p>
+
+        <pre><code>from ultralytics import YOLO
+model = YOLO("yolov8n.pt")
+model.export(format="engine", quantize=16)   # FP16 engine, built for THIS device</code></pre>
+
+        <p><strong>The explicit pipeline (what our repo uses):</strong> export ONNX first, then build the engine &mdash; with NMS parameters baked into the graph:</p>
+
+        <pre><code>python3 export-det.py --weights yolov8n.pt \
+  --iou-thres 0.65 --conf-thres 0.25 --topk 100 \
+  --opset 11 --sim --input-shape 1 3 640 640 --device cuda:0
+
+python3 build.py --weights models/onnx/yolov8n.onnx \
+  --iou-thres 0.65 --conf-thres 0.25 --topk 100 --fp16 --device cuda:0</code></pre>
+
+        <p>Baking confidence and IoU thresholds into the exported graph removes a per-frame Python-side NMS decision. At edge frame rates, every millisecond you do not spend in Python postprocessing counts.</p>
+
+        <p><strong>The rule that saves a day:</strong> a <code>.engine</code> file is not a model format &mdash; it is a build artifact for one GPU architecture and one TensorRT/CUDA combination. Build on the Jetson that will run it. Our environment pins CUDA 12.2 and TensorRT &ge; 8.6.2; the <a href="https://docs.ultralytics.com/integrations/tensorrt/" target="_blank" rel="noopener">Ultralytics TensorRT docs</a> say it plainly: do not treat an <code>.engine</code> file as portable.</p>
+
+        <h2>Step 2 &mdash; Track</h2>
+
+        <p>The quick path if you just want IDs on screen:</p>
+
+        <pre><code>results = model.track(source="rtsp://camera/stream", persist=True,
+                      tracker="bytetrack.yaml")</code></pre>
+
+        <p>The full lab pipeline runs the engine through our own loop &mdash; <code>srcs/yolov8_bytetrack_starlab.py</code> is the entry point &mdash; feeding BYTETrack and then the traffic logic. Expect the first engine build and first inference to be slow; steady-state is what matters.</p>
+
+        <h2>Step 3 &mdash; Tracks to traffic metrics</h2>
+
+        <p>Detection boxes become track IDs; track IDs become trajectories; trajectories become speed, heading, and distance estimates, and pairs of trajectories become conflict points with time-to-collision. The honest difficulty is not the tracking &mdash; it is calibration. Pixel geometry to world geometry decides whether your speed estimates are usable. (More on the analysis side in <a href="https://mkarim.us/blog/2026-08-29-llm-traffic-safety-applications.html">my post on LLM applications in traffic safety</a>.)</p>
+
+        <h2>Jetson field notes</h2>
+
+        <ul>
+            <li><strong>Fix power mode before benchmarking.</strong> <code>sudo nvpmodel -m 0 &amp;&amp; sudo jetson_clocks</code>. Comparing throttled to unthrottled runs has invalidated many a benchmark.</li>
+            <li><strong>INT8 needs your data.</strong> Post-training quantization calibrates on a representative set; Ultralytics' guidance is explicit that calibration is device- and data-dependent. Calibrate with frames from your cameras, on your Jetson.</li>
+            <li><strong>Sanity-check numbers exist.</strong> Ultralytics documents Jetson Orin NX 16&nbsp;GB at ~3.18&nbsp;ms/image FP16 and ~2.30&nbsp;ms INT8 (YOLOv8n, batch 8, predict). Treat those as an order-of-magnitude check, then measure your own.</li>
+            <li><strong>RTSP wants its own thread.</strong> Sequentially opening, reading, and inferring in one loop hides latency and drops frames. Decouple capture from inference.</li>
+            <li><strong>Flask viz is for debugging.</strong> Fine in the lab; do not put it on a pole.</li>
+        </ul>
+
+        <div class="cta">
+            <p>Roadside footage is personal data &mdash; faces, plates, gait. Before a clip leaves the device, redact it: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> removes identifiers offline, with a local LLM. Edge processing without an upload path is a good start; treat sharing as a separate, deliberate step.</p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Can I copy a <code>.engine</code> file from my PC or another Jetson?</h3>
+        <p>No. Engines are built per GPU architecture and TensorRT/CUDA version. Rebuild on the deployment device (export from <code>.pt</code>/<code>.onnx</code> there).</p>
+
+        <h3>Is YOLOv8 still the right model?</h3>
+        <p>Newer Ultralytics families exist; YOLOv8 remains fully supported for detection in the current export paths. On Jetson, model size (n/s) and precision usually matter more than family.</p>
+
+        <h3>Why ByteTrack and not DeepSORT?</h3>
+        <p>ByteTrack associates low-confidence detections instead of discarding them &mdash; free recall on small and distant road users, which is exactly where safety analysis cares.</p>
+
+        <h3>What about INT8 on the Orin Nano?</h3>
+        <p>Possible and documented, but budget calibration time and re-validate mAP on your own data before trusting counts.</p>
+
+        <p>Code: <a href="https://github.com/monjurulkarim/YOLOv8_Object_Tracking_TensorRT" target="_blank" rel="noopener">YOLOv8_Object_Tracking_TensorRT</a> &middot; <a href="https://github.com/ifzhang/ByteTrack" target="_blank" rel="noopener">ByteTrack</a> &middot; <a href="https://docs.ultralytics.com/guides/nvidia-jetson" target="_blank" rel="noopener">Ultralytics on Jetson</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-29-llm-traffic-safety-applications.html">previous: LLMs in traffic safety</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:raju.monjurulkarim@gmail.com">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

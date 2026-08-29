@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Self-Hosted RAG — Private AI Chat for Your Documents — Muhammad Karim</title>
+    <meta name="description" content="Self-host a private, multi-user chat-with-your-documents AI. Local models via Ollama, admin dashboard, one-time purchase — no cloud, no subscription." />
+    <link rel="canonical" href="https://mkarim.us/apps/self-hosted-rag.html" />
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <!-- Bootstrap core CSS (matches site theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root { --primary: #bd5d38; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Muli, Roboto, "Helvetica Neue", Arial, sans-serif; color: #212529; }
+        h1, h2, h3, .navbar-brand { font-family: "Saira Extra Condensed", -apple-system, "Segoe UI", sans-serif; font-weight: 700; text-transform: uppercase; }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.2rem; }
+        .text-brand { color: var(--primary); }
+        .btn-brand { background-color: var(--primary); border-color: var(--primary); color: #fff; }
+        .btn-brand:hover { background-color: #a04e2e; border-color: #a04e2e; color: #fff; }
+        .hero { padding: 4.5rem 0 3rem; background: #f8f9fa; border-bottom: 1px solid #e9ecef; }
+        .section-pad { padding: 3.5rem 0; }
+        .step-num { display: inline-block; width: 2.2rem; height: 2.2rem; line-height: 2.2rem; text-align: center; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; margin-bottom: 0.75rem; }
+        .card { border: 1px solid #e9ecef; }
+        .feature-list li { margin-bottom: 0.5rem; }
+        .faq dt { font-weight: 700; margin-top: 1.25rem; }
+        .offline-box { background: #212529; color: #f8f9fa; border-radius: 0.5rem; padding: 2rem; }
+        .offline-box .check { color: #28a745; font-weight: 700; }
+        footer { background: #212529; color: #adb5bd; padding: 2.5rem 0; font-size: 0.95rem; }
+        footer a { color: #f8f9fa; }
+        figure figcaption { color: #6c757d; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://mkarim.us/">Muhammad Karim</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#why">Why Self-Hosted</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/monjurulkarim/self-hosted-rag" target="_blank" rel="noopener">GitHub</a></li>
+                    <li class="nav-item"><a class="btn btn-brand ml-lg-2 my-1" href="https://monjurulkarim.gumroad.com/l/self-hosted-rag" target="_blank" rel="noopener">Get the Source Code</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="mb-2">Self-Hosted <span class="text-brand">RAG</span></h1>
+                    <p class="lead font-weight-bold">Your private AI chat for all your documents — running on hardware you control.</p>
+                    <p class="mb-4">A production-ready, multi-user "chat with your documents" system powered by local AI. Build knowledge bases from your PDF, DOCX, TXT, MD, and CSV files, then ask questions and get answers grounded in your own documents. Models run locally through <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>. No data leaves your server. No monthly AI bill.</p>
+                    <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/self-hosted-rag" target="_blank" rel="noopener">Get the Source Code — One-Time Purchase</a>
+                    <a class="btn btn-outline-dark btn-lg mb-2" href="https://www.youtube.com/watch?v=AsCBroOevGA" target="_blank" rel="noopener">Watch the Demo</a>
+                    <p class="small text-muted mt-3 mb-0">Complete source code with one-step installers for macOS, Linux, and Windows.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="offline-box">
+                        <h3 class="text-white mb-3" style="font-size:1.3rem;">The privacy model</h3>
+                        <p class="mb-1"><span class="check">✓</span> Your documents never leave your server</p>
+                        <p class="mb-1"><span class="check">✓</span> Local models via Ollama — Llama 3, Qwen, Gemma</p>
+                        <p class="mb-1"><span class="check">✓</span> Multi-user accounts and permissions</p>
+                        <p class="mb-1"><span class="check">✓</span> Admin dashboard: users, access, analytics</p>
+                        <p class="mb-0"><span class="check">✓</span> One-time purchase — no subscription</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What it does / who it's for -->
+    <section class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">What it does — and who it is for</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>Self-Hosted RAG is a retrieval-augmented generation (RAG) application: it indexes your documents, finds the passages relevant to your question, and feeds them to a language model that runs on your own machine. Answers cite your material instead of guessing from general training data.</p>
+                    <p>It ships with two chat modes. <strong>Knowledge Base Chat</strong> builds permanent document collections — ideal for a team that shares a reference library. <strong>Quick Document Chat</strong> lets any user drop in a single file for a one-time question, with nothing stored afterwards. Deployment runs in <code>personal</code> (single user) or <code>team</code> (multi-user) mode.</p>
+                </div>
+                <div class="col-lg-6">
+                    <p><strong>Built for people who cannot put documents in a cloud AI:</strong></p>
+                    <ul class="feature-list">
+                        <li>Teams with confidential documents — legal, healthcare, HR, finance</li>
+                        <li>Companies that want a private ChatGPT over their internal knowledge base</li>
+                        <li>Research groups working with unpublished data</li>
+                        <li>Self-hosters and homelab owners who prefer running their own services</li>
+                        <li>Anyone canceling a per-seat AI subscription</li>
+                    </ul>
+                    <p class="mb-0">If you need to remove sensitive identifiers <em>before</em> loading documents, see <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> — offline PII redaction built on the same local-first principle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">How it works — three steps</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">1</span>
+                    <h3 style="font-size:1.4rem;">Install</h3>
+                    <p>One script does everything: <code>bash install.sh</code> on macOS/Linux or <code>install.bat</code> on Windows installs Ollama, pulls the default models (Qwen), and sets up the Python environment. You need Python 3.10+.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">2</span>
+                    <h3 style="font-size:1.4rem;">Add documents</h3>
+                    <p>Create knowledge bases (a folder plus one config entry), or drop a file into Quick Chat for a one-time question. Upload rights can be enabled or disabled per knowledge base.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <span class="step-num">3</span>
+                    <h3 style="font-size:1.4rem;">Chat</h3>
+                    <p>Open the web interface on your server, ask questions, and get answers grounded in your documents. Users get individual accounts; the admin sets read and upload permissions per knowledge base.</p>
+                </div>
+            </div>
+            <p class="mb-4">See the full walkthrough: <a href="https://www.youtube.com/watch?v=AsCBroOevGA" target="_blank" rel="noopener">complete demo video on YouTube</a>. Code and documentation: <a href="https://github.com/monjurulkarim/self-hosted-rag" target="_blank" rel="noopener">GitHub repository</a>.</p>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <figure class="mb-0">
+                        <img src="../assets/img/apps/self-hosted-rag-quick-chat.png" alt="Self-Hosted RAG Quick Chat interface — upload one document and ask questions without storing it" class="img-fluid rounded border" loading="lazy" width="1393" height="507" />
+                        <figcaption class="mt-2">Quick Chat — one document, one question, nothing stored.</figcaption>
+                    </figure>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <figure class="mb-0">
+                        <img src="../assets/img/apps/self-hosted-rag-chat.png" alt="Self-Hosted RAG knowledge-base chat interface — ask questions across a permanent document collection" class="img-fluid rounded border" loading="lazy" width="1218" height="664" />
+                        <figcaption class="mt-2">Knowledge Base Chat — a permanent collection your whole team can query.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why self-hosted -->
+    <section id="why" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Why self-hosted matters</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Cloud AI rents your data back to you</h3>
+                    <p>Hosted assistants charge per seat every month, and using them means uploading the documents you would most like to keep private to someone else's servers. For many teams that is a compliance problem before it is a cost problem.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Most self-hosted tutorials are weekend projects</h3>
+                    <p>A notebook that answers questions over one PDF is a demo, not a deployment. This system ships the parts tutorials skip: user accounts, per-knowledge-base read and upload permissions, an admin dashboard, and a documented config for personal vs. team mode.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">The models run on your hardware</h3>
+                    <p>Generation and embeddings run locally through Ollama. The default setup uses compact Qwen models; on stronger hardware (20&nbsp;GB+ VRAM or 24&nbsp;GB+ unified memory) you can switch to a larger model with one config change and a single <code>ollama pull</code>.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">A stack you can actually read</h3>
+                    <p>Flask, ChromaDB, LangChain, and Ollama — standard, inspectable components with the full source included. When you self-host, "trust me" is not an architecture. You can audit exactly what the system does.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">Features</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>100% local &amp; private</strong> — ingestion, search, and generation all run on your machine</li>
+                        <li><strong>Dual chat modes</strong> — permanent knowledge bases and one-time Quick Chat</li>
+                        <li><strong>Multi-user accounts</strong> — user management with per-KB read and upload permissions</li>
+                        <li><strong>Admin dashboard</strong> — users, permissions, and system analytics</li>
+                        <li><strong>Local AI via Ollama</strong> — run Llama 3, Qwen, or Gemma model families</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>Multi-format documents</strong> — PDF, DOCX, TXT, MD, and CSV</li>
+                        <li><strong>One-step installers</strong> — macOS, Linux, and Windows scripts</li>
+                        <li><strong>Personal or team deployment</strong> — single switch in <code>config.json</code></li>
+                        <li><strong>Model upgrade path</strong> — default Qwen setup; larger models on stronger GPUs</li>
+                        <li><strong>Full source included</strong> — Flask + ChromaDB + LangChain, MIT-licensed components</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="small text-muted mb-0">Requires Python 3.10+ and <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> (installed automatically by the setup script).</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Frequently asked questions</h2>
+            <dl class="mb-0">
+                <dt>What is a self-hosted RAG app?</dt>
+                <dd>RAG stands for retrieval-augmented generation. The system searches your documents for passages relevant to your question and passes them to a language model, so answers are grounded in your files instead of invented from general training data. Self-hosted means the entire pipeline — document parsing, vector search, and the model — runs on hardware you control.</dd>
+
+                <dt>Do my documents ever leave my server?</dt>
+                <dd>No. Parsing, embedding, vector search (ChromaDB), and generation (Ollama) all run locally. There is no cloud AI API call anywhere in the pipeline.</dd>
+
+                <dt>Can multiple people use it at the same time?</dt>
+                <dd>Yes. The app has multi-user accounts with an admin dashboard. Read and upload permissions are set per knowledge base, and a <code>personal</code> mode is available if you just want a single-user install.</dd>
+
+                <dt>Which file formats are supported?</dt>
+                <dd>PDF, DOCX, TXT, Markdown, and CSV files.</dd>
+
+                <dt>What hardware do I need?</dt>
+                <dd>Any machine that runs Python 3.10+ and Ollama works with the default compact models (a Qwen model plus a small embedding model). For best results with powerful hardware — 20&nbsp;GB+ VRAM or 24&nbsp;GB+ unified memory — switch to a larger model such as Qwen3 30B via one config change.</dd>
+
+                <dt>How is this different from a free RAG tutorial?</dt>
+                <dd>Tutorials produce single-user demos. This project ships deployable software: authentication, per-knowledge-base permissions, an admin dashboard, automated installers for three platforms, and documented configuration. You get a system your team can actually use on day one.</dd>
+
+                <dt>What do I get when I buy it?</dt>
+                <dd>The complete source code and one-step installers for macOS, Linux, and Windows, as shown in the <a href="https://www.youtube.com/watch?v=AsCBroOevGA" target="_blank" rel="noopener">demo video</a>. It is a one-time purchase on Gumroad — no subscription.</dd>
+
+                <dt>Which platforms does it run on?</dt>
+                <dd>macOS, Linux, and Windows, via the included install scripts. The web interface runs on your server (localhost:8000 by default; host and port are configurable).</dd>
+
+                <dt>Where can I see the code?</dt>
+                <dd>The project is documented on GitHub at <a href="https://github.com/monjurulkarim/self-hosted-rag" target="_blank" rel="noopener">monjurulkarim/self-hosted-rag</a>. Related write-up: <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">preparing documents before sharing or indexing them</a>.</dd>
+
+                <dt>How much does it cost?</dt>
+                <dd>One-time purchase — see the <a href="https://monjurulkarim.gumroad.com/l/self-hosted-rag" target="_blank" rel="noopener">Gumroad listing</a> for the current price. There are no recurring fees.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section-pad bg-light">
+        <div class="container text-center">
+            <h2 class="mb-3">Give your team a private AI today</h2>
+            <p class="lead mb-4">Get the complete source code, run it on your own hardware, and stop paying monthly fees for cloud AI that reads your documents.</p>
+            <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/self-hosted-rag" target="_blank" rel="noopener">Get it on Gumroad — One-Time Purchase</a>
+            <a class="btn btn-outline-dark btn-lg mb-2" href="https://www.youtube.com/watch?v=AsCBroOevGA" target="_blank" rel="noopener">Watch the Demo</a>
+        </div>
+    </section>
+
+    <!-- FAQ structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What is a self-hosted RAG app?", "acceptedAnswer": {"@type": "Answer", "text": "RAG stands for retrieval-augmented generation. The system searches your documents for passages relevant to your question and passes them to a language model, so answers are grounded in your files. Self-hosted means the entire pipeline runs on hardware you control."}},
+        {"@type": "Question", "name": "Do my documents ever leave my server?", "acceptedAnswer": {"@type": "Answer", "text": "No. Parsing, embedding, vector search (ChromaDB), and generation (Ollama) all run locally. There is no cloud AI API call anywhere in the pipeline."}},
+        {"@type": "Question", "name": "Can multiple people use it at the same time?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The app has multi-user accounts with an admin dashboard. Read and upload permissions are set per knowledge base, and a personal mode is available for single-user installs."}},
+        {"@type": "Question", "name": "Which file formats are supported?", "acceptedAnswer": {"@type": "Answer", "text": "PDF, DOCX, TXT, Markdown, and CSV files."}},
+        {"@type": "Question", "name": "What hardware do I need?", "acceptedAnswer": {"@type": "Answer", "text": "Any machine that runs Python 3.10+ and Ollama works with the default compact Qwen models. On powerful hardware (20GB+ VRAM or 24GB+ unified memory) you can switch to a larger model such as Qwen3 30B with one config change."}},
+        {"@type": "Question", "name": "How is this different from a free RAG tutorial?", "acceptedAnswer": {"@type": "Answer", "text": "Tutorials produce single-user demos. This project ships deployable software: authentication, per-knowledge-base permissions, an admin dashboard, automated installers for three platforms, and documented configuration."}},
+        {"@type": "Question", "name": "What do I get when I buy it?", "acceptedAnswer": {"@type": "Answer", "text": "The complete source code and one-step installers for macOS, Linux, and Windows. It is a one-time purchase on Gumroad — no subscription."}},
+        {"@type": "Question", "name": "Which platforms does it run on?", "acceptedAnswer": {"@type": "Answer", "text": "macOS, Linux, and Windows via the included install scripts. The web interface runs on your server; host and port are configurable."}},
+        {"@type": "Question", "name": "How much does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "One-time purchase — see the Gumroad listing for the current price. There are no recurring fees."}}
+      ]
+    }
+    </script>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Muhammad Karim, Ph.D.</h3>
+                    <p class="mb-0">I build privacy-first, local-first AI tools.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Product</h3>
+                    <p class="mb-1"><a href="https://github.com/monjurulkarim/self-hosted-rag" target="_blank" rel="noopener">GitHub repository</a></p>
+                    <p class="mb-1"><a href="https://www.youtube.com/watch?v=AsCBroOevGA" target="_blank" rel="noopener">Demo video</a></p>
+                    <p class="mb-0"><a href="https://monjurulkarim.gumroad.com/l/self-hosted-rag" target="_blank" rel="noopener">Source code on Gumroad</a></p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Site</h3>
+                    <p class="mb-1"><a href="https://mkarim.us/">Home</a></p>
+                    <p class="mb-1"><a href="https://mkarim.us/apps/privateredact.html">PrivateRedact — offline PII redaction</a></p>
+                    <p class="mb-1"><a href="https://monjurulkarim.gumroad.com/" target="_blank" rel="noopener">All products on Gumroad</a></p>
+                    <p class="mb-0"><a href="mailto:raju.monjurulkarim@gmail.com">raju.monjurulkarim@gmail.com</a></p>
+                </div>
+            </div>
+            <hr style="border-color:#495057;" />
+            <p class="mb-0 small">© 2026 Muhammad Monjurul Karim. Self-Hosted RAG — a private, self-hosted chat-with-your-documents assistant.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

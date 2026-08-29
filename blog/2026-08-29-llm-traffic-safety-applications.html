@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>LLM Traffic Safety Applications: What Actually Works — Muhammad Karim</title>
+    <meta name="description" content="LLM traffic safety applications mapped: crash analysis, driver behavior, flow prediction, signal control — the modality gap, failure modes, and what works today." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-29-llm-traffic-safety-applications.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul, ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 29, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>LLM Traffic Safety Applications: What Actually Works</h1>
+
+        <p>Large language models are moving into roadway safety and traffic engineering. The honest version of LLM traffic safety applications is messier than the keynote version: some tasks work today, some need adaptation, and some are a bad fit for the technology. In 2025 my coauthors and I published a comprehensive review of exactly this landscape &mdash; now peer-reviewed in <em>Artificial Intelligence for Transportation</em> (<a href="https://arxiv.org/abs/2506.06301" target="_blank" rel="noopener">arXiv:2506.06301</a> &middot; <a href="https://doi.org/10.1016/j.ait.2025.100004" target="_blank" rel="noopener">DOI 10.1016/j.ait.2025.100004</a>). This post is the practitioner's short version: where LLMs earn their keep, where they break, and what to try first.</p>
+
+        <h2>The modality gap &mdash; the one idea to internalize</h2>
+
+        <p>Traffic data is spatio-temporal and physical: loop detectors, trajectories, signal phases, crash geometry. LLMs were trained on text. That mismatch &mdash; the &ldquo;modality gap&rdquo; &mdash; is the organizing problem of the whole field. The review groups how researchers close it into four strategies:</p>
+
+        <ol>
+            <li><strong>Architectural</strong> &mdash; bolt on encoders for time series, video, or graph data.</li>
+            <li><strong>Training</strong> &mdash; fine-tune or continue-pretrain on transportation corpora.</li>
+            <li><strong>Prompting</strong> &mdash; serialize the data into text and prompt a general model.</li>
+            <li><strong>Multimodal</strong> &mdash; pair the LLM with purpose-built perception or forecasting models and let it reason over their outputs.</li>
+        </ol>
+
+        <p>Prompting is where most practitioners start, because it is the cheapest. Multimodal designs are where the strongest results live, because the specialist model does the numeric heavy lifting and the LLM does what it is actually good at: integration, explanation, and structured reasoning.</p>
+
+        <h2>Where LLMs are working today</h2>
+
+        <table>
+            <thead>
+                <tr><th>Domain</th><th>Application</th><th>What the LLM actually does</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mobility</td><td>Traffic flow prediction</td><td>Integrates context &mdash; weather, incidents, events &mdash; with forecast outputs</td></tr>
+                <tr><td>Mobility</td><td>Signal control</td><td>Explains and assists control decisions; supports natural-language interfaces</td></tr>
+                <tr><td>Safety</td><td>Crash analysis</td><td>Reads crash reports and narratives; extracts structured factors</td></tr>
+                <tr><td>Safety</td><td>Driver behavior assessment</td><td>Summarizes and classifies behavior descriptions and telemetry logs</td></tr>
+            </tbody>
+        </table>
+
+        <p>Crash-report analysis is the quiet standout. Crash narratives are text already &mdash; police reports, incident logs &mdash; so the modality gap barely applies. An LLM that turns hundreds of pages of narratives into a structured factor table is working with text in and text out.</p>
+
+        <h2>Enabling technologies to know about</h2>
+
+        <ul>
+            <li><strong>V2X integration</strong> &mdash; vehicle-to-everything data streams as (very) fresh context.</li>
+            <li><strong>Domain-specific foundation models</strong> &mdash; pretraining aimed at transportation data.</li>
+            <li><strong>Explainability frameworks</strong> &mdash; making the model's reasoning auditable for engineers.</li>
+            <li><strong>Edge computing</strong> &mdash; running compact models roadside, where latency and connectivity are real constraints. (This is my home turf: small models on modest hardware, close to the sensor.)</li>
+        </ul>
+
+        <h2>What breaks &mdash; read this before the demo</h2>
+
+        <p>Four failure families, straight from the review:</p>
+
+        <ol>
+            <li><strong>Hallucination and reasoning deficits.</strong> An LLM will produce a fluent, confident factor analysis of a crash that never happened the way it says. In safety work, fluent-wrong is worse than obviously-wrong.</li>
+            <li><strong>Data governance.</strong> Traffic video and crash reports are full of personal data &mdash; faces, plates, names, addresses. Before anything reaches a model, that PII has to be handled.</li>
+            <li><strong>Sim-to-real and latency.</strong> Lab prompts are not intersection deployments.</li>
+            <li><strong>Safety assurance.</strong> Nobody has a settled answer for verifying an LLM inside a safety-critical loop. Treat any claim otherwise with suspicion.</li>
+        </ol>
+
+        <div class="cta">
+            <p>Working with traffic footage or crash reports that contain PII? <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> finds and removes names, plates, and other identifiers offline &mdash; and <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">this walkthrough</a> covers the free options too.</p>
+        </div>
+
+        <h2>A practical starting point</h2>
+
+        <p>If you have crash narratives and want structure out of them, start with a strict extraction prompt &mdash; schema in, schema out, nothing more:</p>
+
+        <pre><code>You are extracting structured factors from a police crash report.
+Return JSON only, using exactly this schema. Use null for anything
+the report does not state. Do not infer.
+
+{
+  "road_conditions":      string | null,
+  "weather":              string | null,
+  "contributing_factors": string[] | null,
+  "injuries":             "none"|"minor"|"serious"|"fatal" | null,
+  "quotes":               string[]   // verbatim evidence for each factor
+}</code></pre>
+
+        <p>Two properties matter more than the model choice: <em>null for unstated</em> forces silence instead of invention, and <em>verbatim quotes</em> keep every extracted factor traceable to the source text. Auditability is the whole game in safety analysis.</p>
+
+        <h2>Where the field is going</h2>
+
+        <p>The review closes on five directions: advanced multimodal fusion, better spatio-temporal reasoning, human-AI collaboration, continuous learning, and efficient, verifiable systems. The last one &mdash; verifiable &mdash; is the gate for everything else. Traffic engineering has spent decades building codes and standards of practice; LLM systems that want a seat at that table will need the software equivalent.</p>
+
+        <h2>FAQ</h2>
+
+        <h3>Can LLMs predict traffic flow?</h3>
+        <p>Not alone, and they should not. Numeric forecasting belongs to forecasting models; LLMs add value by integrating context (weather, incidents, events) and explaining outputs. Multimodal designs, not raw prompting, are the credible pattern.</p>
+
+        <h3>Are LLMs used in traffic safety research?</h3>
+        <p>Yes &mdash; most concretely for crash analysis and driver behavior assessment, where the source data is textual. The review catalogs both plus mobility applications like signal control assistance.</p>
+
+        <h3>What is the &ldquo;modality gap&rdquo; in transportation AI?</h3>
+        <p>The mismatch between text-trained models and traffic's spatio-temporal, physical data. Architectural, training, prompting, and multimodal strategies are the four standard ways to close it.</p>
+
+        <h3>Do LLMs hallucinate in safety-critical analysis?</h3>
+        <p>Yes, and the risk is worse than usual because hallucinated safety analysis reads as credible. Constrain the task, demand evidence trails, and keep a human in the loop.</p>
+
+        <p>Read the full review: <a href="https://arxiv.org/abs/2506.06301" target="_blank" rel="noopener">arXiv:2506.06301</a> &middot; <a href="https://doi.org/10.1016/j.ait.2025.100004" target="_blank" rel="noopener">Artificial Intelligence for Transportation, 1, 100004 (2025)</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher and builder of privacy-first, local-first AI tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, and <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">previous: redacting PDFs without Adobe Pro</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:raju.monjurulkarim@gmail.com">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

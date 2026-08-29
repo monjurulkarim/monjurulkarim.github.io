@@ -26,6 +26,9 @@
         .faq dt { font-weight: 700; margin-top: 1.25rem; }
         .offline-box { background: #212529; color: #f8f9fa; border-radius: 0.5rem; padding: 2rem; }
         .offline-box .check { color: #28a745; font-weight: 700; }
+        .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.25rem; }
+        .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        figure figcaption { color: #6c757d; font-size: 0.9rem; }
         footer { background: #212529; color: #adb5bd; padding: 2.5rem 0; font-size: 0.95rem; }
         footer a { color: #f8f9fa; }
     </style>
@@ -115,6 +118,25 @@
                     <span class="step-num">3</span>
                     <h3 style="font-size:1.4rem;">Ask, organize, export</h3>
                     <p>Ask the transcript questions with answers cited to the exact moment. Organize with search, folders, tags, and bookmarks. Export to PDF, Word, Markdown, HTML, or plain text.</p>
+                </div>
+            </div>
+            <h3 class="mt-4 mb-3" style="font-size:1.4rem;">See it in action</h3>
+            <div class="embed-container mb-2">
+                <iframe src="https://www.youtube-nocookie.com/embed/6arG7skP1Fs" title="MeetingMint demo video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p class="small text-muted mb-4">Full demo: recording, on-device transcription, generated minutes, and transcript Q&amp;A. Also on YouTube: <a href="https://youtu.be/6arG7skP1Fs" target="_blank" rel="noopener">youtu.be/6arG7skP1Fs</a>.</p>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <figure class="mb-0">
+                        <img src="../assets/img/apps/meetingmint-minutes.png" alt="MeetingMint generated meeting minutes — action items, decisions, and key points from an on-device transcript" class="img-fluid rounded border" loading="lazy" width="1600" height="984" />
+                        <figcaption class="mt-2">Generated minutes — action items, decisions, and key points, written on-device.</figcaption>
+                    </figure>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <figure class="mb-0">
+                        <img src="../assets/img/apps/meetingmint-qa.png" alt="MeetingMint Q&amp;A over a meeting transcript — answers cite the exact moment they came from" class="img-fluid rounded border" loading="lazy" width="1600" height="984" />
+                        <figcaption class="mt-2">Ask the transcript questions — answers cite the exact moment.</figcaption>
+                    </figure>
                 </div>
             </div>
             <p class="mb-0 small text-muted">Requires macOS 14.0 or later. After the one-time model download, everything works offline.</p>

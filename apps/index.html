@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Apps &amp; Software — Muhammad Karim</title>
+    <meta name="description" content="Local-first, privacy-first software by Muhammad Karim, Ph.D.: on-device meeting notes, mic + system audio recording, offline document redaction, self-hosted RAG, and AI file organization." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Apps &amp; Software — Muhammad Karim" />
+    <meta property="og:description" content="Local-first, privacy-first software: meeting notes, audio recording, document redaction, self-hosted RAG, and AI file organization — nothing has to leave your machine." />
+    <meta property="og:url" content="https://mkarim.us/apps/" />
+    <link rel="canonical" href="https://mkarim.us/apps/" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,700,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root {
+            --ink:#1a1e23; --body:#3a4149; --muted:#6c757d;
+            --line:#e4e7eb; --accent:#0d6efd; --accent-soft:#eef4ff;
+            --bg:#fbfcfd; --card:#ffffff;
+        }
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            margin:0; background:var(--bg); color:var(--body);
+            font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+            line-height:1.75; -webkit-font-smoothing:antialiased;
+        }
+        ::selection { background:var(--accent); color:#fff; }
+        a { color:var(--accent); text-decoration:none; }
+        a:hover { text-decoration:underline; }
+
+        .topbar {
+            position:sticky; top:0; z-index:10; background:rgba(251,252,253,.92);
+            backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+        }
+        .topbar-inner {
+            max-width:980px; margin:0 auto; padding:.8rem 1.25rem;
+            display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+        }
+        .brand { font-weight:800; color:var(--ink); font-size:.95rem; letter-spacing:.01em; }
+        .brand:hover { text-decoration:none; color:var(--accent); }
+        .topnav { font-size:.85rem; display:flex; gap:1.1rem; }
+        .topnav a { color:var(--muted); }
+        .topnav a:hover { color:var(--ink); text-decoration:none; }
+
+        .wrap { max-width:980px; margin:0 auto; padding:3rem 1.25rem 4rem; }
+
+        .kicker {
+            color:var(--accent); font-weight:800; text-transform:uppercase;
+            letter-spacing:.14em; font-size:.75rem; margin:0 0 .6rem;
+        }
+        h1.masthead {
+            color:var(--ink); font-weight:800; font-size:clamp(2rem,5vw,3rem);
+            line-height:1.15; margin:0 0 .8rem; letter-spacing:-.01em;
+        }
+        .lede { font-size:1.08rem; max-width:40em; margin:0 0 2.4rem; }
+
+        .grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+
+        .app {
+            background:var(--card); border:1px solid var(--line); border-radius:12px;
+            padding:1.5rem 1.6rem; display:flex; flex-direction:column; gap:.45rem;
+            box-shadow:0 1px 2px rgba(20,24,40,.04), 0 8px 24px rgba(20,24,40,.05);
+            transition:box-shadow .2s ease, transform .2s ease;
+        }
+        .app:hover { box-shadow:0 2px 4px rgba(20,24,40,.06), 0 12px 32px rgba(20,24,40,.09); transform:translateY(-2px); }
+        .app .badges { display:flex; gap:.45rem; flex-wrap:wrap; }
+        .badge {
+            display:inline-block; background:var(--accent-soft); color:var(--accent);
+            font-size:.68rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+            border-radius:999px; padding:.22rem .65rem;
+        }
+        .badge.neutral { background:#f1f3f5; color:var(--muted); }
+        .app h2 { margin:.1rem 0 0; font-size:1.28rem; font-weight:800; line-height:1.3; }
+        .app h2 a { color:var(--ink); }
+        .app h2 a:hover { color:var(--accent); text-decoration:none; }
+        .app p { margin:0; font-size:.95rem; flex-grow:1; }
+        .app .go { font-weight:700; font-size:.92rem; margin-top:.35rem; }
+        .app .go::after { content:" \2192"; }
+
+        .also {
+            margin-top:2.4rem; background:var(--card); border:1px dashed var(--line);
+            border-radius:10px; padding:1.1rem 1.4rem; font-size:.95rem; color:var(--muted);
+        }
+        .also strong { color:var(--ink); font-weight:800; }
+
+        footer.site {
+            margin-top:3rem; border-top:1px solid var(--line); padding-top:1.3rem;
+            font-size:.85rem; color:var(--muted);
+            display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between;
+        }
+        footer.site a { color:var(--muted); }
+        footer.site a:hover { color:var(--ink); text-decoration:none; }
+
+        @media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition:none !important; animation:none !important; }
+            html { scroll-behavior:auto; }
+        }
+        a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:2px; }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="https://mkarim.us/">Muhammad Karim, Ph.D.</a>
+            <nav class="topnav">
+                <a href="https://mkarim.us/#about">About</a>
+                <a href="https://mkarim.us/blog/">Blog</a>
+                <a href="mailto:karim@mkarim.us">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <p class="kicker">Apps &amp; Software</p>
+        <h1 class="masthead">Local-first tools that respect your data.</h1>
+        <p class="lede">Everything below runs on your machine &mdash; on-device AI, offline workflows, self-hosted servers. No subscriptions to your privacy, no silent cloud uploads.</p>
+
+        <div class="grid">
+            <article class="app">
+                <div class="badges"><span class="badge">Mac App Store</span><span class="badge neutral">macOS</span></div>
+                <h2><a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a></h2>
+                <p>On-device AI meeting notes for Mac. Record or import any audio, get clean minutes with action items, a full transcript &mdash; and query it in 90+ languages. Nothing leaves your Mac.</p>
+                <a class="go" href="https://mkarim.us/apps/meetingmint.html">View MeetingMint</a>
+            </article>
+
+            <article class="app">
+                <div class="badges"><span class="badge">Mac App Store</span><span class="badge neutral">macOS</span></div>
+                <h2><a href="https://mkarim.us/apps/audiorecord.html">AudioRecord Mic+System</a></h2>
+                <p>Record your microphone and system audio together on your Mac &mdash; calls, tutorials, app audio &mdash; and save straight to a file.</p>
+                <a class="go" href="https://mkarim.us/apps/audiorecord.html">View AudioRecord</a>
+            </article>
+
+            <article class="app">
+                <div class="badges"><span class="badge">Gumroad</span><span class="badge neutral">Offline</span></div>
+                <h2><a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a></h2>
+                <p>Redact personal information from documents &mdash; 100% offline, driven by a local LLM. No cloud, no upload, no way to un-redact.</p>
+                <a class="go" href="https://mkarim.us/apps/privateredact.html">View PrivateRedact</a>
+            </article>
+
+            <article class="app">
+                <div class="badges"><span class="badge">Gumroad</span><span class="badge neutral">Self-hosted</span></div>
+                <h2><a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a></h2>
+                <p>A production-ready, self-hosted chat-with-your-documents system powered by local AI (Ollama). Your library, your server, your rules.</p>
+                <a class="go" href="https://mkarim.us/apps/self-hosted-rag.html">View Self-Hosted RAG</a>
+            </article>
+
+            <article class="app">
+                <div class="badges"><span class="badge">Gumroad</span><span class="badge neutral">100% local</span></div>
+                <h2><a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a></h2>
+                <p>AI reads your files and organizes them by content and purpose &mdash; running entirely locally via Ollama. Your files never leave your machine.</p>
+                <a class="go" href="https://mkarim.us/apps/ai-file-organizer.html">View AI File Organizer Pro</a>
+            </article>
+
+            <article class="app">
+                <div class="badges"><span class="badge neutral">Writing</span></div>
+                <h2><a href="https://mkarim.us/blog/">From the blog</a></h2>
+                <p>The how-to layer: calibrating roadside cameras, running detectors on a Jetson, redacting PDFs offline, and more &mdash; with runnable code.</p>
+                <a class="go" href="https://mkarim.us/blog/">Read the blog</a>
+            </article>
+        </div>
+
+        <div class="also">
+            <strong>Also on Gumroad:</strong> <a href="https://monjurulkarim.gumroad.com/l/ai-meeting-notes" target="_blank" rel="noopener">AI Meeting Note Taker</a> &mdash; a self-hosted Flask app for private meeting transcription and summarization of audio of any length.
+        </div>
+
+        <footer class="site">
+            <span>&copy; 2026 Muhammad Monjurul Karim &middot; <a href="https://mkarim.us/">mkarim.us</a></span>
+            <span><a href="mailto:karim@mkarim.us">karim@mkarim.us</a> &middot; <a href="https://mkarim.us/blog/">blog</a></span>
+        </footer>
+    </main>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

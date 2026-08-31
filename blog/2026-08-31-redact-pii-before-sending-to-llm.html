@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Redact PII Before You Send Documents to an LLM — Muhammad Karim</title>
+    <meta name="description" content="Redact PII before sending documents to an LLM: what leaks in a paste, value-only redaction with a local LLM, and the leak-scan proof — fully offline." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-31-redact-pii-before-sending-to-llm.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 31, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Redact PII Before You Send Documents to an LLM</h1>
+
+        <p>Everyone now has a private AI assistant one keystroke away, and the shortcut is irresistible: paste the contract in, ask for a summary. Paste the patient notes in, ask for a table. Paste the vendor agreement in, ask &ldquo;what are the termination clauses?&rdquo; It feels like copying text to a colleague. It is not &mdash; and knowing how to redact PII before sending to an LLM has become a basic document-hygiene skill. The paste creates a second copy of your most sensitive document &mdash; names, identifiers, diagnoses, pricing, codenames &mdash; on somebody else&rsquo;s server, in an account whose retention settings you do not control.</p>
+
+        <p>If you already redact documents for a living, none of this is new. What is new is the destination. Redaction used to be about the recipient: the FOIA release, the filed exhibit, the shared report. Now the &ldquo;recipient&rdquo; is a summarization request, and the leak happens before you read the first sentence of the answer. This post is about the workflow that fixes it &mdash; automatic, verifiable, with the document never leaving your machine.</p>
+
+        <p>I build privacy-first, local-first tools for exactly this problem. <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> is a desktop app that finds and removes PII from PDF, DOCX, and images using a local LLM, and I wrote a <a href="https://medium.com/@raju.monjurulkarim/redacting-pii-100-offline-a-technical-deep-dive-a326f9fed3b8" target="_blank" rel="noopener">technical deep dive</a> on its architecture. This post is the part that matters before any architecture: what to scrub, in what order, and how to prove you got it.</p>
+
+        <h2>What actually leaks when you paste a document into an LLM</h2>
+
+        <p>Think of the pasted text as a disclosure, because that is what it is. Three tiers leave with it:</p>
+
+        <ul>
+            <li><strong>Direct identifiers.</strong> Names, SSNs, account numbers, phone numbers, email addresses, street addresses. Obvious, and the tier people mostly remember.</li>
+            <li><strong>Quasi-identifiers.</strong> Dates of birth, job titles, employer names, exact dollar figures, case numbers. Each one is harmless alone; combined they re-identify a person with startling reliability.</li>
+            <li><strong>Context PII &mdash; the tier regex never sees.</strong> &ldquo;Patient presented with Type 2 diabetes.&rdquo; &ldquo;Project Falcon&rsquo;s margin is below floor.&rdquo; &ldquo;You can reach the client at his summer house.&rdquo; No pattern matches a diagnosis, a codename, or an unlisted address mentioned mid-sentence. This is the tier that makes LLM-bound text different from form-bound text: prose carries meaning, and meaning is the leak.</li>
+        </ul>
+
+        <p>Metadata is a fourth channel, but it is out of scope for a paste &mdash; it matters when you attach the file, and it is covered in the <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">redaction guide</a>.</p>
+
+        <h2>Why regex-only redaction fails before an LLM</h2>
+
+        <p>Regex is the right first tool and the wrong only tool. It nails the well-formatted tier: SSNs, payment cards, IBANs, dates of birth. Two hard limits show up immediately in LLM-prep work:</p>
+
+        <ol>
+            <li><strong>The semantic tier is invisible to it.</strong> A pattern cannot express &ldquo;a diagnosis&rdquo;, &ldquo;a person&rsquo;s home address written out in prose&rdquo;, or a project codename. Those need a model that reads context &mdash; which is exactly what a local LLM does in PrivateRedact: chunked text, strict output schema, detections mapped back to exact character offsets.</li>
+            <li><strong>Naive matching destroys readability.</strong> The fix everyone reaches for &mdash; black the whole line &mdash; produces a document you can no longer check against the question you were going to ask. Value-only redaction (black &ldquo;555-1234&rdquo;, keep &ldquo;Phone:&rdquo;) is what keeps the summary request answerable.</li>
+        </ol>
+
+        <p>And the manual route fails worst of all: hand-drawn boxes miss page 47&rsquo;s SSN, and in most viewers the rectangle covers the rendering, not the text &mdash; select-and-copy underneath reveals everything. If the document is worth protecting, it is worth a pipeline that re-reads its own output.</p>
+
+        <h2>Redact PII before sending to an LLM: the step-by-step</h2>
+
+        <p>This is the checklist I use, whether by hand or in the app:</p>
+
+        <ol>
+            <li><strong>Decide what the model actually needs.</strong> A summary task often needs roles and amounts, not names. Every field you keep is a field you do not have to protect.</li>
+            <li><strong>Run the structured pass.</strong> Regex over the well-formatted tier: SSNs, cards, IBANs, DOBs. Fast, deterministic, and it should never be skipped even when an LLM pass runs after it.</li>
+            <li><strong>Run the semantic pass.</strong> Local LLM over the prose for the context tier: names, addresses, diagnoses, codenames. Local, because sending the document to a cloud detection API recreates the exact leak you are preventing.</li>
+            <li><strong>Redact values, not lines &mdash; then review.</strong> The document must stay readable enough to confirm the redaction engine did not miss what you care about. Ninety seconds of review is part of the pipeline, not an optional extra.</li>
+            <li><strong>Verify the artifact you will paste &mdash; not the one you started with.</strong> Whatever leaves your machine, re-read it as text and scan it again.</li>
+        </ol>
+
+        <h2>Prove it worked: the leak-scan rule</h2>
+
+        <p>The step most workflows skip is the one I trust most: after export, re-OCR the output and scan it again for PII. Not the source &mdash; the artifact. If the scan was skipped or failed, the correct report is &ldquo;could not verify&rdquo;, never &ldquo;clean&rdquo;. And export should leave nothing underneath: in PrivateRedact the output PDF is rasterized and rebuilt, so there is no text layer under the black boxes to select, copy, or peel back. &ldquo;Redacted&rdquo; that can be un-redacted with two clicks is not redacted; it is a delay.</p>
+
+        <p>The same rule covers metadata, by the way: author names, file paths, and EXIF fields survive most casual exports. Strip them by default, not as an afterthought.</p>
+
+        <div class="cta">
+            <p>PrivateRedact runs this pipeline offline &mdash; PDF, DOCX, images, and scans; regex plus a local LLM; value-only redaction with a review overlay; rasterized export with a leak-scan proof. <a href="https://mkarim.us/apps/privateredact.html">Load, detect, and review for free; export is a one-time license.</a></p>
+        </div>
+
+        <h2>Tooling</h2>
+
+        <p><a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> implements the whole pipeline as a desktop app: PDF, DOCX, images, and scans (OCR with a vision-model double-check on low-quality inputs), regex plus a local LLM, compliance presets for HIPAA / GDPR / PCI DSS / HR / Legal / Financial, value-only redaction with a review overlay, rasterized export with the leak-scan proof, and metadata stripping. It runs entirely on your machine &mdash; no upload, no account. Free to load, detect, and review; exporting the redacted file is a one-time license, no subscription.</p>
+
+        <p>If you want the engineering details &mdash; the extraction fork between born-digital and scanned pages, proportional redaction boxes, why the review overlay and the exporter must share one union function &mdash; that is the <a href="https://medium.com/@raju.monjurulkarim/redacting-pii-100-offline-a-technical-deep-dive-a326f9fed3b8" target="_blank" rel="noopener">technical deep dive</a> on Medium. And if your document is headed to a human instead of a model, the <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">Adobe-free redaction guide</a> covers that workflow.</p>
+
+        <h2>FAQ</h2>
+
+        <h3>What should I redact before sending to an LLM?</h3>
+        <p>Three tiers: direct identifiers (names, SSNs, account numbers), quasi-identifiers (dates of birth, employers, exact figures &mdash; individually harmless, identifying in combination), and context PII (diagnoses, codenames, addresses mentioned in prose). The third tier is the one regex misses and the one an LLM pass exists for.</p>
+
+        <h3>Is it safe to paste documents into an AI chatbot?</h3>
+        <p>Treat every paste as a disclosure to a system you do not control. Some services offer retention and training opt-outs on some tiers; the safe default for anything sensitive is to remove the PII first and treat the &ldquo;safe settings&rdquo; as a second layer, never the first.</p>
+
+        <h3>Can redaction be automatic but keep the document readable?</h3>
+        <p>Yes &mdash; that is value-only redaction: black the value, keep the label and surrounding text. It is harder to build than line-blacking, and it is the difference between a document you can still work with and a wall of black bars.</p>
+
+        <h3>Do I need to worry about scanned documents?</h3>
+        <p>Yes &mdash; a scanned page is an image, so there is no text layer to search unless you OCR it first. Word-level OCR boxes are what allow precise, value-only redaction on scans; paragraph-level boxes force line-blacking.</p>
+
+        <h3>What about metadata?</h3>
+        <p>Strip it. Author names, file paths, and image EXIF survive most casual export flows, and they leak even when the visible text is perfectly redacted. Default-on stripping is the only setting that survives a busy day.</p>
+
+        <h3>Does this matter if my AI tool is enterprise or private?</h3>
+        <p>Reduce the blast radius anyway. The copy of the document that lives in the assistant&rsquo;s history is a copy you no longer govern &mdash; and the cheapest moment to fix that is before the paste, not after.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-31-self-hosted-meeting-notes-long-audio.html">previous: self-hosted meeting notes</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

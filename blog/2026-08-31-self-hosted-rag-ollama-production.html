@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Self-Hosted RAG in Production: What the Tutorials Skip — Muhammad Karim</title>
+    <meta name="description" content="The deployment checklist beginner RAG tutorials skip: multi-user auth, per-KB permissions, model sizing, upgrades, and ops for Ollama-based self-hosted RAG." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-31-self-hosted-rag-ollama-production.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul, ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 31, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Self-Hosted RAG in Production: What the Tutorials Skip</h1>
+
+        <p>Most &ldquo;self hosted RAG with Ollama&rdquo; tutorials end at the same place: a notebook that answers questions over one PDF, running on localhost, with no login page. That is a demo. A self hosted RAG deployment &mdash; the thing a team actually uses on Tuesday morning &mdash; needs user accounts, permissions, a config that survives a restart, an upgrade path for the models, and answers to &ldquo;port already in use&rdquo; at 9 a.m. This post is the checklist I worked through while turning my own RAG prototype into a deployable system (<a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, the app I built and ship as complete source). It is organized around the five gaps between demo and deployment, so you can audit your own setup &mdash; whichever stack you run.</p>
+
+        <h2>Gap 1: Authentication and multi-user are not optional</h2>
+
+        <p>A tutorial can ignore auth because it has one user: you. The moment a second person touches the system, you need accounts. The moment you have accounts, you need an admin who manages them. In my app this is a dedicated <code>auth.py</code> module plus an admin dashboard for user management and system analytics &mdash; not because it is glamorous, but because &ldquo;who can log in&rdquo; is the first production question any team asks.</p>
+
+        <p>Two rules from shipping this:</p>
+
+        <ol>
+            <li><strong>Force the password change on first boot.</strong> My installer creates an <code>admin</code> / <code>admin123</code> account and the README tells you to change it immediately. If you are building your own, make the app refuse team mode until the default password is gone. Password complexity rules belong in config, not in hope.</li>
+            <li><strong>Separate deployment modes.</strong> <code>config.json</code> has a <code>deployment</code> section with <code>personal</code> (single user) and <code>team</code> (multi-user) values. A personal install should not carry team surface area, and a team install should not run without accounts. One switch, checked at startup.</li>
+        </ol>
+
+        <h2>Gap 2: Permissions are per knowledge base, not global</h2>
+
+        <p>Multi-user without permissions is worse than single-user: anyone can upload anything into the collection everyone queries. The unit of access control that matches how teams work is the knowledge base &mdash; &ldquo;the HR collection is read-only for most, upload for two people&rdquo; is a real requirement; &ldquo;everyone is an admin&rdquo; is not an answer.</p>
+
+        <p>Each knowledge base in my <code>config.json</code> carries its own flags:</p>
+
+        <pre><code>{
+  "id": "your_topic",
+  "name": "Your Topic",
+  "description": "Documents for your topic",
+  "chroma_db_path": "./chroma_db_store/your_topic",
+  "chroma_collection_name": "your_topic_collection",
+  "document_paths": ["./knowledge_bases/your_topic"],
+  "enabled": true,
+  "color": "#007bff",
+  "type": "team",
+  "allow_uploads": true,
+  "read_only": false
+}</code></pre>
+
+        <p><code>read_only</code>, <code>allow_uploads</code>, and <code>enabled</code> per collection &mdash; that is the whole model, and it covers most team situations without a permissions database. If you are designing your own, resist going finer than this at first; per-document ACLs inside a local RAG app are where weekend projects go to die.</p>
+
+        <p>Related: before confidential documents go into any shared collection, strip the identifiers you do not want indexed. I treat <a href="https://mkarim.us/apps/privateredact.html">offline PII redaction</a> as a pre-ingest step, not an afterthought &mdash; see also my <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">guide to redacting PDFs without Adobe Pro</a>.</p>
+
+        <h2>Gap 3: Retrieval settings decide self hosted RAG quality</h2>
+
+        <p>Chunk size and retrieval settings decide answer quality more than the LLM does. In this app they are fields in the <code>rag</code> section of <code>config.json</code>, next to the Ollama URL and model names &mdash; which means they are tunable without touching code, and reviewable in one place.</p>
+
+        <p>The practice I recommend: change one variable at a time, keep a small set of questions you ask after every change, and compare the retrieved passages &mdash; not just the generated answers. Retrieval is usually where quality is lost. I deliberately do not publish &ldquo;optimal&rdquo; chunk numbers here; they depend on your documents, and anyone who gives you a universal constant is guessing.</p>
+
+        <h2>Gap 4: Size the models to the box, and plan the upgrade</h2>
+
+        <p>The default pairing in my install is compact and runs on modest hardware: <code>qwen3:4b</code> for generation, <code>qwen3-embedding:0.6b</code> for embeddings &mdash; both pulled automatically by the installer. When the machine is stronger (20&nbsp;GB+ VRAM, or 24&nbsp;GB+ unified memory on Apple Silicon), the README&rsquo;s upgrade path is deliberately boring:</p>
+
+        <pre><code>ollama pull qwen3:30b</code></pre>
+
+        <p>then one line in <code>config.json</code>:</p>
+
+        <pre><code>"llm_model": "qwen3:30b"</code></pre>
+
+        <p>No reinstall, no migration, no re-index of the vector store &mdash; embeddings and generation are separately configured, so upgrading the chat model does not invalidate the collection you already built. If you switch embedding models, that is the change that forces a re-index; plan for it. Model references: <a href="https://ollama.com/library/qwen3" target="_blank" rel="noopener">Qwen3</a> and <a href="https://ollama.com/library/qwen3-embedding" target="_blank" rel="noopener">Qwen3 Embedding</a> on Ollama.</p>
+
+        <h2>Gap 5: Ops is a first-class feature</h2>
+
+        <p>The unglamorous list that decides whether people keep using the system:</p>
+
+        <ul>
+            <li><strong>Restart story.</strong> A <code>restart_app.sh</code> script and a &ldquo;knowledge base not showing &rarr; restart after config edits&rdquo; note in the README. Config changes should have one documented, boring path to take effect.</li>
+            <li><strong>Port conflicts.</strong> Port lives in config, not in code. &ldquo;Already in use&rdquo; is the most common support question for any local web app; make the answer a one-line edit.</li>
+            <li><strong>Dependency clarity.</strong> requirements.txt plus a venv the run scripts activate. The README&rsquo;s troubleshooting table (Ollama not running, ImportError, port, missing KB) maps to the four failures you will actually hit.</li>
+            <li><strong>Readable stack.</strong> <a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Flask</a>, <a href="https://www.trychroma.com/" target="_blank" rel="noopener">ChromaDB</a>, <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a>, <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> &mdash; standard, inspectable components. When you self-host, &ldquo;trust me&rdquo; is not an architecture; you should be able to read every line that touches your documents.</li>
+        </ul>
+
+        <h2>Should you build this or ship it?</h2>
+
+        <p>If the checklist above reads like your next six weekends, that is the honest signal. The demo is 10% of the work &mdash; the other 90% is everything above. Build it yourself if the building is the point; take the shortcut if the answering is the point. Either way, hold your deployment to this checklist.</p>
+
+        <div class="cta">
+            <p>I took the shortcut once the checklist was done: <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a> ships as complete source (Flask + ChromaDB + Ollama), one-time purchase, MIT-style &ldquo;use it, modify it, ship it&rdquo; posture. The <a href="https://github.com/monjurulkarim/self-hosted-rag" target="_blank" rel="noopener">public README</a> covers the full feature list.</p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>How is this different from the beginner tutorials?</h3>
+        <p>Tutorials cover ingest-to-answer on one PDF in a notebook. This post (and the app) cover the deployment layer: auth, per-KB permissions, config, model upgrades, ops. Both are legitimate; only one survives contact with a team.</p>
+
+        <h3>Can multiple people use a self hosted RAG at once?</h3>
+        <p>Yes &mdash; with accounts. The app ships multi-user with an admin dashboard and per-knowledge-base read/upload permissions, plus a single-user personal mode if you do not need any of it.</p>
+
+        <h3>Which document formats work?</h3>
+        <p>PDF, DOCX, TXT, MD, and CSV.</p>
+
+        <h3>What hardware do I need?</h3>
+        <p>The default Qwen models run on modest hardware via Ollama; the larger qwen3:30b path targets 20&nbsp;GB+ VRAM or 24&nbsp;GB+ unified memory. You need Python 3.10+.</p>
+
+        <h3>Do my documents leave the server?</h3>
+        <p>No. Parsing, embedding, vector search, and generation all run locally &mdash; there is no cloud AI API call anywhere in the pipeline.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-31-real-time-traffic-conflict-estimation-edge.html">previous: traffic conflicts on an edge device</a></span>
+            <span><a href="https://mkarim.us/apps/self-hosted-rag.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

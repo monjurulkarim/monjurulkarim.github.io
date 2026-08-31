@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Calibrate a Roadside Camera for Speed Estimation — Muhammad Karim</title>
+    <meta name="description" content="Calibrate a roadside camera for speed estimation: chessboard intrinsics, road-plane homography, runnable OpenCV code, and where the error hides." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 30, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Calibrate a Roadside Camera for Speed Estimation</h1>
+
+        <p>Every traffic pipeline I have shipped &mdash; including the <a href="https://github.com/monjurulkarim/YOLOv8_Object_Tracking_TensorRT" target="_blank" rel="noopener">YOLOv8 + TensorRT + ByteTrack one on a Jetson</a> &mdash; hits the same wall after the tracker works: pixel speeds are not speeds. To calibrate a roadside camera for speed estimation you need two calibrations, in the right order, and most tutorials quietly assume you already have them. This post is the step-by-step version: intrinsics from a chessboard, a road-plane homography from ground-control points, then pixels to meters per second &mdash; with runnable OpenCV code and the error sources that actually bite.</p>
+
+        <h2>Why calibrate the roadside camera for speed estimation at all</h2>
+
+        <p>A pixel is not a unit of length, and its physical size changes across the image. Near the camera a vehicle might cross 300 pixels per meter; at the far edge of the same frame, 30. Barrel distortion bends straight lane lines into curves. Multiply any of that by 30 seconds of trajectory and you get speed estimates that are confidently wrong. Calibration is the difference between "approximately 41 mph" and "a number."</p>
+
+        <p>Two models do the work:</p>
+
+        <ul>
+            <li><strong>Intrinsics</strong> &mdash; focal length, principal point, distortion coefficients: how this lens maps the world onto pixels. Fix it once per camera+lens pair and reuse it.</li>
+            <li><strong>Extrinsics</strong> &mdash; where the camera sits relative to the road plane. For planar roads (most roadside installs), a single 3&times;3 homography maps undistorted pixels to ground coordinates in meters.</li>
+        </ul>
+
+        <p>Order matters: remove lens distortion first, then map to the road plane. A homography fitted on distorted pixels inherits the distortion everywhere you did not sample.</p>
+
+        <h2>Step 1 &mdash; Intrinsics: the chessboard, done properly</h2>
+
+        <p>Print a checkerboard, tape it to something rigid, and capture 15&ndash;25 frames with varied angle, distance, and position in the frame &mdash; including edges and corners, where distortion lives. Then:</p>
+
+        <pre><code>import cv2, numpy as np, glob
+
+CHECKER = (9, 6)                      # INNER corners, (cols, rows)
+objp = np.zeros((CHECKER[0] * CHECKER[1], 3), np.float32)
+objp[:, :2] = np.mgrid[0:CHECKER[0], 0:CHECKER[1]].T.reshape(-1, 2)
+
+objpoints, imgpoints = [], []
+for f in glob.glob("calib/*.jpg"):
+    img = cv2.imread(f)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ok, corners = cv2.findChessboardCorners(
+        gray, CHECKER,
+        cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_NORMALIZE_FILTER)
+    if ok:
+        corners = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1),
+            (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 1e-3))
+        objpoints.append(objp)
+        imgpoints.append(corners)
+
+rms, K, dist, rvecs, tvecs = cv2.calibrateCamera(
+    objpoints, imgpoints, gray.shape[::-1], None, None)
+print("RMS reprojection error:", rms)   # aim well under 1.0 px</code></pre>
+
+        <p><code>cv2.calibrateCamera</code> returns the RMS reprojection error as its first value &mdash; read it. Well under 1 pixel is achievable with careful corners; if you are stuck at 2+, you have a bad detection, a bent board, or too little angle variety, not a bad camera. The method itself is Zhang's classic flexible calibration technique (<a href="https://doi.org/10.1109/34.888718" target="_blank" rel="noopener">PAMI 2000</a>); the <a href="https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html" target="_blank" rel="noopener">OpenCV calibration tutorial</a> covers the same ground with more knobs.</p>
+
+        <p>Pole-mounted already, no way to wave a board? Two fallbacks: the lens datasheet (rough), or keep the frame and skip to Step 2 &mdash; a homography alone can carry planar speed estimation if distortion is mild and you accept far-field error. But for anything you will report, calibrate the lens properly.</p>
+
+        <h2>Step 2 &mdash; Extrinsic: ground-control points on the road plane</h2>
+
+        <p>You need at least four non-collinear points whose image pixel positions AND world positions (meters, on the road plane) you know. The standard sources of known road geometry:</p>
+
+        <ul>
+            <li>Lane widths and dashed-stripe cycle lengths are set by road design standards &mdash; in the US, the FHWA's MUTCD. Look up your jurisdiction's values; do not guess.</li>
+            <li>For a permanent install, measure once with a tape or laser rangefinder and mark painted checkpoints you can re-find.</li>
+        </ul>
+
+        <p>Pick the points on the <strong>undistorted</strong> frame (see Step 3's pipeline), spread them across the region where vehicles will be measured &mdash; not all in one corner &mdash; and never off the plane (curbs, signs, overpasses break the assumption):</p>
+
+        <pre><code># pixel (x, y) -> world (X, Y) meters, both on the road plane
+pixels = np.array([[812, 730], [771, 412],
+                   [998, 741], [951, 404], [880, 570]], np.float32)
+world  = np.array([[0.0, 0.0], [0.0, 10.0],
+                   [3.6, 0.0], [3.6, 10.0], [1.8, 5.0]], np.float32)
+
+H, _ = cv2.findHomography(pixels[:4], world[:4])   # px -> meters
+
+# 5th point = validation: transform it, check the residual
+probe = cv2.perspectiveTransform(
+    pixels[4].reshape(-1, 1, 2), H).reshape(-1)
+print("residual (m):", np.linalg.norm(probe - world[4]))</code></pre>
+
+        <p>That fifth point is not optional ceremony. A homography will happily fit any four points, including wrong ones. Leave-one-out residuals on extra checkpoints are how you know the mapping is real &mdash; and how you detect later that the camera mount has slipped.</p>
+
+        <h2>Step 3 &mdash; Pixels to meters per second</h2>
+
+        <p>The pipeline: undistort every frame <em>once</em> with the optimal matrix, run detection and tracking on the undistorted frames, transform track points through <code>H</code>, and take the median of per-step speeds:</p>
+
+        <pre><code>newK, roi = cv2.getOptimalNewCameraMatrix(K, dist, (W, H), 1, (W, H))
+
+# per frame, before tracking:
+frame = cv2.undistort(frame, K, dist, None, newK)
+
+def speed_mps(track_px, ts):
+    """track_px: (N,2) pixel pts on UNDISTORTED frames; ts: (N,) seconds"""
+    w = cv2.perspectiveTransform(
+        track_px.reshape(-1, 1, 2).astype(np.float32), H).reshape(-1, 2)
+    steps = np.linalg.norm(np.diff(w, axis=0), axis=1)   # meters per step
+    dt = np.diff(ts)                                      # seconds per step
+    ok = dt &gt; 0
+    return float(np.median(steps[ok] / dt[ok]))</code></pre>
+
+        <p>Median over the whole track, not start-to-end distance over duration &mdash; the median shrugs off a few mangled detections, an average does not. Take timestamps from the video stream itself (frame index &divide; fps, or decoder PTS), never from wall-clock loops; Python's scheduler is not a clock.</p>
+
+        <h2>Where the error actually comes from</h2>
+
+        <ul>
+            <li><strong>Far-field growth.</strong> Pixels-per-meter shrinks with distance, so the same pixel noise is more meters of error at the far edge. Measure vehicles in the region your ground-control points actually cover.</li>
+            <li><strong>Skip-undistortion-itis.</strong> The most common silent killer: homography on raw distorted frames. The bends land wherever you did not sample.</li>
+            <li><strong>Mount movement.</strong> Wind, vibration, thermal expansion &mdash; a roadside camera is a slowly moving camera. Re-probe your painted checkpoints periodically; residual drift means re-fit <code>H</code>.</li>
+            <li><strong>Timestamp quantization.</strong> At low fps the &plusmn;half-frame uncertainty is a real fraction of a short track's duration. Long tracks, or higher fps near the measurement zone.</li>
+            <li><strong>Rolling shutter.</strong> Fast vehicles close to the camera shear across the sensor rows. Global-shutter cameras, or keep fast lanes out of the near field.</li>
+        </ul>
+
+        <p>And always close the loop on reality: a sanity band around the posted speed limit, the known length of a bus occupying so many meters, or &mdash; gold standard &mdash; a comparison against a loop detector or radar for a sample of vehicles.</p>
+
+        <div class="cta">
+            <p>Roadside footage is personal data &mdash; faces, plates, home addresses on dashboards. If a clip needs to leave the device for a report or a paper, redact it first: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> strips identifiers offline, no upload, with a local LLM.</p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Can I calibrate without physical access to the camera?</h3>
+        <p>Partially. From archived footage alone you can fit a homography from road markings with known dimensions, and intrinsics can be estimated from scene line features (classic self-calibration). Both are less accurate than five minutes on-site with a board and a tape measure &mdash; do the site visit if the numbers will be published.</p>
+
+        <h3>How many chessboard images do I actually need?</h3>
+        <p>15&ndash;25 usable detections with genuinely varied viewpoints is the practical sweet spot. Thirty near-identical frames add nothing; orientation diversity is what constrains the distortion terms.</p>
+
+        <h3>Is homography-based speed estimation accurate enough?</h3>
+        <p>For traffic studies: usually yes, in the covered region, with distortion removed and the fit validated on held-out points. For enforcement-grade measurement you need certified instruments &mdash; calibrated loops or radar &mdash; not a pipeline blog post. Validate yours against a reference sample and report the agreement.</p>
+
+        <h3>Curved or inclined roads?</h3>
+        <p>A single plane homography assumes a flat road. Gentle grades introduce small, systematic error; horizontal curves and vertical crests break the assumption in the far field &mdash; split the scene into regions with their own ground control, or move to a full 3D pose with a DLT-style multi-plane setup.</p>
+
+        <p>Next in this series: turning calibrated trajectories into <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">tracked ones on an edge device</a>, and conflict estimation on top (post coming). Background on where this line of work is headed: <a href="https://mkarim.us/blog/2026-08-29-llm-traffic-safety-applications.html">LLMs in traffic safety</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">previous: YOLOv8 + TensorRT on a Jetson</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

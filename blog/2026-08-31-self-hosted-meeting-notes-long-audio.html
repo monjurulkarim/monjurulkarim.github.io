@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Self-Hosted Meeting Notes for Any-Length Audio — Muhammad Karim</title>
+    <meta name="description" content="Self-hosted meeting notes without live capture: batch any-length audio through local Whisper and Ollama — the workflow meeting bots skip." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-31-self-hosted-meeting-notes-long-audio.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 31, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Self-Hosted Meeting Notes for Any-Length Audio</h1>
+
+        <p>Most tools and tutorials that say "self hosted meeting notes" quietly mean one workflow: a capture agent sits inside your live call, transcribes as you talk, and summarizes at the end. That is a real workflow &mdash; but it is not the only one. The other one starts after the meeting ends: you already have the recording (a Zoom export, a phone voice memo, a lecture capture, an interview file), and you need notes from it without uploading it anywhere. This post is about that second workflow &mdash; batch processing any-length audio into meeting notes on your own machine &mdash; and it is the half of the problem most self-hosted tooling skips.</p>
+
+        <p>I care about this split because I lived it. I built a self-hosted note taker that runs 100% offline (<a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank" rel="noopener">write-up on Medium</a>), later shipped it as a native Mac app (<a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>), and kept the self-hostable Flask version available for people who want the source. Every design decision below comes from that arc.</p>
+
+        <h2>What self hosted meeting notes means today</h2>
+
+        <p>Search the term and you mostly find live-capture projects. The best-known is <a href="https://github.com/Zackriya-Solutions/meetily" target="_blank" rel="noopener">Meetily</a>: a privacy-first meeting assistant that runs on your local machine, captures meetings, transcribes in real time, and generates summaries without sending data to the cloud. Projects in this space share a shape: local speech-to-text (usually Whisper-family models), a local LLM for the summary (often via Ollama), and a capture path that hooks into the meeting while it happens.</p>
+
+        <p>That shape answers the privacy question &mdash; nothing leaves your machine &mdash; and for meetings you host and attend live, it works. The stack is not the problem. The timing assumption is.</p>
+
+        <h2>Where live capture breaks down</h2>
+
+        <ul>
+            <li><strong>Meetings you did not record live.</strong> The recording arrives afterwards &mdash; a client sends a Zoom export, a colleague shares a Teams link, you find a voice memo from a site visit. There is nothing to capture in real time.</li>
+            <li><strong>Rooms that ban bots.</strong> Health, legal, HR, and enterprise calls increasingly prohibit meeting bots outright, even local ones. An after-the-fact file you process yourself does not join anything.</li>
+            <li><strong>Long audio.</strong> Lectures, seminars, deposition audio, conference talks. Three hours is a normal input here, not an edge case &mdash; and "short free tier, paid per minute above it" is the cloud model this whole ecosystem exists to escape.</li>
+            <li><strong>Backlogs.</strong> A month of back-to-back recordings processed in one batch is a different workload from one live meeting: it wants a queue and stable throughput, not a bot seat.</li>
+        </ul>
+
+        <p>None of these need real-time anything. They need a pipeline that accepts a file of any length and returns notes &mdash; locally.</p>
+
+        <h2>The batch pipeline: chunk, transcribe, minutes</h2>
+
+        <p>Here is the whole pipeline, the same one from the Medium write-up, in five steps:</p>
+
+        <ol>
+            <li><strong>Split the audio.</strong> pydub cuts the file into 10-minute chunks. Ten minutes is not magic &mdash; it is a trade-off: small enough that one bad chunk never poisons a run, big enough that per-chunk overhead stays noise. Chunk boundaries are the only place this pipeline can fail mid-way, so you want them cheap.</li>
+            <li><strong>Transcribe each chunk locally.</strong> Whisper per chunk &mdash; large-v3 when the audio is hard, base.en when the input is plain English and the quality bar is lower. Either way the call never leaves the machine.</li>
+            <li><strong>Combine the transcript.</strong> Concatenate in order, keeping chunk positions visible, so any sentence in the final minutes can be traced back to where in the recording it was said.</li>
+            <li><strong>Generate the minutes.</strong> The combined transcript goes to a local LLM via Ollama with a minutes prompt: summary, action items, key decisions. gemma3:27b produced the examples in the write-up.</li>
+            <li><strong>Run it in the background.</strong> In the Flask build this is a background thread with a polling UI &mdash; deliberately, because a three-hour batch job and an interactive page are different workloads. You submit the file, close the tab, come back.</li>
+        </ol>
+
+        <p>The one non-obvious lesson: <strong>do not hand an hour-plus transcript to the model in one call.</strong> Summarize per chunk, then merge the chunk summaries into the minutes. A single giant call degrades in the middle &mdash; models drop or garble content that sits far from the start of a very long context &mdash; and you will not notice, because the output still reads like confident minutes. Per-chunk summarization bounds what the model holds at once and gives you checkpoints: if chunk 14's summary is wrong, you regenerate chunk 14, not the meeting.</p>
+
+        <h2>Tooling that already does this</h2>
+
+        <p><strong>1. MeetingMint &mdash; the native Mac app.</strong> Record live or import any audio file &mdash; a Zoom or Teams export, a voice memo, an interview, a lecture &mdash; and batch through a backlog. "Import a three-hour lecture or a month of back-to-back call recordings" is the app's own pitch, and it is the one that matches this post. Whisper plus open language models on-device, 90+ languages, no cloud, no account, macOS 14+, free for your first 5 meetings. &rarr; <a href="https://mkarim.us/apps/meetingmint.html">mkarim.us/apps/meetingmint.html</a></p>
+
+        <p><strong>2. The Flask AI Meeting Note Taker &mdash; the self-host build.</strong> The full source of the pipeline above, runnable on your own machine: unlimited audio length (files up to 500&nbsp;MB), drag-and-drop web UI that is network-accessible so a lab or small team can point at one install, Whisper transcription, Ollama summaries split into minutes / action items / decisions, exports TXT, Markdown, or PDF. One-time purchase; the quick start is three steps &mdash; install Ollama, <code>pip install -r requirements.txt</code>, <code>python app.py</code>. &rarr; <a href="https://github.com/monjurulkarim/ai-meeting-note-taker" target="_blank" rel="noopener">github.com/monjurulkarim/ai-meeting-note-taker</a></p>
+
+        <p><strong>3. Build it yourself.</strong> The <a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank" rel="noopener">Medium deep dive</a> has the architecture &mdash; pydub chunking, Whisper, Ollama minutes &mdash; if you would rather own every line. If your interest is the ops side (keeping a local LLM stack actually running), the <a href="https://mkarim.us/blog/2026-08-31-self-hosted-rag-ollama-production.html">RAG-in-production post</a> covers the same discipline for a different workload.</p>
+
+        <h2>Practical notes for long audio</h2>
+
+        <ul>
+            <li><strong>Chunk size is a trade-off, not a constant.</strong> Shorter chunks mean cheaper re-runs and more merge seams where a sentence straddles a boundary; longer chunks mean fewer seams but more memory per chunk and a costlier failure. Ten minutes worked for meeting audio; material with long silences (lectures, depositions) tolerates longer chunks.</li>
+            <li><strong>Whisper model choice is accuracy vs speed &mdash; and language coverage.</strong> large-v3 for difficult audio; base.en when the input is English and the bar is lower. One trap: the <code>.en</code> variants are English-only. For anything multilingual, pick a multilingual Whisper model &mdash; that is where the 90+ language coverage comes from, and it is a model choice, not an app feature.</li>
+            <li><strong>Minutes quality tracks the local model.</strong> Bigger Ollama models hold longer contexts and write tighter merges; smaller ones run faster and are fine for short meetings. Stated qualitatively on purpose &mdash; I am not going to invent a benchmark I did not run.</li>
+            <li><strong>Prompt structure matters more than you would think.</strong> There are no embeddings in this pipeline, so there is nothing to re-tune there. What moves output quality is the minutes prompt: fix the sections (summary, action items, decisions), have it cite chunk positions when it can, and tell it explicitly not to invent attendees or decisions that are not in the transcript.</li>
+            <li><strong>Disk and patience.</strong> The audio stays, the transcripts stay, and the models live on disk too &mdash; multi-gigabyte territory once you keep large-v3 around. Long batches finish in minutes per file, not seconds. That is the price of everything staying local, and it is the price you chose on purpose.</li>
+        </ul>
+
+        <div class="cta">
+            <p>MeetingMint does this workflow natively &mdash; import a recording of any length, get minutes on-device, nothing uploaded: <a href="https://mkarim.us/apps/meetingmint.html">free for your first 5 meetings</a>. Prefer to run the source yourself? The <a href="https://mkarim.us/apps/">Flask build is linked from the apps page</a>.</p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Can it handle a three-hour recording?</h3>
+        <p>Yes &mdash; that is the design point. Chunking exists precisely so input length stops being the limit. The MeetingMint page uses "import a three-hour lecture" as its example for a reason.</p>
+
+        <h3>Do my recordings leave my machine?</h3>
+        <p>No. Transcription (Whisper) and summarization (Ollama) both run locally. The native app needs no cloud and no account; the Flask build runs on your machine &mdash; or your own server, since its UI is network-accessible.</p>
+
+        <h3>What formats go in, what comes out?</h3>
+        <p>In: the audio formats Whisper handles &mdash; .m4a, .mp3, .wav and more; the Flask build accepts files up to 500&nbsp;MB. Out: TXT, Markdown, or PDF.</p>
+
+        <h3>What about languages other than English?</h3>
+        <p>Whisper is multilingual &mdash; the app ships with 90+ language coverage. Use a multilingual Whisper model rather than a <code>.en</code> variant, which is English-only.</p>
+
+        <h3>Do I need a GPU?</h3>
+        <p>No. It runs on CPU; a GPU makes it faster, not possible. Expect long backlogs on CPU to take real time &mdash; queue them, do not sit through them.</p>
+
+        <h3>How is this different from Meetily / cloud note takers?</h3>
+        <p>Timing, not privacy. Meetily solves the live problem &mdash; capture while you talk &mdash; and solves it well. Cloud tools solve live capture too, then upload your audio and bill per minute above a free tier. This workflow starts after the recording exists: no bot in the room, nothing uploaded, no per-minute meter.</p>
+
+        <p>The architecture behind both tools is written up in full in <a href="https://medium.com/@raju.monjurulkarim/i-built-an-self-hosted-ai-meeting-note-taker-that-runs-100-offline-heres-how-you-can-too-d110b7ef0b95" target="_blank" rel="noopener">the Medium build log</a>; the ops discipline for keeping a local LLM stack alive is in <a href="https://mkarim.us/blog/2026-08-31-self-hosted-rag-ollama-production.html">Self-Hosted RAG in Production</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-31-self-hosted-rag-ollama-production.html">previous: self-hosted RAG in production</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

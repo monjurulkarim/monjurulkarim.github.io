@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Real-Time Traffic Conflict Estimation on an Edge Device — Muhammad Karim</title>
+    <meta name="description" content="Real-time traffic conflict estimation on an edge device: tracked, calibrated trajectories turned into TTC and PET events with runnable Python — and where pipelines fail." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-08-31-real-time-traffic-conflict-estimation-edge.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">August 31, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Real-Time Traffic Conflict Estimation on an Edge Device</h1>
+
+        <p>Every traffic pipeline I have shipped &mdash; including the <a href="https://github.com/monjurulkarim/YOLOv8_Object_Tracking_TensorRT" target="_blank" rel="noopener">YOLOv8 + TensorRT + ByteTrack one on a Jetson</a> &mdash; hits the same wall once the <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">tracker works</a> and the <a href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html">camera is calibrated</a>: now what? Speeds are nice, counts are nice, but the question a transportation engineer actually gets funded to answer is &ldquo;did this treatment make the site safer?&rdquo; Crash counts need years to move. Real-time traffic conflict estimation is the practical answer: measure near-misses instead of crashes, continuously, on the edge device itself. This post closes the trilogy &mdash; tracked trajectories, calibrated to meters, and now turned into safety events.</p>
+
+        <h2>Why conflicts instead of crashes</h2>
+
+        <p>A crash at a single intersection is a rare event; waiting for enough of them to compare a before and after period is a multi-year project. The traffic conflict technique predates deep learning by decades: Perkins and Harris generalized the idea at General Motors in 1967, Hayward formalized time-to-collision in his 1972 Penn State report, and Hyd&eacute;n&rsquo;s Swedish conflicts technique turned observer ratings into a field method in 1987. What changed since then is not the math &mdash; it&rsquo;s that a small, cheap box can now run the whole observation automatically.</p>
+
+        <p>The modern reference for computing these measures is Gettman and Head&rsquo;s Surrogate Safety Assessment Methodology (<a href="https://www.fhwa.dot.gov/publications/research/safety/03050/" target="_blank" rel="noopener">FHWA-RD-03-050</a>; journal version in <a href="https://doi.org/10.3141/1840-12" target="_blank" rel="noopener">TRR 1840</a>). It defines the surrogate measures and their algorithms for conflict points (crossing flows) and conflict lines (merging and following flows) &mdash; the taxonomy any serious implementation should follow.</p>
+
+        <h2>The two measures that carry most of the weight</h2>
+
+        <p><strong>Time-to-collision (TTC).</strong> Hayward&rsquo;s definition: the time required for two vehicles to collide if they continue at their present speed and on the same path. For a tracked pair you compute it at every time step and keep the minimum over the interaction. Thresholds are a research choice, not physics: the SSAM algorithms use 1.5&nbsp;s as their worked example of an upper limit for a valid conflict at intersection approaches &mdash; from van der Horst&rsquo;s dissertation work &mdash; while higher critical values (2.6&ndash;3.5&nbsp;s) appear in high-speed car-following.</p>
+
+        <p><strong>Post-encroachment time (PET).</strong> The time gap at the crossing point between one road user leaving the area and the other arriving. PET needs only where the paths cross and when each user passed it &mdash; no velocities, which makes it the more robust choice when detection noise is unavoidable. Its weakness: it assumes you can identify the conflict point, which is exactly where two vehicles occlude each other in the image.</p>
+
+        <h2>The code</h2>
+
+        <p>Prerequisites from the previous two posts: per-road-user tracks (id, pixel positions, timestamps) from the tracker, and a homography mapping undistorted pixels to ground meters. Everything below is plain numpy.</p>
+
+        <p>TTC, in closest-approach form:</p>
+
+        <pre><code>import numpy as np
+
+def min_ttc(a, ta, b, tb, extent=1.0):
+    """Minimum time-to-collision between two ground-plane tracks.
+
+    a, b: (N,2) tracks in meters; ta, tb: strictly increasing seconds.
+    extent: center-to-contact distance that counts as a collision (m).
+    """
+    bx = np.stack([np.interp(ta, tb, b[:, 0]),
+                   np.interp(ta, tb, b[:, 1])], axis=1)
+    dt = np.diff(ta)
+    va = np.diff(a, axis=0) / dt[:, None]        # velocity samples
+    vb = np.diff(bx, axis=0) / dt[:, None]
+    r  = a[:-1] - bx[:-1]                        # relative position
+    v  = va - vb                                  # relative velocity
+    vv = np.einsum('ij,ij-&gt;i', v, v)
+    t  = np.where(vv &gt; 0, -np.einsum('ij,ij-&gt;i', r, v) / vv, np.inf)
+    ok = (t &gt; 0) &amp; (t &lt; 10)                      # plausible horizon
+    dmin = np.linalg.norm(r + v * t[:, None], axis=1)
+    hit = ok &amp; (dmin &lt;= extent)                  # on a collision course
+    return float(np.min(t[hit])) if hit.any() else np.inf</code></pre>
+
+        <p>PET, in path-crossing form:</p>
+
+        <pre><code>def _time_at(track, ts, x):
+    """Timestamp at which a track passed closest to ground point x."""
+    d = np.linalg.norm(track - x, axis=1)
+    k = int(np.argmin(d))
+    if k == 0 or k == len(ts) - 1:
+        return float(ts[k])
+    lo, hi = k - 1, k + 1
+    seg = track[hi] - track[lo]
+    t = np.clip((x - track[lo]) @ seg / (seg @ seg), 0.0, 1.0)
+    return float(ts[lo] + t * (ts[hi] - ts[lo]))
+
+def pet(a, ta, b, tb):
+    """Post-encroachment time at the crossing of two paths (seconds)."""
+    D = np.linalg.norm(a[:, None, :] - b[None, :, :], axis=2)
+    i, j = np.unravel_index(np.argmin(D), D.shape)
+    x = 0.5 * (a[i] + b[j])          # conflict point (m)
+    return _time_at(b, tb, x) - _time_at(a, ta, x)</code></pre>
+
+        <p>For crossing conflicts, report both; they disagree in informative ways.</p>
+
+        <h2>What real-time conflict estimation costs on the edge</h2>
+
+        <p>Here is the good news: everything above is microseconds of numpy. The compute budget of this pipeline was spent before the safety stage &mdash; on the detector. That is why the TensorRT engine from the <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">tracking post</a> is the right base: export once, run batch-1 inference on the Jetson, and treat conflict estimation as a callback on track updates. Two practical notes:</p>
+
+        <ul>
+            <li>Gate candidate pairs by spatial proximity (a few meters) before running TTC/PET. At typical intersection densities the full pairwise matrix is already trivial, but gating keeps it trivial at peak.</li>
+            <li>Run the safety stage on every track update, not on saved video. The output worth storing is the event log &mdash; timestamp, pair, measure values, conflict point &mdash; not the video itself. A day of events is kilobytes; a day of video is a privacy liability.</li>
+        </ul>
+
+        <h2>Where it goes wrong</h2>
+
+        <ul>
+            <li><strong>ID switches.</strong> A tracker that merges two vehicles into one identity erases conflicts silently. ByteTrack is sturdy, not perfect: audit switches before trusting a low count, and prefer PET (path-based) when tracks are short.</li>
+            <li><strong>Centroid vs. contact point.</strong> Vehicles are 4.5&nbsp;m long. Map the bottom-center of the detection box to the ground plane, not the box center, and set <code>extent</code> from real vehicle dimensions &mdash; not 1.0 by habit.</li>
+            <li><strong>Far-field amplification.</strong> The homography error that was tolerable for speeds multiplies in TTC, which divides by closing speed. Measure conflicts inside your <a href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html">ground-control region</a>, full stop.</li>
+            <li><strong>Occlusion at the worst moment.</strong> Two vehicles about to conflict overlap in the image exactly when you need them most. Predict through short gaps with a constant-velocity model, and flag events whose tracks were patched.</li>
+            <li><strong>Threshold-only reporting.</strong> &ldquo;14 conflicts below 1.5&nbsp;s&rdquo; hides more than it shows. Report the distribution of TTC/PET by hour and location &mdash; the shape moves before the count does.</li>
+        </ul>
+
+        <div class="cta">
+            <p>Roadside footage is personal data &mdash; faces, plates, home addresses on dashboards. If a clip needs to leave the device for a report or a paper, redact it first: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a> strips identifiers offline, no upload, with a local LLM.</p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Which measure should I compute first, TTC or PET?</h3>
+        <p>PET for crossing movements &mdash; it needs no velocities and survives noisy detections. TTC for following and rear-end interactions, where there is no crisp crossing point. Report both when you can.</p>
+
+        <h3>Does conflict estimation need special camera placement?</h3>
+        <p>The <a href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html">calibration post&rsquo;s</a> requirements still apply, plus one: the conflict zone itself must be visible. A camera that sees long approach legs but not the crossing point produces speeds, not conflicts.</p>
+
+        <h3>How much video do I need for stable estimates?</h3>
+        <p>More than you think &mdash; serious conflicts are rarer than vehicles. The method matters as much as the volume: compare like with like (same weekday mix, same hours), and treat the event count as a trend line, not a one-shot verdict.</p>
+
+        <h3>Can I run this CPU-only?</h3>
+        <p>The safety stage, trivially. The detector is the cost &mdash; and that is a TensorRT/Jetson question, covered in the <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">tracking post</a>.</p>
+
+        <p>This closes the series this post was promised in. The pieces it builds on: <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">detection and tracking on a Jetson</a> and <a href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html">roadside camera calibration</a>; the wider research direction is in <a href="https://mkarim.us/blog/2026-08-29-llm-traffic-safety-applications.html">LLMs in traffic safety</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-30-roadside-camera-calibration-speed-estimation.html">previous: calibrate a roadside camera</a></span>
+            <span><a href="https://mkarim.us/apps/privateredact.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

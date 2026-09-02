@@ -36,15 +36,15 @@
 
   <rect class="pick" x="210" y="205" width="150" height="58" rx="8"/>
   <text class="bt" x="285" y="228" text-anchor="middle" fill="#0d6efd">CaseGuard</text>
-  <text class="s" x="285" y="247" text-anchor="middle">+ video &amp; audio, on-prem</text>
+  <text class="s" x="285" y="247" text-anchor="middle">video &amp; audio too</text>
 
   <rect class="pick" x="400" y="205" width="150" height="58" rx="8"/>
   <text class="bt" x="475" y="228" text-anchor="middle" fill="#0d6efd">Redactable</text>
-  <text class="s" x="475" y="247" text-anchor="middle">team workflows, audit trail</text>
+  <text class="s" x="475" y="247" text-anchor="middle">teams, audit trail</text>
 
   <rect class="pick" x="570" y="205" width="150" height="58" rx="8"/>
   <text class="bt" x="645" y="228" text-anchor="middle" fill="#0d6efd">Acrobat Pro</text>
-  <text class="s" x="645" y="247" text-anchor="middle">if already subscribed</text>
+  <text class="s" x="645" y="247" text-anchor="middle">already subscribed</text>
 
   <path class="link" d="M155,156 C130,170 118,185 114,200" marker-end="url(#a11)"/>
   <path class="link" d="M245,156 C270,170 282,185 286,200" marker-end="url(#a11)"/>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>TunnelMate: SSH Tunnel Manager for Mac — Muhammad Karim</title>
+    <meta name="description" content="Set up an SSH tunnel on a Mac without the terminal. TunnelMate is a menu-bar SSH tunnel manager: pick your service, flip a switch, connected. $9.99 one-time, macOS 14+." />
+    <link rel="canonical" href="https://mkarim.us/apps/tunnelmate.html" />
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <!-- Bootstrap core CSS (matches site theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root { --primary: #bd5d38; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Muli, Roboto, "Helvetica Neue", Arial, sans-serif; color: #212529; }
+        h1, h2, h3, .navbar-brand { font-family: "Saira Extra Condensed", -apple-system, "Segoe UI", sans-serif; font-weight: 700; text-transform: uppercase; }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.2rem; }
+        .text-brand { color: var(--primary); }
+        .btn-brand { background-color: var(--primary); border-color: var(--primary); color: #fff; }
+        .btn-brand:hover { background-color: #a04e2e; border-color: #a04e2e; color: #fff; }
+        .hero { padding: 4.5rem 0 3rem; background: #f8f9fa; border-bottom: 1px solid #e9ecef; }
+        .section-pad { padding: 3.5rem 0; }
+        .step-num { display: inline-block; width: 2.2rem; height: 2.2rem; line-height: 2.2rem; text-align: center; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; margin-bottom: 0.75rem; }
+        .card { border: 1px solid #e9ecef; }
+        .feature-list li { margin-bottom: 0.5rem; }
+        .faq dt { font-weight: 700; margin-top: 1.25rem; }
+        .offline-box { background: #212529; color: #f8f9fa; border-radius: 0.5rem; padding: 2rem; }
+        .offline-box .check { color: #28a745; font-weight: 700; }
+        code.shell { background: #212529; color: #f8f9fa; border-radius: 0.25rem; padding: 0.15rem 0.5rem; font-size: 0.85em; white-space: nowrap; }
+        figure figcaption { color: #6c757d; font-size: 0.9rem; }
+        footer { background: #212529; color: #adb5bd; padding: 2.5rem 0; font-size: 0.95rem; }
+        footer a { color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://mkarim.us/">Muhammad Karim</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#trust">Security</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item"><a class="btn btn-brand ml-lg-2 my-1" href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">Get TunnelMate — $9.99</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="mb-2">TunnelMate: SSH Tunnels <span class="text-brand">From Your Menu Bar</span></h1>
+                    <p class="lead font-weight-bold">Local port forwarding without the terminal — pick your service, flip a switch, connected.</p>
+                    <p class="mb-4">Setting up an SSH tunnel on a Mac usually means a long <code class="shell">ssh -N -L</code> command every morning, a terminal window you can't close, and no idea whether the tunnel actually works until something fails. TunnelMate is a menu-bar SSH tunnel manager for macOS that does it for you: a four-step wizard, one switch, and a <strong>Connected</strong> status that only appears when the service on the other end actually answers.</p>
+                    <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">Buy on Gumroad — $9.99 one-time</a>
+                    <p class="small text-muted mt-3 mb-0">One-time purchase &middot; Free updates to the 1.x series &middot; Requires macOS 14 or later.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="offline-box">
+                        <h3 class="text-white mb-3" style="font-size:1.3rem;">The tunnel model</h3>
+                        <p class="mb-1"><span class="check">✓</span> Flip a switch — no terminal, nothing to memorize</p>
+                        <p class="mb-1"><span class="check">✓</span> "Connected" is health-checked, not assumed</p>
+                        <p class="mb-1"><span class="check">✓</span> Auto-reconnects after network drops and sleep</p>
+                        <p class="mb-1"><span class="check">✓</span> Secrets live in your Keychain, never in config files</p>
+                        <p class="mb-0"><span class="check">✓</span> Drives the system ssh — your existing setup works</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What it does / who it's for -->
+    <section class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">What it does — and who it is for</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>TunnelMate manages SSH local port forwarding: it forwards a port on your Mac (say, <code class="shell">localhost:11434</code>) to a service running on a remote server, so local tools can reach it as if it were local. That is the part it automates — the wizard, the connection, the reconnection, and the verification that the service actually responds through the tunnel.</p>
+                    <p>It is not another SSH client and it does not replace your terminal. It drives the system <code class="shell">ssh</code> already on your Mac, so everything your terminal can reach — your existing <code class="shell">~/.ssh/config</code>, keys, and agent — TunnelMate can tunnel.</p>
+                </div>
+                <div class="col-lg-6">
+                    <p><strong>Built for people who tunnel to the same services every day:</strong></p>
+                    <ul class="feature-list">
+                        <li><strong>Self-hosted AI</strong> — reach Ollama, or a private RAG stack you host yourself</li>
+                        <li><strong>Automation &amp; scrapers</strong> — Firecrawl, n8n, and other self-hosted tools</li>
+                        <li><strong>Notebooks &amp; dev servers</strong> — Jupyter, and the services you develop against</li>
+                        <li><strong>Databases</strong> — running on your own VPS or work server</li>
+                        <li><strong>Anyone</strong> — a Raspberry Pi at home, a work box, any host you can SSH to</li>
+                    </ul>
+                    <p class="mb-0">Self-hosting AI tools yourself? <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a> pairs well with a tunnel-managed Ollama box.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">How it works — four steps, once</h2>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <span class="step-num">1</span>
+                    <h3 style="font-size:1.4rem;">Answer four things</h3>
+                    <p>The setup wizard asks for a service name, its port, the server, and your username. That is the whole form.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="step-num">2</span>
+                    <h3 style="font-size:1.4rem;">Get a menu-bar icon</h3>
+                    <p>Each service appears in your menu bar, with its own switch. Saved servers are reused across services.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="step-num">3</span>
+                    <h3 style="font-size:1.4rem;">Flip the switch</h3>
+                    <p>TunnelMate launches the tunnel, then verifies the remote service actually answers — only then does it show <strong>Connected</strong>.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="step-num">4</span>
+                    <h3 style="font-size:1.4rem;">Open your service</h3>
+                    <p>Click <em>Open Service</em> to jump straight to <code class="shell">http://localhost:&lt;port&gt;</code>. Done.</p>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">The morning ritual it replaces</h3>
+                    <p>Without a tunnel manager, port forwarding on a Mac means <code class="shell">ssh -N -L 11434:127.0.0.1:11434 user@host</code> in a terminal tab you keep open, re-run after every network change or sleep, and re-check by hand when a page suddenly won't load.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Set-and-forget instead</h3>
+                    <p>TunnelMate reconnects automatically with backoff when the network drops, recovers after sleep/wake, and tells you the true state of the tunnel — because it checks the service, not just the SSH process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security -->
+    <section id="trust" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Security you can check</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Secrets stay in your Keychain</h3>
+                    <p>Passwords and passphrases are stored in the macOS Keychain — never in config files — and logs are scrubbed of secrets. The app is a signed and notarized Mac app: Developer ID signed, notarized by Apple, install by dragging the DMG to Applications.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Safe first connections</h3>
+                    <p>An unknown or changed host key opens a review sheet where you compare fingerprints before trusting the server — the same caution the terminal gives you, without the raw <code class="shell">yes/no</code> prompt.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Authentication you already use</h3>
+                    <p>Password, SSH key, or ssh-agent — all supported. Endpoints can be imported from your existing <code class="shell">~/.ssh/config</code>, so there is nothing to re-enter.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Errors a human can read</h3>
+                    <p>When a connection fails, TunnelMate translates the error into a plain-language cause and fix — instead of leaving you to decode SSH's exit output.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">Features</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>Set-and-forget tunnels</strong> — automatic reconnection with backoff; recovery after sleep/wake</li>
+                        <li><strong>Real health checks</strong> — "Connected" only when the remote service actually responds</li>
+                        <li><strong>Saved servers</strong> — reuse endpoints across services; import from <code class="shell">~/.ssh/config</code></li>
+                        <li><strong>Open Service</strong> — one click to <code class="shell">http://localhost:&lt;port&gt;</code></li>
+                        <li><strong>Plain-language diagnostics</strong> — errors with causes and fixes</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="feature-list">
+                        <li><strong>Simple &amp; Advanced modes</strong> — a friendly editor, or full control: identity files, agent forwarding, keepalives, multiple forwards, custom health checks</li>
+                        <li><strong>Keychain-only secrets</strong> — never in config files; logs scrubbed</li>
+                        <li><strong>Host-key review</strong> — compare fingerprints before trusting a new or changed server</li>
+                        <li><strong>Tunnels on your LAN</strong> — bind a tunnel to your Wi-Fi address and open it from an iPhone or iPad on the same network</li>
+                        <li><strong>Native Mac app</strong> — macOS 14+, signed and notarized, drives the system ssh</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Frequently asked questions</h2>
+            <dl class="mb-0">
+                <dt>How do I set up an SSH tunnel on a Mac?</dt>
+                <dd>The built-in way is a command like <code class="shell">ssh -N -L 11434:127.0.0.1:11434 user@host</code>, kept running in a terminal. TunnelMate wraps that in a menu-bar app: a four-step wizard (service name, port, server, username), then a switch you flip. It launches the tunnel, health-checks it, and shows Connected only when the remote service answers.</dd>
+
+                <dt>Is TunnelMate an SSH client?</dt>
+                <dd>No — it is a tunnel manager. It drives the system <code class="shell">ssh</code> on your Mac, so it works with everything your terminal ssh already uses: your <code class="shell">~/.ssh/config</code>, identity files, and ssh-agent. You keep your terminal for everything else.</dd>
+
+                <dt>What services can I tunnel?</dt>
+                <dd>Anything running on a server you can reach over SSH and that speaks TCP on a port — Ollama, Firecrawl, n8n, Jupyter, databases, dev servers, internal dashboards. Your own VPS, a Raspberry Pi, or a work server all work.</dd>
+
+                <dt>Where are my passwords and keys stored?</dt>
+                <dd>Passwords and passphrases go into the macOS Keychain — never into config files — and TunnelMate scrubs secrets from its logs. Identity files and the ssh-agent are used as-is if you prefer them.</dd>
+
+                <dt>What happens when my Wi-Fi drops or my Mac sleeps?</dt>
+                <dd>TunnelMate reconnects automatically with backoff, and recovers after sleep/wake. Because the health check re-verifies the service, you can trust the Connected status again without poking at it.</dd>
+
+                <dt>Can I open the tunneled service from my iPhone or iPad?</dt>
+                <dd>Yes — bind a tunnel to your Mac's Wi-Fi address, then open <code class="shell">http://&lt;mac-ip&gt;:&lt;port&gt;</code> from any device on the same network.</dd>
+
+                <dt>What does it cost?</dt>
+                <dd>$9.99, one-time. Updates through the 1.x series are free.</dd>
+
+                <dt>What are the requirements?</dt>
+                <dd>A Mac running macOS 14 (Sonoma) or later, and a server you can reach over SSH. Password, SSH key, or ssh-agent authentication — all supported. The app is Developer ID signed and notarized by Apple.</dd>
+
+                <dt>Where do I get it?</dt>
+                <dd>On Gumroad: <a href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">TunnelMate — SSH tunnels from your menu bar</a>. One-time purchase, DMG download.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section-pad bg-light">
+        <div class="container text-center">
+            <h2 class="mb-3">Stop typing that ssh command every morning</h2>
+            <p class="lead mb-4">Set your services up once, flip the switches, and let the tunnels take care of themselves.</p>
+            <a class="btn btn-brand btn-lg mb-2" href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">Get TunnelMate on Gumroad — $9.99</a>
+        </div>
+    </section>
+
+    <!-- FAQ structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "How do I set up an SSH tunnel on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "The built-in way is a command like ssh -N -L 11434:127.0.0.1:11434 user@host kept running in a terminal. TunnelMate wraps that in a menu-bar app: a four-step wizard, then a switch you flip. It launches the tunnel, health-checks it, and shows Connected only when the remote service answers."}},
+        {"@type": "Question", "name": "Is TunnelMate an SSH client?", "acceptedAnswer": {"@type": "Answer", "text": "No — it is a tunnel manager. It drives the system ssh on your Mac, so it works with your ~/.ssh/config, identity files, and ssh-agent. You keep your terminal for everything else."}},
+        {"@type": "Question", "name": "Where are my passwords and keys stored?", "acceptedAnswer": {"@type": "Answer", "text": "Passwords and passphrases go into the macOS Keychain — never into config files — and TunnelMate scrubs secrets from its logs."}},
+        {"@type": "Question", "name": "What happens when my Wi-Fi drops or my Mac sleeps?", "acceptedAnswer": {"@type": "Answer", "text": "TunnelMate reconnects automatically with backoff and recovers after sleep/wake. The health check re-verifies the service, so the Connected status is trustworthy."}},
+        {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "$9.99, one-time. Updates through the 1.x series are free."}},
+        {"@type": "Question", "name": "What are the requirements?", "acceptedAnswer": {"@type": "Answer", "text": "A Mac running macOS 14 (Sonoma) or later, and a server you can reach over SSH. Password, SSH key, or ssh-agent authentication are all supported. The app is Developer ID signed and notarized by Apple."}}
+      ]
+    }
+    </script>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Muhammad Karim, Ph.D.</h3>
+                    <p class="mb-0">I build privacy-first, local-first Mac tools.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Product</h3>
+                    <p class="mb-1"><a href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">TunnelMate on Gumroad</a></p>
+                    <p class="mb-0"><a href="mailto:support@mkarim.us">support@mkarim.us</a></p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Site</h3>
+                    <p class="mb-1"><a href="https://mkarim.us/">Home</a></p>
+                    <p class="mb-1"><a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a></p>
+                    <p class="mb-1"><a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a></p>
+                    <p class="mb-0"><a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a></p>
+                </div>
+            </div>
+            <hr style="border-color:#495057;" />
+            <p class="mb-0 small">© 2026 Muhammad Karim. TunnelMate — SSH tunnels from your menu bar: local port forwarding without the terminal.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

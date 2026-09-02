@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Record Internal Audio on a Mac &mdash; With or Without a Mic &mdash; Muhammad Karim</title>
+    <meta name="description" content="Two working ways to record internal audio on a Mac: the free BlackHole + QuickTime route, and a recorder that saves mic and system audio in one file." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-01-record-internal-audio-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 1, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Record Internal Audio on a Mac &mdash; With or Without a Mic</h1>
+
+        <p>Every Mac plays sound beautifully and makes you work to record any of it. If you&rsquo;ve ever finished a screen recording and discovered the audio track is silent &mdash; or realized QuickTime can capture your voice but not the meeting, the tab, or the game you&rsquo;re explaining &mdash; you&rsquo;ve hit the same wall: macOS has no built-in way to record internal audio. The system&rsquo;s own output never appears as a recording input, so when you try to record system audio on a Mac, the recorder hears nothing.</p>
+
+        <p>That&rsquo;s a design choice, not a bug: macOS routes audio to the speakers without ever exposing it as a source a recorder can select. The workarounds fall into two camps &mdash; a free virtual-audio-driver setup you configure once and tolerate forever, or a dedicated recorder that taps system audio directly. This guide walks through both: a complete free recipe (BlackHole + QuickTime, including the multi-output trick most tutorials skip), and the one-click route if you&rsquo;d rather never think about audio routing again.</p>
+
+        <h2>Why macOS doesn&rsquo;t let you do this natively</h2>
+
+        <p>On Windows, &ldquo;Stereo Mix&rdquo; has existed for years (even when hidden by default). macOS has no equivalent. CoreAudio treats playback output and recording input as separate worlds: your speakers are an output, your microphone is an input, and nothing bridges them. QuickTime&rsquo;s audio recording offers exactly the inputs in that second world &mdash; microphones &mdash; which is why a default screen or audio recording comes out with your voice and none of the computer&rsquo;s.</p>
+
+        <p>Apple did eventually open a door for developers: ScreenCaptureKit, the framework behind screen recording, can also capture the system&rsquo;s audio output. Apps built on it record what the Mac is playing without any virtual devices. But there&rsquo;s no user-facing toggle for it &mdash; the capability only exists inside apps that implement it.</p>
+
+        <h2>The free way: BlackHole + QuickTime</h2>
+
+        <p><a href="https://existential.audio/blackhole/" target="_blank" rel="noopener">BlackHole</a> is a free, open-source virtual audio driver. It creates a loopback device: whatever the Mac plays into it, you can record from it. It&rsquo;s the standard free answer, and for occasional recordings it&rsquo;s genuinely fine. Here&rsquo;s the full setup, including the step most tutorials leave out.</p>
+
+        <ol>
+            <li><strong>Install BlackHole.</strong> Download the installer from the project&rsquo;s site and run it. The 2-channel build is all you need for stereo recording.</li>
+            <li><strong>Create a Multi-Output Device.</strong> Open Audio MIDI Setup (in <code>/Applications/Utilities</code>), click <strong>+</strong> &rarr; <em>Create Multi-Output Device</em>, and tick both <strong>BlackHole 2ch</strong> and your real speakers or headphones.
+                <p>This is the step the thin tutorials skip, and skipping it ruins the workflow: a Multi-Output Device plays the same audio to BlackHole <em>and</em> to your speakers, so you can hear what you&rsquo;re recording. If you skip it, every recording is recorded in silence &mdash; you&rsquo;ll hear nothing while it happens.</p></li>
+            <li><strong>Switch the Mac&rsquo;s output.</strong> In Control Center or Sound settings, set the output to the Multi-Output Device. From now until you switch back, everything the Mac plays also flows into BlackHole.</li>
+            <li><strong>Record.</strong> Open QuickTime Player &rarr; File &rarr; New Audio Recording, and select <strong>BlackHole 2ch</strong> as the input. What you hear, QuickTime saves.</li>
+            <li><strong>To capture your microphone too,</strong> the free path gets fiddly: QuickTime records one input device at a time, so mic + system audio together means building an Aggregate Device that combines your mic and BlackHole, then selecting that as the input. It works, but level balancing between the two sources and the occasional drift between them are now your problem.</li>
+        </ol>
+
+        <p><strong>The honest cost of free:</strong> three configuration artifacts (a driver, a multi-output device, an output switch) that stay in your sound settings permanently; a manual output switch every time you start and finish recording; no per-recording format choices; and a mic-mixing setup that&rsquo;s fragile. If you record system audio once a month, that&rsquo;s a fine price. If you do it daily &mdash; meetings, lectures, transcription workflows, research interviews &mdash; it&rsquo;s friction on every single recording.</p>
+
+        <p>CLI-inclined readers can skip QuickTime entirely once BlackHole is installed:</p>
+
+        <pre>ffmpeg -f avfoundation -i ":BlackHole 2ch" output.wav</pre>
+
+        <p>(The device name must match what Audio MIDI Setup shows; <code>ffmpeg -f avfoundation -list_devices true -i ""</code> lists yours.)</p>
+
+        <h2>The easy way: a recorder built for it</h2>
+
+        <p><a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a> &mdash; my Mac app &mdash; takes the ScreenCaptureKit route: it taps system audio directly, so there are no drivers, no Multi-Output Devices, and no output switching. You install it, grant the macOS screen-recording permission it needs for audio capture, and record.</p>
+
+        <p>What it does, concretely:</p>
+
+        <ul>
+            <li><strong>Mic and system audio in one file</strong>, mixed, with a live balance control between the two sources &mdash; the thing that takes an Aggregate Device and luck in the free setup.</li>
+            <li><strong>&#8984;&#8679;R</strong> starts and stops a recording from anywhere; it also lives in the menu bar.</li>
+            <li><strong>Pause and resume</strong>, so one recording can span an entire meeting or lecture.</li>
+            <li><strong>A searchable library</strong> with folders, color tags, and favorites, instead of a pile of exported files.</li>
+            <li><strong>WAV or M4A per recording</strong> &mdash; uncompressed when you&rsquo;re going to edit, small files when you&rsquo;re not.</li>
+            <li>The mic is selected automatically, including <strong>AirPods</strong> when they&rsquo;re connected.</li>
+            <li>The app itself is under 1 MB, runs on macOS 14 and later, and its App Store privacy label is <strong>Data Not Collected</strong> &mdash; recordings never leave your machine.</li>
+        </ul>
+
+        <p>It&rsquo;s free to download from the <a href="https://apps.apple.com/app/audiorecord-mic-system/id6802515117">Mac App Store</a> with a full version unlock ($8.99 one-time) if you hit the free tier&rsquo;s limits &mdash; and if you&rsquo;d rather not, the BlackHole recipe above is genuinely functional, which is exactly why this post teaches it first.</p>
+
+        <h2>Which one should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th></th><th>BlackHole + QuickTime</th><th>AudioRecord</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Cost</td><td>Free, open source</td><td>Free tier; $8.99 one-time full version</td></tr>
+                <tr><td>Setup</td><td>Driver + Multi-Output Device + output switch</td><td>Install, grant permission</td></tr>
+                <tr><td>Mic + system in one file</td><td>Aggregate Device, manual leveling</td><td>Built in, live balance control</td></tr>
+                <tr><td>Pause / resume</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Library / organization</td><td>Your file system</td><td>Folders, tags, favorites, search</td></tr>
+                <tr><td>Output format</td><td>Whatever QuickTime exports</td><td>WAV or M4A, per recording</td></tr>
+                <tr><td>Reversible when done?</td><td>Configuration stays in Sound settings</td><td>Delete the app, done</td></tr>
+            </tbody>
+        </table>
+
+        <p>If you need this once or twice a quarter, use BlackHole and close this tab knowing the job&rsquo;s done free. If recording internal audio is part of your weekly workflow, the setup tax is the product.</p>
+
+        <div class="cta">
+            <p>AudioRecord taps system audio directly &mdash; mic and system sound in one file, &#8984;&#8679;R to start and stop, WAV or M4A. <a href="https://apps.apple.com/app/audiorecord-mic-system/id6802515117">Free to download from the Mac App Store; the full version is a one-time unlock, no subscription.</a></p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Why is my QuickTime screen recording silent?</h3>
+        <p>Because QuickTime captures a <em>microphone</em> input, and macOS never presents system audio as one. Your voice got recorded; the Mac&rsquo;s own sound had no path into the file. Fix it with either method above &mdash; or note that for screen recordings specifically, QuickTime on recent macOS versions can include system audio when you choose it in the recording options (for plain audio capture without video, you still need one of the methods here).</p>
+
+        <h3>Can I record only the system audio, without my mic?</h3>
+        <p>Yes. With BlackHole, record from the BlackHole input and leave your mic out of it. In AudioRecord, drag the balance fully to system audio &mdash; or record internal audio alone from the start.</p>
+
+        <h3>WAV or M4A?</h3>
+        <p>WAV is uncompressed: bigger files, no generation loss, the right choice if you&rsquo;ll edit or process the audio. M4A is compressed but transparent for voice and meetings at a fraction of the size. Record to WAV when the audio is the raw material for something else; record to M4A when it&rsquo;s the deliverable.</p>
+
+        <h3>Does this work with AirPods?</h3>
+        <p>Yes &mdash; AudioRecord picks up AirPods automatically as the microphone when they&rsquo;re connected. The system-audio side is unaffected by what your mic is, since ScreenCaptureKit taps the output directly.</p>
+
+        <h3>Is recording system audio legal?</h3>
+        <p>That depends on what you&rsquo;re capturing and where you are. Recording your own meetings, calls, and content is everyday work; many jurisdictions require the consent of everyone on a call before you record it, so check yours before recording other people. And note that capturing DRM-protected streams violates both the law and the services&rsquo; terms everywhere.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-08-31-redact-pii-before-sending-to-llm.html">previous: redacting PII before an LLM</a></span>
+            <span><a href="https://mkarim.us/apps/audiorecord.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

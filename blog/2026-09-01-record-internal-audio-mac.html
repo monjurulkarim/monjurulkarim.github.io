@@ -33,6 +33,9 @@
         li { margin-bottom:.4rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
         footer.site a { color:var(--muted); }
     </style>
@@ -67,6 +70,10 @@
             <li><strong>To capture your microphone too,</strong> the free path gets fiddly: QuickTime records one input device at a time, so mic + system audio together means building an Aggregate Device that combines your mic and BlackHole, then selecting that as the input. It works, but level balancing between the two sources and the occasional drift between them are now your problem.</li>
         </ol>
 
+        <figure>
+          <img src="../assets/img/blog/fig-blackhole-routing.svg" alt="BlackHole signal path: the Mac’s audio plays into a Multi-Output Device feeding both the speakers and the BlackHole virtual input, which QuickTime records; the microphone joins only via an extra Aggregate Device" loading="lazy" width="760" height="360" />
+          <figcaption>The free recipe’s signal path &mdash; solid arrows are the five steps; the dashed route is the fiddly mic add-on.</figcaption>
+        </figure>
         <p><strong>The honest cost of free:</strong> three configuration artifacts (a driver, a multi-output device, an output switch) that stay in your sound settings permanently; a manual output switch every time you start and finish recording; no per-recording format choices; and a mic-mixing setup that&rsquo;s fragile. If you record system audio once a month, that&rsquo;s a fine price. If you do it daily &mdash; meetings, lectures, transcription workflows, research interviews &mdash; it&rsquo;s friction on every single recording.</p>
 
         <p>CLI-inclined readers can skip QuickTime entirely once BlackHole is installed:</p>
@@ -91,6 +98,10 @@
             <li>The app itself is under 1 MB, runs on macOS 14 and later, and its App Store privacy label is <strong>Data Not Collected</strong> &mdash; recordings never leave your machine.</li>
         </ul>
 
+        <figure>
+          <img src="../assets/img/apps/audiorecord-interface.png" alt="AudioRecord interface &mdash; recording view with live level meters for the microphone and system audio sources" loading="lazy" width="1199" height="940" />
+          <figcaption>The easy route in one picture: both sources in one window, one live balance.</figcaption>
+        </figure>
         <p>It&rsquo;s free to download from the <a href="https://apps.apple.com/app/audiorecord-mic-system/id6802515117">Mac App Store</a> with a full version unlock ($8.99 one-time) if you hit the free tier&rsquo;s limits &mdash; and if you&rsquo;d rather not, the BlackHole recipe above is genuinely functional, which is exactly why this post teaches it first.</p>
 
         <h2>Which one should you use?</h2>

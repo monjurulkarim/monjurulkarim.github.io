@@ -33,6 +33,9 @@
         li { margin-bottom:.4rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
         footer.site a { color:var(--muted); }
     </style>
@@ -76,6 +79,10 @@
             </tbody>
         </table>
 
+        <figure>
+          <img src="../assets/img/blog/fig-redaction-flow.svg" alt="Decision flow: files that must stay offline lead to PrivateRedact for documents or CaseGuard with video; cloud-acceptable files to Redactable for teams or Acrobat Pro if already subscribed; zero budget to the free route with verification" loading="lazy" width="760" height="340" />
+          <figcaption>Start from the constraint &mdash; where the file may go &mdash; not from a feature list.</figcaption>
+        </figure>
         <h2>Adobe Acrobat Pro &mdash; the incumbent benchmark</h2>
 
         <p><a href="https://www.adobe.com/acrobat/pricing.html" target="_blank" rel="noopener">Acrobat Pro</a> is the tool most redaction requirements were written against. Its Redact tool does the job properly: you search or mark the content, apply the redaction, and the text is removed &mdash; not covered. A separate hidden-information sanitizer strips metadata, and the search-and-mark workflow handles names and patterns across a long document faster than hand-marking ever will.</p>
@@ -116,6 +123,10 @@
 
         <p>What it does, concretely: PDF, DOCX, TXT, and images including scanned pages (OCR with a vision-model double-check on hard scans); regex for the well-formatted identifiers plus a local model for the context tier &mdash; diagnoses, codenames, addresses written in prose &mdash; that pattern matching can&rsquo;t see; value-only redaction so the document stays readable; a review overlay before anything is applied; and an export that rasterizes and rebuilds the PDF so there&rsquo;s no text layer under the boxes, with a leak-scan that re-reads the output before it tells you it&rsquo;s clean. Metadata gets stripped by default. It runs entirely offline &mdash; that&rsquo;s the product.</p>
 
+        <figure>
+          <img src="../assets/img/apps/privateredact-review.jpg" alt="PrivateRedact review screen &mdash; proposed PII redactions listed for accept/reject before export" loading="lazy" width="1400" height="931" />
+          <figcaption>Machine finds, human reviews, then apply &mdash; the workflow every serious tool converges on.</figcaption>
+        </figure>
         <p>It is a documents-only tool. It does not redact video or audio, and I&rsquo;d rather say that here than let the comparison table imply otherwise. Free to load, detect, and review; exporting the redacted file is a one-time license, no subscription.</p>
 
         <h2>The comparison at a glance</h2>

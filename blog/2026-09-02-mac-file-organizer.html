@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Mac File Organizer: How to Clean Up a Messy Folder &mdash; Muhammad Karim</title>
+    <meta name="description" content="How to organize files on a Mac: manual cleanup, Smart Folders, scripts, rule-based tools &mdash; and a content-aware file organizer that runs locally." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-02-mac-file-organizer.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 2, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Mac File Organizer: How to Clean Up a Messy Folder</h1>
+
+        <p>Every Mac has one folder that collects everything: Downloads, usually &mdash; the invoices, the zip you opened once, the photos from the group chat, the installer for an app you already installed. The mess isn&rsquo;t your fault, exactly. The default behavior of every browser and every &ldquo;Save&rdquo; dialog is to drop files in one place and never think about them again. What you need is a file organizer that matches how much you care &mdash; which on a Mac ranges from free manual discipline to an app that reads the files for you.</p>
+
+        <p>This guide goes from cheapest to easiest: a one-hour manual cleanup, the free built-in tricks that keep a folder tidy, scripts for the terminal-inclined, and at the end, the AI option &mdash; the one I built, which runs entirely on your machine.</p>
+
+        <h2>First: the one-hour manual cleanup</h2>
+
+        <p>Before any tool, a messy folder needs one honest triage pass. Open the folder in Finder, switch to list view, and:</p>
+
+        <ol>
+            <li><strong>Sort by Kind, then by Date Added.</strong> Kind groups all the images, PDFs, and installers together so you can act in batches. Date Added answers &ldquo;why is this here&rdquo; faster than any filename.</li>
+            <li><strong>Make four folders &mdash; no more.</strong> Something like <code>Work</code>, <code>Personal</code>, <code>Projects</code>, <code>To Delete</code>. Resisting a cleverer taxonomy is the whole trick; you can refine later, but a 4-bucket sort is something you&rsquo;ll actually finish.</li>
+            <li><strong>Batch-select and move.</strong> Click the first file of a run, Shift-click the last. Two minutes of this does 80% of the cleanup.</li>
+            <li><strong>Delete ruthlessly.</strong> Installers (<code>*.dmg</code>, <code>*.pkg</code>, <code>*.exe</code>), duplicates, and anything you can&rsquo;t remember in one second. When in doubt, drag it to <code>To Delete</code> &mdash; not Trash &mdash; and empty that folder in a month.</li>
+        </ol>
+
+        <p>The manual pass works. Its weakness is the &ldquo;monthly&rdquo; part: the folder refills, and the discipline doesn&rsquo;t survive a busy week.</p>
+
+        <h2>Free ways to keep a Mac folder tidy</h2>
+
+        <p>macOS ships two features that do more for folder hygiene than most people use:</p>
+
+        <p><strong>Smart Folders</strong> (Finder &rarr; File &rarr; New Smart Folder) are saved searches, not folders &mdash; but pinned to the sidebar they act like self-updating folders. Two worth building first:</p>
+
+        <ul>
+            <li><strong>&ldquo;Recent documents&rdquo;</strong> &mdash; New Smart Folder &rarr; search criteria: Kind is <em>PDF</em>, Last modified date is <em>within last</em> 30 <em>days</em>. Save it as &ldquo;Recent PDFs&rdquo;. Every contract, receipt, and form from the last month is now one click away regardless of where it was filed.</li>
+            <li><strong>&ldquo;The big stuff&rdquo;</strong> &mdash; criteria: File Size is <em>greater than</em> 100 MB. This is the fastest disk-cleanup view on the Mac; when storage fills, you open this first, not Finder settings.</li>
+        </ul>
+
+        <p>Both refresh themselves. Common retrievals stop depending on where you put things &mdash; which is most of what &ldquo;organized&rdquo; actually means day to day.</p>
+
+        <p><strong>Tags</strong> color-code files across folders, which helps when your filing is imperfect. Tag every invoice red for a month and tax season becomes a saved search instead of an archaeology dig.</p>
+
+        <p><strong>Folder templates.</strong> If <code>Downloads</code> keeps refilling with the same categories, make an empty folder structure once (<code>Work/Invoices</code>, <code>Work/Receipts</code>, <code>Personal/Photos</code>), keep it somewhere safe, and copy it in whenever you do a cleanup pass. Future-you inherits past-you&rsquo;s decisions.</p>
+
+        <h2>For the terminal-inclined: sort by extension in one line</h2>
+
+        <p>If a shell window doesn&rsquo;t scare you, this sorts a folder&rsquo;s images into one place &mdash; extend the pattern per type:</p>
+
+        <pre>cd ~/Downloads
+mkdir -p Images
+find . -maxdepth 1 \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.heic' \) -exec mv {} Images/ \;</pre>
+
+        <p>Run it inside the folder you mean; <code>-maxdepth 1</code> keeps it from touching subfolders. It&rsquo;s fast, repeatable, and free &mdash; and it organizes exactly the way you&rsquo;ll eventually regret: by type. A folder full of <code>Images/</code>, <code>PDFs/</code>, and <code>Archives/</code> is neater than where you started, but the vacation itinerary, the invoice, and the paper draft still all live together in <code>PDFs/</code>, because the extension was never the point.</p>
+
+        <h2>Rule-based organizers: automation with the same blind spot</h2>
+
+        <p>The classic step up from scripts is a rule-based organizer &mdash; Hazel is the long-respected name on the Mac, and there are others. You write rules like &ldquo;if kind is movie and added today, move to Movies,&rdquo; and the folder maintains itself. For predictable, repeated files &mdash; screenshots, invoices from the same sender, camera dumps &mdash; rules are genuinely the right tool.</p>
+
+        <p>The blind spot is everything that doesn&rsquo;t match a rule. <code>invoice_march_2024.pdf</code> and <code>maui_vacation.pdf</code> are both PDFs; a rule that sorts by extension files them together, and a rule specific enough to tell them apart is a rule you have to write after you&rsquo;ve already solved the problem by hand. Rule-based tools organize what you can predict.</p>
+
+        <h2>The AI way: a file organizer that reads the files</h2>
+
+        <p>This is the part where I disclose that I built the tool I&rsquo;m about to describe. <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a> takes the other approach: instead of sorting by extension, it reads the content. An invoice lands in <code>Work/Invoices/</code> because it&rsquo;s an invoice &mdash; not because it&rsquo;s a PDF. Vacation photos go to <code>Personal/Photos/</code> because the vision model sees what&rsquo;s in them. A Python project stays a project, with its folder structure kept intact, because the organizer recognizes code by language and purpose.</p>
+
+        <p>The workflow is deliberately boring: pick the folder, see a file-by-file preview of everything that will move where, approve, done. One click undoes the whole run if the plan wasn&rsquo;t right. Duplicates get their own tab instead of quietly multiplying.</p>
+
+        <p>The privacy model is the reason it exists: the AI runs locally through <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> &mdash; your files never leave your machine, no cloud, no upload, and it works offline after the one-time model download. It handles the document types that actually pile up (PDF, DOCX, XLSX, and more), needs a recommended 8 GB of RAM and 5&ndash;20 GB of disk for the model, and runs on macOS 11+ (Apple Silicon) and Windows 10+. It&rsquo;s $15.99 one-time (launch price; no subscription), with lifetime updates and a 7-day refund &mdash; so the test is cheap.</p>
+
+        <p>Think of it as an AI document organizer for the 90% of files whose category is obvious to you but invisible to any rule: the folder that&rsquo;s messy <em>because</em> its contents don&rsquo;t follow patterns.</p>
+
+        <div class="cta">
+            <p>AI File Organizer Pro reads your files &mdash; content, not extensions &mdash; and shows a full preview before anything moves, with one-click undo. <a href="https://mkarim.us/apps/ai-file-organizer.html">100% local via Ollama; $15.99 one-time with a 7-day refund.</a></p>
+        </div>
+
+        <h2>Which approach fits which mess?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Situation</th><th>Best fit</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>One bad folder, one afternoon</td><td>Manual cleanup (above)</td></tr>
+                <tr><td>Same files, same categories, every week</td><td>Rule-based (Hazel-class)</td></tr>
+                <tr><td>Retrieval matters more than location</td><td>Smart Folders + tags</td></tr>
+                <tr><td>You live in the terminal</td><td><code>find</code> one-liners</td></tr>
+                <tr><td>Mixed personal/work/projects, no pattern</td><td>Content-aware AI (reads the files)</td></tr>
+                <tr><td>Don&rsquo;t want files leaving the Mac</td><td>Any of the above EXCEPT cloud sorters</td></tr>
+            </tbody>
+        </table>
+
+        <h2>FAQ</h2>
+
+        <h3>Is there a file organizer built into macOS?</h3>
+        <p>Partly. Smart Folders (saved searches), tags, and Automator folder actions cover the &ldquo;keep it findable&rdquo; half of organizing. The &ldquo;put it away correctly&rdquo; half &mdash; deciding that this PDF is an invoice and that one is a receipt &mdash; isn&rsquo;t built in.</p>
+
+        <h3>How do I organize my Downloads folder on a Mac?</h3>
+        <p>Start with the one-hour manual pass above &mdash; sort by Kind, batch-move into four folders, delete installers. Then prevent refills: point your browser&rsquo;s save location to a subfolder per source, or accept the refill and run a monthly pass.</p>
+
+        <h3>What&rsquo;s the best file organizer for Mac?</h3>
+        <p>For rules you can predict, a rule-based tool. For files whose category only a reader would know, a content-aware one. The honest test for any file organizer for Mac users: give it <code>invoice_march_2024.pdf</code> and <code>maui_vacation.pdf</code> &mdash; if both end up in &ldquo;PDFs&rdquo;, it sorted; it didn&rsquo;t organize.</p>
+
+        <h3>Does AI file organizing upload my files somewhere?</h3>
+        <p>Depends entirely on the tool &mdash; some are cloud services and your files do leave your machine. <a href="https://mkarim.us/apps/ai-file-organizer.html">The one I built</a> runs 100% locally through Ollama specifically so the answer is no. Check a tool&rsquo;s privacy claim before pointing it at tax documents.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-02-best-redaction-software.html">previous: best redaction software</a></span>
+            <span><a href="https://mkarim.us/apps/ai-file-organizer.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

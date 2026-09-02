@@ -32,6 +32,9 @@
         li { margin-bottom:.4rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
         footer.site a { color:var(--muted); }
     </style>
@@ -58,6 +61,11 @@ pdftotext redacted.pdf - | grep -i ssn
         <p>This is the most common redaction failure. It has shipped in court filings, government releases, and at least one well-known congressional report. Adobe's own documentation is explicit: proper redaction removes the content, then you apply the mark. Their <a href="https://helpx.adobe.com/acrobat/using/removing-sensitive-content-pdfs.html" target="_blank" rel="noopener">redaction guide</a> covers it &mdash; but it requires Acrobat Pro.</p>
 
         <p>So the question &ldquo;how do I do this without Adobe Pro&rdquo; becomes: which tool actually <em>removes</em> content, and which just paints over it?</p>
+
+        <figure>
+          <img src="../assets/img/blog/fig-cover-vs-remove.svg" alt="Two PDF pages compared: a drawn black rectangle still has selectable text under it; true redaction deletes the content so nothing remains to extract" loading="lazy" width="760" height="330" />
+          <figcaption>Covering is not redacting &mdash; the left page’s rectangle leaves the text layer intact.</figcaption>
+        </figure>
 
         <h2>Option 1: macOS Preview markup &mdash; free, on every Mac</h2>
 

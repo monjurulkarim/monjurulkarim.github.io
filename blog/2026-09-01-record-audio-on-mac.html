@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Record Audio on a Mac: Every Method, Compared &mdash; Muhammad Karim</title>
+    <meta name="description" content="Voice Memos, QuickTime, and third-party apps: every way to record audio on a Mac, and which to use for voice, meetings, and system sound." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-01-record-audio-on-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 1, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Record Audio on a Mac: Every Method, Compared</h1>
+
+        <p>&ldquo;Record audio on a Mac&rdquo; sounds like one question, but it&rsquo;s three. Recording your own voice, recording other people &mdash; a call, a meeting, an interview &mdash; and recording what the Mac itself is playing. macOS is built for exactly one of those. The other two take either a workaround or the right app, and the fastest way to pick wrong is to not notice you&rsquo;re in the third situation until the recording comes out silent.</p>
+
+        <p>Here&rsquo;s every method that works in 2026, organized by which job you&rsquo;re actually doing, with the trade-offs of each.</p>
+
+        <h2>Record your own voice: the built-in way</h2>
+
+        <p>For voice notes, lectures you&rsquo;re giving, and scratch ideas, the Mac already ships what you need, twice.</p>
+
+        <p><strong>Voice Memos</strong> is the simplest: open it, hit record, talk. It saves into a searchable library where you can trim the start and end, and recordings sync through iCloud to your iPhone and iPad if you use the same account. For spoken audio with zero setup, this is the right tool and there&rsquo;s no reason to open anything else.</p>
+
+        <p><strong>QuickTime Player</strong> is the second built-in option &mdash; File &rarr; New Audio Recording. It looks bare, but it has one thing Voice Memos doesn&rsquo;t: you can pick which input it records and set the quality. If your Mac is connected to an external USB microphone or an audio interface, QuickTime will record from it, which makes it the quick test that a new mic is actually working before you commit to a longer session.</p>
+
+        <p>Both of these record a microphone, and that&rsquo;s the whole trick to understanding this topic:</p>
+
+        <h2>Why the method matters: what are you recording?</h2>
+
+        <p>A Mac recording app captures an <em>input</em>. Voice Memos and QuickTime see inputs, and macOS presents exactly one kind of input: microphones. Your voice is a microphone. But the sound of a Zoom call, a YouTube video, or a webinar playing on your Mac isn&rsquo;t a microphone &mdash; it&rsquo;s the system&rsquo;s output, and macOS never exposes it as something a recorder can select.</p>
+
+        <p>That&rsquo;s why &ldquo;record audio on a Mac&rdquo; forks so sharply:</p>
+
+        <ul>
+            <li><strong>Your voice</strong> &rarr; any mic recorder works, including the built-in ones.</li>
+            <li><strong>Other people, in the room</strong> &rarr; still just a microphone, but see the tips below, because mic placement decides whether the recording is usable.</li>
+            <li><strong>Your Mac&rsquo;s own sound</strong> &rarr; nothing built in works. Skip to the last method.</li>
+        </ul>
+
+        <h2>Record a meeting, call, or interview</h2>
+
+        <p>When the audio is other people, the recording app stops being the hard part and the acoustics become it.</p>
+
+        <p>Get close to the microphone, or get the microphone close to the sound. A laptop mic two meters from a speaker across a table picks up more room echo than voice; if you&rsquo;re interviewing someone in person, put the Mac (or a phone running Voice Memos) between you, not at the side of the table.</p>
+
+        <p>If you&rsquo;re on headphones for a remote call, your own voice is captured clean by the mic &mdash; but note what&rsquo;s happening on the far end: everything the other person says is coming out of your speakers or into your headphones as <em>system audio</em>, not microphone input. The Mac&rsquo;s built-in recorders will save only your half of that conversation. For both sides in one file you need either the platform&rsquo;s own recording feature (Zoom, Meet, and Teams all have one, with their own notification and consent behavior and their own rules about who may record) or a recorder that captures system audio &mdash; next section.</p>
+
+        <p>One non-technical rule that matters more than any app choice: recording a conversation implicates other people, and many places require everyone&rsquo;s consent. Check yours before you hit record, and say on the recording that you&rsquo;re making it.</p>
+
+        <h2>Record what your Mac is playing (system audio)</h2>
+
+        <p>This is the case where the Mac gives you nothing. There&rsquo;s no setting, no hidden Voice Memos mode, no QuickTime option for it: macOS routes audio to the speakers and never presents it as a recording source. A default screen recording has the same hole &mdash; your narration gets in, the Mac&rsquo;s own sound doesn&rsquo;t.</p>
+
+        <p>There are two working answers, and I&rsquo;ve written the <a href="https://mkarim.us/blog/2026-09-01-record-internal-audio-mac.html">complete walkthrough to recording internal audio on a Mac</a> separately, so here&rsquo;s the short version:</p>
+
+        <ul>
+            <li><strong>The free route</strong> pairs QuickTime with <a href="https://existential.audio/blackhole/" target="_blank" rel="noopener">BlackHole</a>, a free open-source virtual audio driver. BlackHole creates a loopback input the Mac&rsquo;s sound can flow into; QuickTime records from it. It genuinely works and it&rsquo;s the right choice for occasional use &mdash; at the cost of a driver, a Multi-Output Device, and an output switch that live in your sound settings permanently.</li>
+            <li><strong>The app route</strong>: my Mac app <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a> uses macOS&rsquo;s ScreenCaptureKit to tap system audio directly &mdash; no drivers, no routing. It records <strong>mic and system audio mixed in one file</strong> with a live balance between the two sources, starts and stops with <strong>&#8984;&#8679;R</strong>, supports <strong>pause and resume</strong>, and saves each recording as <strong>WAV or M4A</strong>. The app is under 1 MB, runs on macOS 14 and later, and its App Store privacy label is <strong>Data Not Collected</strong> &mdash; recordings never leave your machine. It&rsquo;s a free download from the <a href="https://apps.apple.com/app/audiorecord-mic-system/id6802515117">Mac App Store</a> with a one-time $8.99 unlock for the full version.</li>
+        </ul>
+
+        <p>If you record your Mac&rsquo;s audio more than occasionally, that second path is the one that stops being an event every time you need it.</p>
+
+        <h2>Which method for which job</h2>
+
+        <table>
+            <thead>
+                <tr><th></th><th>Voice Memos</th><th>QuickTime</th><th>BlackHole + QuickTime</th><th>AudioRecord</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Best for</td><td>Quick voice notes</td><td>Testing / using an external mic</td><td>Occasional system-audio capture</td><td>Regular mic + system recording</td></tr>
+                <tr><td>Captures system audio</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+                <tr><td>Mic + system in one file</td><td>&mdash;</td><td>&mdash;</td><td>Needs an Aggregate Device</td><td>Built in, live balance</td></tr>
+                <tr><td>Pause / resume</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Setup</td><td>None</td><td>None</td><td>Driver + output routing</td><td>Install + one permission</td></tr>
+                <tr><td>Output</td><td>M4A</td><td>M4A (High / Maximum)</td><td>Whatever QuickTime exports</td><td>WAV or M4A</td></tr>
+            </tbody>
+        </table>
+
+        <div class="cta">
+            <p>AudioRecord records mic and system audio in one file &mdash; no drivers, no routing, &#8984;&#8679;R from anywhere. <a href="https://apps.apple.com/app/audiorecord-mic-system/id6802515117">Free to download from the Mac App Store; the full version is a one-time unlock, no subscription.</a></p>
+        </div>
+
+        <h2>Small things that improve any recording</h2>
+
+        <ul>
+            <li><strong>Room over gear.</strong> A soft room (curtains, bookshelves) beats an empty one with any microphone; carpet and a closed door are free upgrades.</li>
+            <li><strong>WAV when you&rsquo;ll edit, M4A when you won&rsquo;t.</strong> Uncompressed WAV survives processing without generation loss; M4A is transparent for voice at a fraction of the size. (More on the choice in the internal-audio guide.)</li>
+            <li><strong>Name and file recordings immediately.</strong> &ldquo;New Recording 47&rdquo; is useless in a week. If a recorder doesn&rsquo;t organize for you, one folder per project beats one giant pile.</li>
+        </ul>
+
+        <h2>FAQ</h2>
+
+        <h3>Does my Mac have a voice recorder?</h3>
+        <p>Yes &mdash; Voice Memos ships with macOS. It records from the built-in or an external microphone, trims, and syncs through iCloud. It records microphones only.</p>
+
+        <h3>Can Voice Memos record internal audio?</h3>
+        <p>No. It captures microphone input, and macOS doesn&rsquo;t present the system&rsquo;s audio output as a microphone. Use the BlackHole setup or a recorder built on ScreenCaptureKit.</p>
+
+        <h3>Why is there no sound in my screen recording?</h3>
+        <p>QuickTime captures a <em>microphone</em> while the screen records, so your narration gets saved but the Mac&rsquo;s own sound never had a path into the file. That gap is the same problem as the section above &mdash; system audio needs the BlackHole route or an app like AudioRecord.</p>
+
+        <h3>Where do recordings get saved?</h3>
+        <p>Voice Memos keeps its own library (synced via iCloud). QuickTime audio recordings start as untitled documents you save anywhere you choose. AudioRecord keeps a searchable library with folders, tags, and favorites.</p>
+
+        <h3>Can I record a phone call on my Mac?</h3>
+        <p>If the call runs through an app on the Mac, the other party&rsquo;s voice is system audio &mdash; so the same options apply: the platform&rsquo;s own record feature, or a system-audio recorder. And the consent rules in the meetings section apply to calls doubly.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-01-record-internal-audio-mac.html">previous: recording internal audio on a Mac</a></span>
+            <span><a href="https://mkarim.us/apps/audiorecord.html">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

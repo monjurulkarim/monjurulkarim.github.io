@@ -33,6 +33,9 @@
         li { margin-bottom:.4rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
         footer.site a { color:var(--muted); }
     </style>
@@ -100,6 +103,10 @@ find . -maxdepth 1 \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.heic' \) -ex
 
         <p>The workflow is deliberately boring: pick the folder, see a file-by-file preview of everything that will move where, approve, done. One click undoes the whole run if the plan wasn&rsquo;t right. Duplicates get their own tab instead of quietly multiplying.</p>
 
+        <figure>
+          <img src="../assets/img/apps/ai-file-organizer-dashboard.png" alt="AI File Organizer Pro dashboard &mdash; folder browser, before/after preview, progress and duplicates tabs" loading="lazy" width="971" height="742" />
+          <figcaption>The preview step: file by file, nothing moves until you approve the plan.</figcaption>
+        </figure>
         <p>The privacy model is the reason it exists: the AI runs locally through <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> &mdash; your files never leave your machine, no cloud, no upload, and it works offline after the one-time model download. It handles the document types that actually pile up (PDF, DOCX, XLSX, and more), needs a recommended 8 GB of RAM and 5&ndash;20 GB of disk for the model, and runs on macOS 11+ (Apple Silicon) and Windows 10+. It&rsquo;s $15.99 one-time (launch price; no subscription), with lifetime updates and a 7-day refund &mdash; so the test is cheap.</p>
 
         <p>Think of it as an AI document organizer for the 90% of files whose category is obvious to you but invisible to any rule: the folder that&rsquo;s messy <em>because</em> its contents don&rsquo;t follow patterns.</p>

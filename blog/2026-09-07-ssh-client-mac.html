@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>SSH Client on Mac: Keys, Config, and Tunnels (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="The SSH client already on your Mac can do everything: keys, config aliases, file transfers, and tunnels &mdash; a practical 2026 guide, plus when a tunnel manager is worth it." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-07-ssh-client-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 7, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>SSH Client on Mac: Keys, Config, and Tunnels (2026)</h1>
+
+        <p>Every Mac ships with a complete SSH client. Before you download anything: open Terminal, type <code>ssh</code>, and you&rsquo;re holding the same open-source suite (OpenSSH) that most of the world&rsquo;s servers run. The catch is that the built-in SSH client on a Mac is invisible until someone shows you the workflow around it &mdash; keys, host aliases, file transfers, and the tunnel tricks that turn a remote machine into a local one.</p>
+
+        <p>This guide covers that workflow end to end. It&rsquo;s written for people who SSH occasionally and suspect they&rsquo;re doing it the hard way &mdash; and at the end, it covers the one job where the terminal genuinely runs out of patience.</p>
+
+        <h2>The client you already have</h2>
+
+        <p>Open Terminal and check what you&rsquo;re working with:</p>
+
+        <pre>ssh -V</pre>
+
+        <p>A basic connection is one line:</p>
+
+        <pre>ssh user@server.example.com</pre>
+
+        <p>The first time you connect to a host, the client prints the host&rsquo;s fingerprint and asks whether to trust it. This is your protection against impostor servers &mdash; the fingerprint is remembered in <code>~/.ssh/known_hosts</code>, and you&rsquo;ll only be warned again if it changes unexpectedly. Type <code>yes</code> deliberately, not reflexively.</p>
+
+        <p>That&rsquo;s a complete SSH client. Everything below makes it fast, safe, and mostly automatic.</p>
+
+        <h2>Step one: set up keys (once, and never type that password again)</h2>
+
+        <p>Password logins work, but keys are better in every way: faster to use, immune to simple guessing attacks, and required by many servers anyway.</p>
+
+        <p>Generate one:</p>
+
+        <pre>ssh-keygen -t ed25519 -C "you@your-mac"</pre>
+
+        <p>Accept the default location (<code>~/.ssh/id_ed25519</code>). The passphrase is optional &mdash; set one, because a key without a passphrase is as sensitive as a password written on a laptop lid.</p>
+
+        <p>Copy the public half to any server you log into:</p>
+
+        <pre>ssh-copy-id user@server.example.com</pre>
+
+        <p>(If your macOS lacks <code>ssh-copy-id</code>, the manual one-liner does the same job: <code>cat ~/.ssh/id_ed25519.pub | ssh user@host "mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</code>.)</p>
+
+        <p>Now add the passphrase to the macOS Keychain so you type it once, ever:</p>
+
+        <pre>ssh-add --apple-use-keychain</pre>
+
+        <h2>The file that makes SSH pleasant: ~/.ssh/config</h2>
+
+        <p>Typing <code>ssh karim@128.95.204.218 -i ~/.ssh/some_key</code> every time is how people learn to hate the terminal. The client reads a config file that turns any server into a two-letter alias:</p>
+
+        <pre>Host gpu
+    HostName 128.95.204.218
+    User karim
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes</pre>
+
+        <p>With that in <code>~/.ssh/config</code>, <code>ssh gpu</code> connects with the right user, key, and keep-alive. Every SSH tool on the system honors these aliases &mdash; <code>scp</code>, <code>rsync</code>, Git remotes, port forwards. The full option list is in the <a href="https://man.openbsd.org/ssh_config" target="_blank" rel="noopener">ssh_config manual</a> (short version: almost any flag you&rsquo;d type on the command line can be pinned per-host here).</p>
+
+        <p><code>ServerAliveInterval</code> is the quiet hero: it keeps long sessions from freezing when a NAT table forgets you mid-afternoon.</p>
+
+        <h2>Copying files without thinking about it</h2>
+
+        <p>Three tools, in order of how much they forgive:</p>
+
+        <pre># one file, over SSH
+scp report.pdf gpu:~/papers/
+
+# a directory tree, efficiently (resumes, skips unchanged files)
+rsync -avz ~/datasets/ gpu:~/datasets/</pre>
+
+        <p><code>scp</code> is the quick grab. <code>sftp</code> gives you an interactive session for browsing. But <code>rsync</code> is the one worth learning: it compares source and destination, transfers only differences, and can resume an interrupted multi-gigabyte copy &mdash; which matters the first time your laptop sleeps halfway through moving data to a <a href="https://mkarim.us/blog/2026-08-29-yolov8-tensorrt-bytetrack-jetson.html">lab server</a>.</p>
+
+        <h2>SSH tunnels: port forwarding in one line</h2>
+
+        <p>The most under-used feature of any SSH client. A tunnel takes a service running on (or behind) a remote server and makes it appear on your own machine &mdash; no firewall ports opened, nothing exposed publicly.</p>
+
+        <p>The common case &mdash; a web dashboard that only listens on the server&rsquo;s localhost:</p>
+
+        <pre>ssh -L 8080:localhost:80 user@server.example.com</pre>
+
+        <p>While that session is open, <code>http://localhost:8080</code> on your Mac is tunneled to port 80 as the server sees it. This is the standard trick for admin panels, Jupyter servers, and database UIs you refuse to expose to the internet. (<code>-R</code> runs the same wire in reverse &mdash; useful for showing a colleague your local dev server. <code>-D 1080</code> builds a simple SOCKS proxy, which survives on expert resumes as &ldquo;the ssh SOCKS trick&rdquo;.)</p>
+
+        <h3>When a terminal tunnel isn&rsquo;t enough</h3>
+
+        <p>Tunnels have one honest weakness on a laptop: they die when your Mac sleeps, and they don&rsquo;t come back on their own. For a one-off look at a dashboard that&rsquo;s fine. For tunnels you want running all day &mdash; one to the lab server, one to a <a href="https://mkarim.us/blog/2026-08-31-self-hosted-rag-ollama-production.html">self-hosted app</a>, one to a NAS &mdash; the terminal becomes a babysitting job: reconnect after every wake, remember which forward was which, check what&rsquo;s still alive.</p>
+
+        <p>This is where I disclose that I built a tool for exactly this. <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a> is a menu-bar SSH tunnel manager for macOS: it drives the same system <code>ssh</code> underneath (no second SSH stack), pulls hosts from your <code>~/.ssh/config</code>, shows a health-checked &ldquo;Connected&rdquo; indicator per tunnel, and reconnects automatically after sleep or a drop. Secrets go to the Keychain only, and host keys get a review sheet on first connect &mdash; the same fingerprint check, in a window you can read. It&rsquo;s a one-time $9.99 on Gumroad, macOS 14+, with a signed and notarized download.</p>
+
+        <p>If you only tunnel once a week, the terminal command above is the right tool. If you tunnel daily and the laptop sleeps daily, that gap is the whole product.</p>
+
+        <div class="cta">
+            <p>TunnelMate keeps tunnels alive through sleep and drops &mdash; a menu-bar SSH tunnel manager for macOS that drives the system <code>ssh</code>, imports your <code>~/.ssh/config</code>, and shows a health-checked &ldquo;Connected&rdquo; state per tunnel. <a href="https://mkarim.us/apps/tunnelmate.html">$9.99 one-time, macOS 14+, signed and notarized.</a></p>
+        </div>
+
+        <h2>So which SSH client should you use on a Mac?</h2>
+
+        <p>The honest answer: the built-in one, configured well, covers most people. Name-brand alternatives earn their place in specific cases &mdash; terminal multiplexers with profiles and split panes (iTerm2 is the long-respected name), or cross-platform SSH managers with synced host lists (Termius is the common one). Try them after the config file, not instead of it: every one of them reads <code>~/.ssh/config</code> anyway.</p>
+
+        <table>
+            <thead>
+                <tr><th>If you&hellip;</th><th>Then&hellip;</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>SSH a few times a week</td><td>Terminal + keys + config file (this guide)</td></tr>
+                <tr><td>Move big files or datasets</td><td><code>rsync</code> over the same aliases</td></tr>
+                <tr><td>Keep tunnels open all day</td><td>A tunnel manager (TunnelMate, above)</td></tr>
+                <tr><td>Live on a lab cluster</td><td>Your cluster&rsquo;s own docs + <code>ServerAliveInterval</code></td></tr>
+            </tbody>
+        </table>
+
+        <h2>FAQ</h2>
+
+        <h3>Is there an SSH client built into macOS?</h3>
+        <p>Yes &mdash; <a href="https://man.openbsd.org/ssh" target="_blank" rel="noopener">OpenSSH</a> is included with every Mac, in Terminal. No install needed: <code>ssh user@host</code> works on a fresh machine, and <code>ssh -V</code> shows the version.</p>
+
+        <h3>How do I create SSH keys on a Mac?</h3>
+        <p><code>ssh-keygen -t ed25519 -C "you@your-mac"</code>, accept the default path, set a passphrase, then <code>ssh-copy-id user@server</code> to install the public key on servers you use. Store the passphrase in the Keychain with <code>ssh-add --apple-use-keychain</code>.</p>
+
+        <h3>Does a Mac have the SSH server too, or just the client?</h3>
+        <p>Both. The client is always on; the server (sshd) is off until you enable it under System Settings &rarr; Sharing &rarr; Remote Login (the pane moves between macOS releases &mdash; search &ldquo;Sharing&rdquo; in System Settings). Turn it on to let <em>other</em> machines SSH into this Mac.</p>
+
+        <h3>How do I keep an SSH tunnel alive when my Mac sleeps?</h3>
+        <p>For sessions, <code>ServerAliveInterval 60</code> in your config prevents idle disconnects. For tunnels, the terminal itself has no reconnect-on-wake &mdash; which is why the tunnel app I built makes auto-reconnect its headline feature. Alternatives: <code>autossh</code> (free, terminal) or closing and re-running your <code>-L</code> command after each wake.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-02-mac-file-organizer.html">previous: mac file organizer</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

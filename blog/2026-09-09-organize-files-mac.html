@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Organize Files on a Mac: A System That Sticks (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="A practical system for organizing files on a Mac: dedupe first, folder structure, naming that scales, and on-device AI for the boring parts." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-09-organize-files-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 9, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Organize Files on a Mac: A System That Sticks (2026)</h1>
+
+        <p>Most advice on how to organize files on Mac starts and ends with &ldquo;make folders.&rdquo; That&rsquo;s why it doesn&rsquo;t stick &mdash; folders are step three, not step one. A system that lasts is: decide the top level, remove duplicates, make names self-describing, and automate the boring parts. Here&rsquo;s the whole thing, in the order that actually works.</p>
+
+        <h2>How to organize files on mac: the short answer</h2>
+
+        <ol>
+            <li>Pick <strong>three to five</strong> top-level buckets. Stop there.</li>
+            <li><strong>Deduplicate before you sort</strong> &mdash; filing ghosts is wasted motion.</li>
+            <li>Use <strong>date-first, self-describing names</strong> (let AI propose them).</li>
+            <li>Let AI draft the filing plan; <strong>you approve</strong> every change.</li>
+            <li>Tags for the second answer, folders for the first.</li>
+            <li>Ten-minute weekly reset. That&rsquo;s the whole maintenance budget.</li>
+        </ol>
+
+        <h2>Step 1: Pick three to five top-level buckets &mdash; then stop</h2>
+
+        <p>Perfectionism at the top level is why organizing projects die. You don&rsquo;t need a taxonomy; you need a place things clearly belong:</p>
+
+        <ul>
+            <li><code>Projects</code> (active work)</li>
+            <li><code>Money</code> (invoices, receipts, statements, tax)</li>
+            <li><code>Reference</code> (manuals, courses, downloaded everything)</li>
+            <li><code>Archive</code> (finished, keep-but-rarely-open)</li>
+        </ul>
+
+        <p>Downloads and Desktop are <strong>inboxes, not homes</strong>. Everything lands there; everything should leave within a week. If a document could go in two buckets, pick one and move on &mdash; Spotlight finds it either way. (For a worked example on one hopeless folder, see the <a href="https://mkarim.us/blog/2026-09-02-mac-file-organizer.html">mac file organizer cleanup guide</a>.)</p>
+
+        <h2>Step 2: Deduplicate before you sort</h2>
+
+        <p>Sorting duplicates is wasted motion &mdash; you&rsquo;ll file the same invoice twice, then wonder why &ldquo;the numbers look doubled.&rdquo; Clean first:</p>
+
+        <ul>
+            <li>Finder Smart Folders for a quick filename sweep.</li>
+            <li>The Photos app&rsquo;s built-in Duplicates album for your photo library.</li>
+            <li>A checksum-based scan for everything else &mdash; the <a href="https://mkarim.us/blog/2026-09-09-duplicate-file-finder-mac.html">duplicate file finder comparison</a> covers the options, including the Duplicates tab in TidyMind, which groups exact copies and lets you pick the keeper per group.</li>
+        </ul>
+
+        <p>Ten minutes here saves an hour of filing ghosts.</p>
+
+        <h2>Step 3: Names that describe contents, not cameras</h2>
+
+        <p>Folders answer &ldquo;where&rdquo;; names answer &ldquo;what.&rdquo; The convention that scales is <strong>date-first plus subject</strong>:</p>
+
+        <pre>2026-03-14_walmart_receipt.png
+2026-03-15_hernandez_bond.pdf</pre>
+
+        <p>Date-first sorts chronologically forever, and a subject prefix means Spotlight finds <code>receipt</code> without opening anything. The problem, of course, is that nobody renames 400 files by hand.</p>
+
+        <p>This is the part I automated. TidyMind&rsquo;s <strong>AI Renamer</strong> reads the <em>contents</em> of each file &mdash; including images, via on-device OCR &mdash; and proposes descriptive names:</p>
+
+        <figure>
+            <img src="../assets/img/blog/tidymind-ai-renamer.png" alt="TidyMind AI Renamer review screen &mdash; 7 files scanned, contents read from 7, camera-named files mapped to receipt names like receipt_for_benjamin_ponce with editable fields and a Rename button" loading="lazy" width="1440" height="900" />
+            <figcaption>The review step: seven camera-named images, read and renamed by what&rsquo;s actually in them &mdash; editable, per-file, nothing applied until you approve.</figcaption>
+        </figure>
+
+        <p>In the screenshot, seven camera-named images become <code>receipt_for_benjamin_ponce</code> and friends &mdash; the model read each image and wrote the name from what&rsquo;s in it, dates first when the document shows its own. Nothing is blind-renamed: you get a review screen with per-file checkboxes, editable names, and a single <strong>Rename</strong> button. It runs entirely on-device (MLX, no uploads, no cloud).</p>
+
+        <p>Renaming receipts isn&rsquo;t a niche need &mdash; it&rsquo;s the whole &ldquo;scan everything, find nothing&rdquo; problem in one sentence.</p>
+
+        <h2>Step 4: Let AI propose the move, you approve it</h2>
+
+        <p>For the filing itself, TidyMind&rsquo;s Organize tab points at a messy folder &mdash; Downloads, Desktop, a project dump &mdash; and produces a plan before anything moves:</p>
+
+        <ul>
+            <li><strong>Quick Metadata mode</strong> sorts instantly by file type, no model download needed.</li>
+            <li><strong>Smart Content mode</strong> reads documents and images (OCR) to file by what they <em>are</em>: receipts, invoices, resumes, whiteboard photos.</li>
+            <li>You review and can <strong>drag files between folders</strong> to fix the plan; applying it needs Pro. Any session can be <strong>undone</strong> &mdash; files return exactly where they were.</li>
+        </ul>
+
+        <p>That last part matters more than the AI: the failure mode of auto-organizers is silent relocations. Review-first plus undo removes it.</p>
+
+        <p>If you&rsquo;re on Windows or an older macOS, my earlier app <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a> does the content-based filing job there (Ollama-based, one-time purchase) &mdash; TidyMind is its complete redesign for modern Apple Silicon Macs, and I keep both on sale for the platforms they fit.</p>
+
+        <div class="cta">
+            <p>TidyMind reads your files&rsquo; contents, proposes the plan, and moves nothing until you approve &mdash; dedupe, rename, and file, fully on-device. <a href="https://www.mkarim.us/tidymind/">Free to scan and review; macOS 15+, Apple Silicon.</a></p>
+        </div>
+
+        <h2>Step 5: Tags vs folders &mdash; use tags for the second answer</h2>
+
+        <p>Folders give one answer (&ldquo;where does this live&rdquo;), tags give a second (&ldquo;what is this across projects&rdquo;). Finder tags are free and sync with iCloud. Rule of thumb: <strong>folder = primary home, tag = cross-cutting label</strong> (<code>tax-2026</code>, <code>active</code>, <code>someday</code>). If you tag everything, you&rsquo;ve rebuilt folders with extra clicks.</p>
+
+        <h2>Step 6: The 10-minute weekly reset</h2>
+
+        <p>Systems decay without a small loop. Once a week:</p>
+
+        <ol>
+            <li>Empty Downloads and Desktop into buckets (or run an Organize plan).</li>
+            <li>One duplicates scan on whatever folder got heavy.</li>
+            <li>Rename the week&rsquo;s camera dumps (or let the AI Renamer propose).</li>
+        </ol>
+
+        <p>Ten minutes weekly beats a weekend purge quarterly, and it&rsquo;s the only reason my own Mac still passes the &ldquo;Spotlight test&rdquo; &mdash; type a subject, get the file, first result.</p>
+
+        <h2>FAQ</h2>
+
+        <h3>What&rsquo;s the fastest way to organize files on a Mac?</h3>
+        <p>Dedupe, then three-to-five buckets, then automated renaming. TidyMind&rsquo;s free scan covers the first and third steps; you approve every change.</p>
+
+        <h3>Is it safe to let AI move my files?</h3>
+        <p>It is when the tool is review-first. Nothing in TidyMind moves until you approve the plan, and any session can be undone. Everything runs on-device &mdash; no uploads, no accounts, no cloud.</p>
+
+        <h3>How is TidyMind different from AI File Organizer Pro?</h3>
+        <p>TidyMind is the complete redesign &mdash; on-device MLX, AI Renamer, duplicates, Schemes &mdash; for macOS 15+ on Apple Silicon. Pro remains the option for Windows and older macOS. Same author, different generations.</p>
+
+        <h3>Do I need to pay to try it?</h3>
+        <p>No &mdash; scanning, AI analysis, plan review, rename proposals, and duplicate scanning are free. Pro ($14.99/year or $29.99 lifetime) unlocks applying changes. Details on the <a href="https://www.mkarim.us/tidymind/">TidyMind page</a>.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/tidymind/">TidyMind</a>, <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a>, <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-09-duplicate-file-finder-mac.html">previous: duplicate file finder for Mac</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

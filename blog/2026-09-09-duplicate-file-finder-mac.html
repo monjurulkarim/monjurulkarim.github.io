@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Duplicate File Finder for Mac: 4 Ways to Find and Delete Copies &mdash; Muhammad Karim</title>
+    <meta name="description" content="Compare four ways to find duplicate files on a Mac &mdash; Finder Smart Folders, the Photos app, Terminal checksums, and TidyMind &mdash; with the trade-offs of each." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-09-duplicate-file-finder-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 9, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Duplicate File Finder for Mac: 4 Ways to Find and Delete Copies</h1>
+
+        <p>Duplicates are quiet hoarders. A folder imported twice, a &ldquo;Copy&rdquo; suffix from an old backup script, three scans of the same invoice &mdash; none of it shows up in Storage settings as a problem, and none of it fixes itself.</p>
+
+        <p>This guide compares every practical way to run a duplicate file finder Mac scan: two built-in options, a Terminal one-liner, and a dedicated app. Exact copies only &mdash; near-duplicate &ldquo;similar photo&rdquo; matching is a different problem, and this guide keeps the two apart.</p>
+
+        <h2>Why Macs pile up duplicate files</h2>
+
+        <p>Three usual suspects:</p>
+
+        <ul>
+            <li><strong>Double imports and downloads.</strong> <code>photo (1).jpg</code> exists because the same file came in twice, often months apart.</li>
+            <li><strong>Backup and sync scripts.</strong> Anything that copies &ldquo;just in case&rdquo; without comparing content first.</li>
+            <li><strong>Deliberate copies you forgot.</strong> <code>Invoice_final_FINAL.pdf</code> is a duplicate with a guilt trip attached.</li>
+        </ul>
+
+        <p>The pattern in my own folders: screenshot pairs like <code>Screen_Shot_&hellip;_DO_NOT_DELETE.jpg</code> and <code>Screen_Shot_&hellip;_DO_NOT_DELETE_backup.jpg</code> &mdash; identical bytes, zero memory of making the second one.</p>
+
+        <h2>Method 1: Finder Smart Folders (free, manual)</h2>
+
+        <p>Finder can group candidates by name and size:</p>
+
+        <ol>
+            <li>In Finder: <strong>File &rarr; New Smart Folder</strong>.</li>
+            <li>Add a rule: <strong>Kind is Image</strong> (or Document), scoped to the folder you care about.</li>
+            <li>Sort by <strong>Name</strong>, select duplicates by eye, delete.</li>
+        </ol>
+
+        <p><strong>Good:</strong> free, no install, fine for a quick sweep of one folder.<br />
+        <strong>Bad:</strong> filename matching only &mdash; <code>Scan_2081.pdf</code> and <code>Scan_2081_backup.pdf</code> match, but two byte-identical files with different names never meet. No content comparison at all.</p>
+
+        <h2>Method 2: The Photos app&rsquo;s built-in Duplicates album</h2>
+
+        <p>Since macOS Ventura, Photos detects duplicate photos and videos inside its library and collects them in a <strong>Duplicates</strong> album in the sidebar. You review pairs and merge; Photos keeps the highest-quality version.</p>
+
+        <p><strong>Good:</strong> built-in, content-aware, merged instead of trashed.<br />
+        <strong>Bad:</strong> Photos library only. Duplicates in <code>~/Downloads</code> or a project folder are invisible to it.</p>
+
+        <h2>Method 3: Terminal checksums (exact, unfriendly)</h2>
+
+        <p>For byte-exact proof, checksum every file and show collisions:</p>
+
+        <pre>find ~/Downloads -type f -exec md5 -r {} + | sort | uniq -w 32 -D</pre>
+
+        <p>Every group of lines sharing the same hash is a true duplicate set.</p>
+
+        <p><strong>Good:</strong> exact, scriptable, honest.<br />
+        <strong>Bad:</strong> no preview, no keeper choice, easy to delete the wrong line, and nothing here stops you from removing all copies.</p>
+
+        <h2>Method 4: a dedicated duplicate file finder (TidyMind)</h2>
+
+        <figure>
+            <img src="../assets/img/blog/tidymind-duplicates.png" alt="TidyMind Duplicates view on macOS &mdash; 5 duplicate groups with a reclaimable-space total, the keeper pre-marked KEEPING, and per-group Keep Selected Copies and Ignore buttons" loading="lazy" width="1440" height="900" />
+            <figcaption>The review step: groups of exact copies, the keeper pre-marked, nothing removed until you say so.</figcaption>
+        </figure>
+
+        <p>This is the method I know best, because I built it: <a href="https://www.mkarim.us/tidymind/">TidyMind</a>, my Mac file organizer, has a Duplicates tab that does the checksum work for you:</p>
+
+        <ul>
+            <li>Point it at folders; it groups <strong>exact duplicate copies</strong> and shows the reclaimable space up front.</li>
+            <li>It <strong>pre-selects a keeper</strong> in each group (marked KEEPING) &mdash; you confirm instead of hunting.</li>
+            <li>Per-group control: <strong>Keep Selected Copies</strong> or <strong>Ignore</strong>, plus a one-click <strong>Remove All Duplicates</strong> when you trust the scan.</li>
+            <li>Removed copies go to Trash as a session you can undo &mdash; nothing moves until you approve it.</li>
+        </ul>
+
+        <p>Everything runs on-device (MLX models, no uploads, no accounts, no cloud). Scanning and review are free; applying removals needs Pro ($14.99/year or $29.99 lifetime). TidyMind is on the <a href="https://www.mkarim.us/tidymind/">Mac App Store via the TidyMind page</a> &mdash; macOS 15 or later, Apple Silicon.</p>
+
+        <div class="cta">
+            <p>TidyMind&rsquo;s Duplicates tab groups exact copies, pre-marks the keeper, and trashes the rest only on your approval &mdash; fully on-device. <a href="https://www.mkarim.us/tidymind/">Free to scan and review; macOS 15+, Apple Silicon.</a></p>
+        </div>
+
+        <h2>Duplicate photos specifically</h2>
+
+        <p>Looking for a duplicate photo finder? Mac coverage splits the same way:</p>
+
+        <ul>
+            <li><strong>Inside Photos:</strong> the built-in Duplicates album (Method 2) is the right tool &mdash; it merges instead of trashing.</li>
+            <li><strong>Everywhere else</strong> (screenshots in Downloads, exported folders, receipt photos): the methods above all work. TidyMind&rsquo;s groups in my own receipt folder were literally named <code>Receipt Photos/&hellip;(Copy).jpg</code> &mdash; exact-copy cleanup, not &ldquo;similar shot&rdquo; cleanup.</li>
+        </ul>
+
+        <p>If you want <em>similar</em> shots ranked and merged, that&rsquo;s a different feature &mdash; be skeptical of any tool that promises it as a side note.</p>
+
+        <h2>Which duplicate file finder mac method should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Quick sweep of one folder, no installs</td><td>Finder Smart Folder</td></tr>
+                <tr><td>Duplicates inside your Photos library</td><td>Photos &rarr; Duplicates album</td></tr>
+                <tr><td>Proof, scripting, or audit</td><td>Terminal checksums</td></tr>
+                <tr><td>Whole-drive cleanup with review + undo</td><td>TidyMind Duplicates</td></tr>
+            </tbody>
+        </table>
+
+        <h2>FAQ</h2>
+
+        <h3>Does Mac have a built-in duplicate file finder?</h3>
+        <p>Partly. Finder Smart Folders match filenames, and the Photos app finds duplicates inside its own library. For exact copies across arbitrary folders, you need a third tool.</p>
+
+        <h3>Will a duplicate finder delete files without asking?</h3>
+        <p>Not TidyMind &mdash; you review every group, the keeper is pre-marked, and removals go to Trash as an undoable session. Terminal, on the other hand, will happily delete whatever you list; that&rsquo;s its charm.</p>
+
+        <h3>How much does TidyMind cost?</h3>
+        <p>Free to scan and review. Pro is $14.99/year or $29.99 lifetime, and applying removals or renames is what Pro unlocks. It&rsquo;s the successor to my <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a>, which stays on sale for Windows and older macOS.</p>
+
+        <h3>Why do I have so many duplicates?</h3>
+        <p>Double imports, backup scripts that copy without comparing, and years of &ldquo;(Copy)&rdquo; suffixes. The fix is a checksum-based scan, not eyeballs.</p>
+
+        <h3>How do I stop duplicates from coming back?</h3>
+        <p>Give every file one home and a self-describing name &mdash; the <a href="https://mkarim.us/blog/2026-09-09-organize-files-mac.html">system guide to organizing files on a Mac</a> covers the routine, including the weekly ten-minute reset.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/tidymind/">TidyMind</a>, <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a>, <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-07-ssh-client-mac.html">previous: SSH client on Mac</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

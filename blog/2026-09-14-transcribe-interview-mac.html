@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Transcribe Interview Recordings on Mac (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to transcribe an interview on a Mac &mdash; Apple Notes, Whisper, human transcriptionists, on-device apps &mdash; and when each is worth it." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-14-transcribe-interview-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 14, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Transcribe Interview Recordings on Mac (2026)</h1>
+
+        <p>If you do qualitative research, journalism, or user interviews, the recording is not the deliverable &mdash; the transcript is. And the hour you spend re-typing an interview is an hour you don&rsquo;t get back.</p>
+
+        <p>This guide compares four practical ways to transcribe interview audio on a Mac in 2026: the free tool already in macOS, a command-line model you can run offline, human transcriptionists, and on-device apps that combine the two.</p>
+
+        <h2>How to transcribe interview audio: the short answer</h2>
+
+        <ul>
+            <li>Recorded inside Apple Notes (macOS Sequoia or later)? The transcript is already there &mdash; open the note and copy it.</li>
+            <li>Have a recording file and comfortable in Terminal? <a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper</a> is free, offline, and handles 90+ languages.</li>
+            <li>Need publication-grade verbatim with speaker names? A human transcriptionist, roughly $1&ndash;2 per audio minute.</li>
+            <li>Regular interviews and want summaries instead of raw text? An on-device app like <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a> imports the file and returns key points and action items.</li>
+        </ul>
+
+        <p>The rest of this guide is the trade-offs behind each line.</p>
+
+        <h2>What &ldquo;good enough&rdquo; transcription means</h2>
+
+        <p>Before picking a tool, decide what you actually need:</p>
+
+        <ul>
+            <li><strong>Verbatim transcript.</strong> Every &ldquo;um&rdquo;, false start, and overlap. Needed for discourse analysis; overkill for most other work.</li>
+            <li><strong>Clean-read transcript.</strong> Filler words removed, sentences tidied, speaker turns labeled. This is what most researchers and journalists actually quote from.</li>
+            <li><strong>Summary and action items.</strong> You don&rsquo;t need the words at all &mdash; you need the decisions and commitments from a 60-minute conversation.</li>
+        </ul>
+
+        <p>Most of the pain in transcription workflows comes from aiming at the wrong one of these three.</p>
+
+        <h2>Method 1: Apple Notes &mdash; free, built into macOS</h2>
+
+        <p>Since macOS Sequoia, the Notes app can record audio and produce a transcript with speaker labels, and you can search the text inside the note. No install, no account, no upload &mdash; the transcription runs on Apple silicon.</p>
+
+        <ol>
+            <li>Open Notes and create a note.</li>
+            <li>Click the <strong>record</strong> button in the toolbar and start your interview.</li>
+            <li>Stop when done &mdash; the transcript appears under the recording, with speakers separated.</li>
+            <li>Select and copy the text into your editor of choice.</li>
+        </ol>
+
+        <p><strong>Good:</strong> free, private, zero setup. Fine for one-on-one interviews in a quiet room.</p>
+        <p><strong>Bad:</strong> you must record inside Notes, so it can&rsquo;t transcribe a recording you already have. Accuracy drops on field recordings, accents outside the training mainstream, and multi-speaker audio. Export is copy-paste, not a clean file.</p>
+
+        <p>Apple documents the feature in their <a href="https://support.apple.com/guide/notes/record-and-transcribe-audio-in-notes-mac-notesmac1003/mac" target="_blank" rel="noopener">Notes for Mac guide</a> &mdash; worth a skim for the supported macOS versions.</p>
+
+        <h2>Method 2: Whisper at the command line &mdash; free and offline</h2>
+
+        <p><a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper</a> is OpenAI&rsquo;s open-source speech recognition model, and it runs fine on a Mac with Apple silicon. It handles 90+ languages and works on files you already have &mdash; the part built-in tools can&rsquo;t do.</p>
+
+        <p>Install and transcribe:</p>
+
+        <pre>pip install -U openai-whisper
+# ffmpeg is a dependency: brew install ffmpeg
+
+# small = fast and decent; large-v3 = best accuracy, slower
+whisper interview_014.m4a --model small --language en</pre>
+
+        <p>That writes <code>interview_014.txt</code>, <code>.srt</code>, and <code>.vtt</code> next to your file. The audio never leaves your machine.</p>
+
+        <p><strong>Good:</strong> free, offline, works on existing recordings, strong multilingual accuracy, plain-text output you can script around.</p>
+        <p><strong>Bad:</strong> no speaker labels &mdash; a genuine limitation for interviews, since diarization is a separate problem. The <code>large-v3</code> model wants more RAM than a base MacBook always has free. And it&rsquo;s a terminal tool; if that sentence stopped you, this method is not for you.</p>
+
+        <p>Practical tip for researchers: run <code>--model small</code> first for a same-day draft, and reserve <code>large-v3</code> for the recordings you&rsquo;ll actually quote.</p>
+
+        <h2>Method 3: Human transcriptionists &mdash; the accuracy ceiling</h2>
+
+        <p>Services and freelancers will transcribe interviews for roughly a dollar or two per audio minute, with multi-day turnaround. For a one-hour interview that&rsquo;s $60&ndash;120 and a clean, speaker-labeled, verbatim transcript.</p>
+
+        <p><strong>Good:</strong> the most accurate option, real speaker labels, handles crosstalk and heavy accents, zero of your time.</p>
+        <p><strong>Bad:</strong> cost scales with volume &mdash; a 20-interview study gets expensive fast. Your recordings leave your machine, which matters when the audio contains participant PII; many IRB protocols and institutional review boards expect you to minimize exactly that exposure. Turnaround is days, not minutes.</p>
+
+        <p>A middle path: machine-transcribe everything for the early pass, then send only the interviews you&rsquo;ll quote at length to a human.</p>
+
+        <h2>Method 4: On-device transcription apps &mdash; Whisper without the terminal</h2>
+
+        <p>The last option is apps that package models like Whisper behind a normal Mac interface: drag in a file, get a transcript, nothing uploaded. This is where &ldquo;transcribe audio to text on a Mac&rdquo; usually lands in practice.</p>
+
+        <p>Two examples from my own stack, both on-device:</p>
+
+        <ul>
+            <li><strong><a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a></strong> (Mac App Store) is built for meetings but imports any audio &mdash; a voice memo, an interview, a Zoom recording &mdash; and turns it into minutes, key points, and action items in 90+ languages, entirely on your Mac. If your goal is the summary rather than the verbatim text, this skips the transcript step entirely.</li>
+            <li><strong><a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a></strong> (Mac App Store) captures the recording side: mic and system audio into one file with a searchable library &mdash; useful when the interview source is a call or a playback on the same machine.</li>
+        </ul>
+
+        <p>The pattern to look for in any app you evaluate: transcription happens locally (check the privacy label &mdash; &ldquo;Data Not Collected&rdquo; is the tell), it imports existing files, and it exports plain text or SRT rather than locking your transcript in.</p>
+
+        <h2>Which method should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Your situation</th><th>Best fit</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Quick interview, quiet room, no install allowed</td><td>Apple Notes</td></tr>
+                <tr><td>Existing file, privacy-critical, comfortable in Terminal</td><td>Whisper CLI</td></tr>
+                <tr><td>Publication-grade verbatim, budget exists</td><td>Human service</td></tr>
+                <tr><td>Regular interviews, want summaries and action items</td><td><a href="https://mkarim.us/apps/meetingmint.html">On-device app</a></td></tr>
+            </tbody>
+        </table>
+
+        <p>For my own research workflow the pairing is AudioRecord (or a Zoom recording) &rarr; MeetingMint import for the summary, with the Whisper CLI for the handful of recordings that need a verbatim clean read.</p>
+
+        <div class="cta">
+            <p>MeetingMint runs meeting notes entirely on your Mac &mdash; import an interview recording and get minutes, key points, and action items in 90+ languages, with nothing uploaded. <a href="https://mkarim.us/apps/meetingmint.html">Free to try with 5 meetings.</a></p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>How long does it take to transcribe an hour of audio?</h3>
+        <p>With on-device Whisper-class models, roughly real-time to a few times faster depending on the model size and your chip &mdash; a one-hour interview in well under an hour, often minutes with the smaller models. Human services take 1&ndash;3 days per recording.</p>
+
+        <h3>Can I transcribe an interview for free on a Mac?</h3>
+        <p>Yes. Apple Notes does it if you record inside the app on macOS Sequoia or later, and the Whisper command-line tool handles existing files at no cost. Both run locally.</p>
+
+        <h3>Does Whisper identify different speakers?</h3>
+        <p>Not by itself. Whisper transcribes speech to text but does not do speaker diarization. For two-speaker interviews people either label turns by hand afterwards or run a diarization tool on top.</p>
+
+        <h3>Is it safe to upload interview recordings to transcription sites?</h3>
+        <p>Treat uploads as a data-sharing decision, not a convenience toggle. Interview audio often contains personally identifiable information, and many ethics protocols expect you to keep participant data local when a local option exists. On-device transcription avoids the upload entirely.</p>
+
+        <h3>What audio format works best for transcription?</h3>
+        <p>Whisper and most Mac apps accept common formats directly (m4a, mp3, wav, flac). Clear mono audio at a modest bitrate beats a huge lossless stereo file &mdash; the model cares about speech clarity, not fidelity.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-09-organize-files-mac.html">previous: organize files on Mac</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

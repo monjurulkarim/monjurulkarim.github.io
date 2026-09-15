@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Video Redactor — Offline Face &amp; License Plate Redaction — Muhammad Karim</title>
+    <meta name="description" content="Video Redactor blurs, pixelates, or blacks out faces and license plates in video — 100% offline. Automatic detection, draw-once boxes that follow the subject, reviewed and validated exports. Nothing is ever uploaded." />
+    <link rel="canonical" href="https://mkarim.us/video-redaction/" />
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+    <!-- Bootstrap core CSS (matches site theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root { --primary: #bd5d38; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Muli, Roboto, "Helvetica Neue", Arial, sans-serif; color: #212529; }
+        h1, h2, h3, .navbar-brand { font-family: "Saira Extra Condensed", -apple-system, "Segoe UI", sans-serif; font-weight: 700; text-transform: uppercase; }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.2rem; }
+        .text-brand { color: var(--primary); }
+        .btn-brand { background-color: var(--primary); border-color: var(--primary); color: #fff; }
+        .btn-brand:hover { background-color: #a04e2e; border-color: #a04e2e; color: #fff; }
+        .hero { padding: 4.5rem 0 3rem; background: #f8f9fa; border-bottom: 1px solid #e9ecef; }
+        .section-pad { padding: 3.5rem 0; }
+        .step-num { display: inline-block; width: 2.2rem; height: 2.2rem; line-height: 2.2rem; text-align: center; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; margin-bottom: 0.75rem; }
+        .feature-list li { margin-bottom: 0.5rem; }
+        .offline-box { background: #212529; color: #f8f9fa; border-radius: 0.5rem; padding: 2rem; }
+        .offline-box .check { color: #28a745; font-weight: 700; }
+        kbd { background: #212529; color: #f8f9fa; border-radius: 0.25rem; padding: 0.1rem 0.45rem; font-size: 0.85em; }
+        footer { background: #212529; color: #adb5bd; padding: 2.5rem 0; font-size: 0.95rem; }
+        footer a { color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="https://mkarim.us/">Muhammad Karim</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#keys">Shortcuts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#privacy">Privacy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#troubleshooting">Help</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#licenses">Licenses</a></li>
+                    <li class="nav-item"><a class="btn btn-brand ml-lg-2 my-1" href="https://monjurulkarim.gumroad.com/" target="_blank" rel="noopener">Get it on Gumroad</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="mb-2">Video <span class="text-brand">Redactor</span></h1>
+                    <p class="lead font-weight-bold">Blur, pixelate, or black out faces and license plates — 100% offline.</p>
+                    <p class="mb-4">Redact the people and plates in your footage without uploading anything. Automatic face and license-plate detection, draw-once boxes that follow the subject on their own, and a review step where <strong>nothing is redacted until you approve it</strong>. The finished file is validated automatically before you ship it. Your original video is never modified.</p>
+                    <p class="small text-muted mb-0">Guide for Video Redactor 1.0 · macOS (Apple Silicon) &amp; Windows (x64)</p>
+                    <!-- SCREENSHOT: player view with a tracked face box over real footage. Drop an <img> here like the PrivateRedact hero figure. -->
+                </div>
+                <div class="col-lg-5">
+                    <div class="offline-box">
+                        <h3 class="text-white mb-3" style="font-size:1.3rem;">The privacy model</h3>
+                        <p class="mb-1"><span class="check">✓</span> Your video never touches a server</p>
+                        <p class="mb-1"><span class="check">✓</span> Detection models run on-device, inside the app</p>
+                        <p class="mb-1"><span class="check">✓</span> No account, no telemetry, no upload</p>
+                        <p class="mb-1"><span class="check">✓</span> Works with the network completely off</p>
+                        <p class="mb-0"><span class="check">✓</span> Exports are validated automatically</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- How it works -->
+    <section id="how" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">How it works</h2>
+            <p class="lead">The workflow is always the same four steps: <strong>import → mark what to redact → review → export</strong>. Here is each one in detail.</p>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">1</span>
+                    <h3 style="font-size:1.4rem;">Import a video</h3>
+                    <p>Click <strong>“Choose a video file…”</strong> and pick any common video file. The app reads its details (duration, dimensions, frame rate, codecs, audio) under <strong>Source details</strong> — nothing is decoded or converted yet. The soundtrack is kept in exports (re-encoded) and is never analyzed; redaction touches only the picture.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">2</span>
+                    <h3 style="font-size:1.4rem;">Mark what to redact — automatically</h3>
+                    <p>In <strong>Automatic detection</strong>, check <strong>Face</strong> and/or <strong>License plate</strong>, then click <strong>Analyze entire video</strong>. The app proposes a <em>track</em> for every subject it finds — one subject followed through the video, with a box around it in every frame it appears. Detection only <em>proposes</em>: you review everything before any export. If you only want part of the video scanned, mark a segment with <kbd>I</kbd> / <kbd>O</kbd> and analyze just that range.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">3</span>
+                    <h3 style="font-size:1.4rem;">…or draw boxes yourself</h3>
+                    <p>For anything the detectors don't cover — a logo, a tattoo, a missed face — click <strong>✚ Draw redaction box</strong> and drag a box around the subject at the playhead. The box then <strong>follows the subject automatically to the end of the video</strong>: you draw once. Drag to move, drag a corner to resize, and adjust each redaction's time range on the timeline (drag its edges, or ✕ to remove it). If tracking ever drifts, fix the box at that moment and use <strong>Re-track from the playhead</strong>.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">4</span>
+                    <h3 style="font-size:1.4rem;">Review and approve</h3>
+                    <p><strong>Every track starts as “pending”</strong> and nothing is redacted until you decide: <strong>Approve</strong> it into the export, or <strong>Exempt (🛡)</strong> to leave that subject visible on purpose. <strong>✓ Approve all</strong> confirms everything in one click; <strong>Approve confident</strong> approves only the detector's high-confidence findings and leaves the rest for you. Tracks flagged <strong>⚠</strong> had uncertain moments (occlusions, gaps where the box was interpolated or held) — check those spots, accept the span with <kbd>X</kbd> if the box looks right, or fix and re-track (<kbd>U</kbd> reopens an accepted span). When in doubt, approve: over-redacting is safer than missing a subject.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">5</span>
+                    <h3 style="font-size:1.4rem;">Choose the style</h3>
+                    <p>Per track in <strong>Track details</strong>: <strong>Black</strong> (solid black — strongest), <strong>Blur</strong>, or <strong>Pixelate</strong>; rectangle or oval shape (faces default to oval); margin padding; soft edge / feather. <strong>Black Safety</strong> is the one-click strongest preset — opaque black, hard rectangle, no feather, extra margin. Blur and pixelate keep the video watchable but are not guaranteed anonymization; black is.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <span class="step-num">6</span>
+                    <h3 style="font-size:1.4rem;">Export &amp; validate</h3>
+                    <p>In <strong>Export</strong>, click <strong>Export &amp; validate</strong> and choose a save location. Export unlocks when every track is approved or exempt (and at least one is approved). The finished file is <strong>validated automatically</strong> — the app checks that every approved redaction is really present in every expected frame, and confirms <strong>✓ Export validated</strong> only when it passes. If a check fails, no partial file is kept. Cancel mid-export and nothing partial is written.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard shortcuts -->
+    <section id="keys" class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">Keyboard shortcuts</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr><td><kbd>Space</kbd></td><td>Play / pause</td></tr>
+                            <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Step one frame</td></tr>
+                            <tr><td><kbd>I</kbd> / <kbd>O</kbd></td><td>Set segment in / out point</td></tr>
+                            <tr><td><kbd>Enter</kbd></td><td>Nudge mode: move the selected box with arrows (<kbd>Shift</kbd> = coarse, <kbd>,</kbd> shrink, <kbd>.</kbd> grow, <kbd>Enter</kbd>/<kbd>Esc</kbd> done)</td></tr>
+                            <tr><td><kbd>A</kbd></td><td>Approve (queue item, or selected track)</td></tr>
+                            <tr><td><kbd>W</kbd></td><td>Exempt (queue item, or selected track)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr><td><kbd>X</kbd></td><td>Accept the ⚠ span at the playhead</td></tr>
+                            <tr><td><kbd>U</kbd></td><td>Reopen an accepted span</td></tr>
+                            <tr><td><kbd>J</kbd> / <kbd>K</kbd></td><td>Step through the review queue</td></tr>
+                            <tr><td><kbd>F</kbd></td><td>Jump to the next warning</td></tr>
+                            <tr><td><kbd>Del</kbd></td><td>Delete the selected box / segment</td></tr>
+                            <tr><td><kbd>Esc</kbd></td><td>Exit draw mode</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy -->
+    <section id="privacy" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">What stays on your machine</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Everything, by design</h3>
+                    <p>The video, the detection models, and the export all live on your disk. The app makes no network connections — you can verify with your firewall, or by going offline entirely: every feature still works. This page is the only thing your browser loads; the app itself is a normal desktop program.</p>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <h3 style="font-size:1.4rem;">Clean temporary data</h3>
+                    <p>Review thumbnails and other working data are stored under randomized, opaque names in your system temp folder and are deleted when you close the app or switch videos. The in-app log drawer shows <code>&lt;source&gt;</code> / <code>&lt;output&gt;</code> instead of your real file paths.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section id="troubleshooting" class="section-pad bg-light">
+        <div class="container">
+            <h2 class="mb-4">Troubleshooting</h2>
+            <dl class="mb-0">
+                <dt class="font-weight-bold">“Worker connection lost” / an offline banner appears</dt>
+                <dd>The app's analysis engine is a separate process; if it ever dies, the app restarts it automatically. If a banner persists, quit and relaunch the app, then run the job again.</dd>
+                <dt class="font-weight-bold">Export is disabled</dt>
+                <dd>The button lists how many tracks are still pending. Approve or exempt every track (and have at least one approved), and the export unlocks.</dd>
+                <dt class="font-weight-bold">A face or plate wasn't detected</dt>
+                <dd>Try a smaller detection interval, make sure the category is checked — or just draw a box over it. Manual boxes track the subject exactly like detections do.</dd>
+                <dt class="font-weight-bold">Plate detection finds nothing</dt>
+                <dd>The plate model needs real, legible plates. Tiny, angled, or motion-blurred plates may need a manual box.</dd>
+            </dl>
+            <p class="mb-0 mt-3">Still stuck? Write to <a href="mailto:support@mkarim.us">support@mkarim.us</a>.</p>
+        </div>
+    </section>
+
+    <!-- Licenses & open-source -->
+    <section id="licenses" class="section-pad">
+        <div class="container">
+            <h2 class="mb-4">Licenses &amp; open-source</h2>
+            <p class="lead">Video Redactor runs entirely on your computer and builds on excellent open-source software. The complete third-party notices and component list ship inside the app (<code>THIRD-PARTY-NOTICES.md</code>) and are included with every download. The source offers below are maintained for at least three years from release.</p>
+
+            <h3 class="mt-4" style="font-size:1.5rem;">FFmpeg <span class="text-muted small">(GPL-3.0-or-later)</span></h3>
+            <p>Each download bundles a private, unmodified FFmpeg build so the app never depends on a system install: the macOS app ships FFmpeg 7.1.1 (Homebrew build); the Windows installer ships FFmpeg 8.1.2 (gyan.dev “full” build, statically linked). Both builds enable GPL components and are distributed under GPL-3.0-or-later. Video Redactor launches FFmpeg as a separate, unmodified external command and is not a derivative work of it.</p>
+            <ul class="feature-list">
+                <li>FFmpeg source for the shipped versions: <a href="https://ffmpeg.org/download.html" target="_blank" rel="noopener">ffmpeg.org</a> (tags <code>n7.1.1</code> and <code>n8.1.2</code>)</li>
+                <li>macOS build recipe (complete build script): the public Homebrew formula <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/f/ffmpeg.rb" target="_blank" rel="noopener"><code>ffmpeg 7.1.1_2</code></a></li>
+                <li>Windows build origin: <a href="https://www.gyan.dev/ffmpeg/builds/" target="_blank" rel="noopener">gyan.dev FFmpeg builds</a> — unmodified release binaries produced by Gyan Doshi; the full configure line for the shipped build is recorded in the bundled THIRD-PARTY-NOTICES.md</li>
+            </ul>
+
+            <h3 class="mt-4" style="font-size:1.5rem;">YuNet face detector <span class="text-muted small">(MIT)</span></h3>
+            <p>The face model (<code>face_detection_yunet_2023mar.onnx</code>) is the YuNet 2023 model from the OpenCV Zoo, distributed under the MIT License by its author within the Apache-2.0 OpenCV project. <a href="https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet" target="_blank" rel="noopener">Model source</a>.</p>
+
+            <h3 class="mt-4" style="font-size:1.5rem;">YOLO11n license-plate detector <span class="text-muted small">(AGPL-3.0)</span></h3>
+            <p>The plate model (<code>license-plate-finetune-v1n.onnx</code>) is a YOLO11-nano fine-tune by morsetechlab, trained on the Roboflow <code>license-plate-recognition-rxg4e</code> dataset (CC BY 4.0), distributed under AGPL-3.0. It ships unmodified inside the app. <a href="https://huggingface.co/morsetechlab/yolov11-license-plate-detection" target="_blank" rel="noopener">Model source</a> · <a href="https://github.com/ultralytics/ultralytics" target="_blank" rel="noopener">Ultralytics YOLO11 (AGPL-3.0)</a> · <a href="https://universe.roboflow.com/roboflow-universe-projects/license-plate-recognition-rxg4e" target="_blank" rel="noopener">Training dataset (CC BY 4.0)</a>.</p>
+
+            <p class="mb-0 mt-3 small text-muted">The full license texts (GPL-3.0, AGPL-3.0, MIT) and the complete component inventory (Python, npm, and Rust dependencies) are in THIRD-PARTY-NOTICES.md, included with every download. Video Redactor itself is proprietary software; all listed third-party components are used under their respective licenses, and none of them communicates over the network at runtime.</p>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section-pad bg-light">
+        <div class="container text-center">
+            <h2 class="mb-3">Redact your first video today</h2>
+            <p class="lead mb-4">Import a clip, let the detectors work or draw a box, review, and export — all on your own machine.</p>
+            <!-- Owner: when the Gumroad listing is live, replace this store-root link with the product URL (see privateredact.html nav/CTA for the pattern). -->
+            <a class="btn btn-brand btn-lg" href="https://monjurulkarim.gumroad.com/" target="_blank" rel="noopener">Get Video Redactor on Gumroad</a>
+        </div>
+    </section>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Muhammad Karim, Ph.D.</h3>
+                    <p class="mb-0">I build privacy-first, offline AI tools.</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Product</h3>
+                    <p class="mb-1"><a href="https://mkarim.us/video-redaction/">User guide (this page)</a></p>
+                    <p class="mb-1"><a href="#licenses">Licenses &amp; open-source</a></p>
+                    <p class="mb-0"><a href="https://monjurulkarim.gumroad.com/" target="_blank" rel="noopener">All products on Gumroad</a></p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h3 class="text-white" style="font-size:1.2rem;">Site</h3>
+                    <p class="mb-1"><a href="https://mkarim.us/">Home</a></p>
+                    <p class="mb-1"><a href="https://mkarim.us/apps/">Apps &amp; Software</a></p>
+                    <p class="mb-0"><a href="mailto:support@mkarim.us">support@mkarim.us</a></p>
+                </div>
+            </div>
+            <hr style="border-color:#495057;" />
+            <p class="mb-0 small">© 2026 Muhammad Monjurul Karim. Video Redactor — offline face &amp; license-plate redaction.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

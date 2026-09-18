@@ -33,6 +33,9 @@
         li { margin-bottom:.4rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
         footer.site a { color:var(--muted); }
     </style>
@@ -47,6 +50,11 @@
         <p>Maybe you filmed a great clip and a stranger walked through the frame. Maybe it&rsquo;s dashcam footage, a recorded interview with a minor, or a workplace incident report. Whatever the reason, knowing how to blur faces in a video &mdash; properly, so the blur actually stays on the face &mdash; is a different skill than blurring a photo, because faces move.</p>
 
         <p>This guide compares four practical ways to blur faces in video in 2026: purpose-built on-device redaction software, a free desktop editor with motion tracking, a one-line ffmpeg command for static shots, and quick mobile apps. For each one you&rsquo;ll see what it costs, when it holds up, and when it breaks down.</p>
+
+        <figure>
+          <img src="../assets/img/blog/fig-blur-method-choice.svg" alt="Decision flow: if the face never moves, an ffmpeg fixed box works; if it moves, sensitive or repeated work calls for on-device redaction software with auto detection and a review queue, while a one-off clip can use manual editor tracking or a mobile app" loading="lazy" width="760" height="330" />
+          <figcaption>The whole guide as one decision: the moving-face question splits the four methods.</figcaption>
+        </figure>
 
         <h2>The short answer</h2>
 
@@ -64,6 +72,11 @@
         <p>This is the category built for the job. Instead of keyframing a blur by hand, the software detects faces frame by frame, proposes the redactions, and lets you approve them before anything is rendered.</p>
 
         <p>We build one: <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>. It runs entirely on your computer &mdash; Mac (Apple Silicon) or Windows &mdash; with the AI models bundled inside, so footage never leaves your machine. You import a clip, it finds faces and license plates automatically, and you can also draw a box around anything else (a screen, a document, a tattoo); the box follows the subject as it moves. Every proposed redaction lands in a review queue &mdash; approve, exempt, or adjust &mdash; then you export with blur, pixelation, or a solid black box, for the whole video or selected segments. It&rsquo;s $49.99 one-time, and the audio track is kept.</p>
+
+        <figure>
+          <img src="../assets/img/blog/videoredactor-cover.jpg" alt="Video Redactor running on a laptop: the video preview shows a person whose face is tracked for redaction, with the review queue of proposed redactions and a detection timeline alongside" loading="lazy" width="900" height="507" />
+          <figcaption>Detection proposes, you review and approve &mdash; nothing renders until you sign off.</figcaption>
+        </figure>
 
         <p><strong>Good:</strong> interviews, dashcam and CCTV clips, HR or incident footage, anything with minors or patients, and anyone who redacts video more than once in a blue moon.</p>
         <p><strong>Trade-off:</strong> it&rsquo;s a paid tool, and it&rsquo;s deliberate about redaction (review queues, consistent output) rather than a quick effects toy.</p>

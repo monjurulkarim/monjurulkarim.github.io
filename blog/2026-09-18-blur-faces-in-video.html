@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Blur Faces in a Video (Every Method, 2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to blur faces in a video &mdash; on-device redaction apps, free editors with tracking, ffmpeg one-liners, and mobile apps &mdash; compared." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-18-blur-faces-in-video.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 18, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Blur Faces in a Video (Every Method, 2026)</h1>
+
+        <p>Maybe you filmed a great clip and a stranger walked through the frame. Maybe it&rsquo;s dashcam footage, a recorded interview with a minor, or a workplace incident report. Whatever the reason, knowing how to blur faces in a video &mdash; properly, so the blur actually stays on the face &mdash; is a different skill than blurring a photo, because faces move.</p>
+
+        <p>This guide compares four practical ways to blur faces in video in 2026: purpose-built on-device redaction software, a free desktop editor with motion tracking, a one-line ffmpeg command for static shots, and quick mobile apps. For each one you&rsquo;ll see what it costs, when it holds up, and when it breaks down.</p>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li>The face moves, the footage is sensitive, or you do this regularly: use video redaction software with automatic detection and a review step.</li>
+            <li>Already comfortable in a video editor and it&rsquo;s a one-off: DaVinci Resolve&rsquo;s free tier does manual tracking well.</li>
+            <li>Locked-off camera, face never leaves one spot: one ffmpeg command is free and fast.</li>
+            <li>Short social clip, nothing sensitive: a mobile app is fine &mdash; but check where the video gets uploaded.</li>
+        </ul>
+
+        <p>The rest of this guide is the trade-offs behind each line.</p>
+
+        <h2>Method 1: On-device redaction software (automatic, reviewed)</h2>
+
+        <p>This is the category built for the job. Instead of keyframing a blur by hand, the software detects faces frame by frame, proposes the redactions, and lets you approve them before anything is rendered.</p>
+
+        <p>We build one: <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>. It runs entirely on your computer &mdash; Mac (Apple Silicon) or Windows &mdash; with the AI models bundled inside, so footage never leaves your machine. You import a clip, it finds faces and license plates automatically, and you can also draw a box around anything else (a screen, a document, a tattoo); the box follows the subject as it moves. Every proposed redaction lands in a review queue &mdash; approve, exempt, or adjust &mdash; then you export with blur, pixelation, or a solid black box, for the whole video or selected segments. It&rsquo;s $49.99 one-time, and the audio track is kept.</p>
+
+        <p><strong>Good:</strong> interviews, dashcam and CCTV clips, HR or incident footage, anything with minors or patients, and anyone who redacts video more than once in a blue moon.</p>
+        <p><strong>Trade-off:</strong> it&rsquo;s a paid tool, and it&rsquo;s deliberate about redaction (review queues, consistent output) rather than a quick effects toy.</p>
+
+        <h2>Method 2: A free editor with motion tracking (DaVinci Resolve)</h2>
+
+        <p>DaVinci Resolve&rsquo;s free tier is a real editor, and its Color page can track a circular window onto a moving face: drop a Circle matte on the clip, blur what&rsquo;s inside it, run the tracker forward, then step through and nudge any frames where the track slips. Render on the Deliver page. (<a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">Blackmagic&rsquo;s page</a> lists what the paid Studio edition adds on top &mdash; including Magic Mask and optical blur, its smarter assisted tools &mdash; so the free route is the manual one.)</p>
+
+        <p><strong>Good:</strong> editors who already live in Resolve, one-off projects, zero budget.</p>
+        <p><strong>Trade-off:</strong> manual and slow &mdash; expect to check and fix frames one by one, and nothing stops you from exporting before every frame is right.</p>
+
+        <h2>Method 3: ffmpeg for static shots (the free one-liner)</h2>
+
+        <p>If the camera never moves &mdash; tripod interview, fixed dashcam, doorbell cam aimed at a porch &mdash; and the face stays in one region, you don&rsquo;t need tracking at all. A single ffmpeg command blurs a fixed rectangle for a time range:</p>
+
+        <pre>ffmpeg -i input.mp4 -filter_complex \
+"[0:v]crop=200:150:420:90,boxblur=10[b]; \
+ [0:v][b]overlay=420:90:enable='between(t,12,38)'" \
+-c:a copy output.mp4</pre>
+
+        <p>That crops a 200&times;150 region at position (420, 90), blurs it, overlays it back on the original between seconds 12 and 38, and copies the audio untouched. Change <code>boxblur=10</code> to a stronger radius for heavier blurring, or adjust the geometry for your frame. The filters are documented in the <a href="https://ffmpeg.org/ffmpeg-filters.html" target="_blank" rel="noopener">official ffmpeg filter reference</a>.</p>
+
+        <p><strong>Good:</strong> locked-off shots, scripted batch jobs, servers.</p>
+        <p><strong>Trade-off:</strong> the box is dumb &mdash; the moment the face moves out of the rectangle, your redaction fails silently, which is the most dangerous failure mode there is.</p>
+
+        <h2>Method 4: Mobile apps for quick social clips</h2>
+
+        <p>For a 15-second vertical clip, a mobile blur app gets you done in minutes: point at the face, let the app&rsquo;s tracker follow it, export.</p>
+
+        <p><strong>Good:</strong> speed, zero learning curve.</p>
+        <p><strong>Trade-off:</strong> many upload your video to their cloud for processing &mdash; fine for a meme, bad for anything sensitive. Watermarks are common, and tracking quality varies wildly between apps. The privacy risk is inverted: the clips where you most need a blur are exactly the ones you least want to upload.</p>
+
+        <h2>How to blur faces in a video: which method should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Method</th><th>Cost</th><th>Tracks moving faces</th><th>Works offline</th><th>Best for</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>On-device redaction software</td><td>$49.99 one-time</td><td>Yes &mdash; automatic + review</td><td>Yes</td><td>Sensitive or repeated work</td></tr>
+                <tr><td>DaVinci Resolve (free)</td><td>Free</td><td>Yes &mdash; manual tracking</td><td>Yes</td><td>Editors, one-offs</td></tr>
+                <tr><td>ffmpeg fixed region</td><td>Free</td><td>No &mdash; static box only</td><td>Yes</td><td>Locked-off cameras, scripts</td></tr>
+                <tr><td>Mobile apps</td><td>Free&ndash;cheap</td><td>Varies by app</td><td>Often no</td><td>Quick social clips</td></tr>
+            </tbody>
+        </table>
+
+        <h2>When you need actual video redaction software</h2>
+
+        <p>&ldquo;Blurring a face for a vlog&rdquo; and &ldquo;redacting footage&rdquo; get called the same thing, but they&rsquo;re different bars. Redaction &mdash; the standard for legal holds, FOIA releases, HR investigations, research consent, insurance claims &mdash; means the redaction is complete, consistent across every frame, and reviewed by a human before it ships. That&rsquo;s why the video redaction software category exists as its own tooling class, separate from effects apps: automatic detection so frames don&rsquo;t get missed, a review queue so a human signs off, and on-device processing so the raw footage never leaves the machine that holds the responsibility. If that&rsquo;s your situation, <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a> does exactly this on your own Mac or PC &mdash; or use any workflow that gives you detection plus review, not just a blur brush. (For the document side of the same problem, see our comparison of <a href="https://mkarim.us/blog/2026-09-02-best-redaction-software.html">redaction software</a>.)</p>
+
+        <h2>Why &ldquo;offline&rdquo; belongs on your checklist</h2>
+
+        <p>A blurred face is still sensitive context: the frames around it show where you were, what was on the screens, who else was there. Uploading raw footage to a random web tool to blur one face adds a second copy of the most sensitive version of that video to a server you don&rsquo;t control. The same logic we apply to documents &mdash; <a href="https://mkarim.us/blog/2026-08-31-redact-pii-before-sending-to-llm.html">redact PII before sending documents to an LLM</a> &mdash; applies to footage; and if your source is a PDF rather than a clip, start with <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">redacting a PDF without Adobe Pro</a>.</p>
+
+        <div class="cta">
+            <p>Video Redactor finds faces and license plates automatically, tracks anything you draw a box around, and renders the redacted video entirely on your own computer &mdash; nothing uploaded. <a href="https://www.mkarim.us/video-redaction/">See how it works.</a></p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Does blurring a face in a video require motion tracking?</h3>
+        <p>Only if the face moves. A locked-off camera with a subject in one spot can use a fixed blurred region (the ffmpeg method). The moment the person or the camera moves, you need tracking &mdash; manual in an editor, automatic in redaction software.</p>
+
+        <h3>Can I blur license plates the same way?</h3>
+        <p>Yes &mdash; plates are the same class of identifying information, and every method above works on them. Purpose-built tools detect plates automatically; in an editor you track a plate exactly like a face.</p>
+
+        <h3>Is a blurred face recoverable?</h3>
+        <p>A properly strong blur or pixelation applied to full frames is not practically reversible. A light blur can sometimes be partially attacked with AI enhancement tools, so for sensitive footage use a heavy blur or a solid black box &mdash; and check the output frame by frame, which is what a review queue is for.</p>
+
+        <h3>What&rsquo;s the difference between blurring and redaction?</h3>
+        <p>Blurring is an effect; redaction is a process with a review step and a documented result. If the video could end up in a legal, HR, or compliance context, you want redaction &mdash; detection, human review, consistent application &mdash; not just a blur brush.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>, <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-14-transcribe-interview-mac.html">previous: transcribe interview recordings on Mac</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Blur License Plates in a Video (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to blur license plates in a video &mdash; on-device redaction apps, editor mask tracking, ffmpeg, and online tools &mdash; compared." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-21-blur-license-plates-in-video.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 21, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Blur License Plates in a Video (2026)</h1>
+
+        <p>Dashcam clips, motovlogs, fleet and delivery footage, drone flyovers, parking-lot CCTV &mdash; license plates are in almost every outdoor video. And a plate is often a stronger identifier than a face: it points to a registered owner, not just a stranger who walked through the frame. If you publish footage, plates are usually the first thing you want unreadable.</p>
+
+        <p>The hard part is the same one that faces cause: plates move. A static blur box fails the moment the car changes lanes. This guide compares four practical ways to blur license plates in a video in 2026, and shows when each one holds up.</p>
+
+        <figure>
+          <img src="../assets/img/blog/fig-plate-method-choice.svg" alt="Decision flow: many plates, sensitive footage, or moving traffic calls for on-device redaction software with auto detection and a review queue; a one-off with few plates suits editor mask tracking; a locked-off camera with a stationary plate suits an ffmpeg fixed box; a quick social clip can use an online tool or app" loading="lazy" width="760" height="330" />
+          <figcaption>The whole guide as one decision: the footage you&rsquo;re blurring picks the method.</figcaption>
+        </figure>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li><strong>Lots of plates, moving traffic, or footage you have to get right:</strong> use redaction software with automatic plate detection and a review step.</li>
+            <li><strong>One or two plates, a one-off, and you already edit video:</strong> draw a mask and track it in a desktop editor.</li>
+            <li><strong>Locked-off camera, plate never moves:</strong> one ffmpeg command is free and fast.</li>
+            <li><strong>Short social clip, nothing sensitive:</strong> an online tool or mobile app &mdash; but check where the video gets uploaded first.</li>
+        </ul>
+
+        <h2>Method 1: On-device redaction software (automatic, reviewed)</h2>
+
+        <p>This is the category built for the job. Instead of masking every plate by hand, the software detects them frame by frame, proposes the redactions, and lets you approve them before anything is rendered.</p>
+
+        <p>We build one: <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>. It finds faces <strong>and</strong> license plates automatically &mdash; the AI models are bundled inside, so detection runs on your computer and footage never leaves your machine. Every proposed redaction lands in a review queue: approve, exempt, or adjust, then export with blur, pixelation, or a solid black box, for the whole video or selected segments. One download covers Mac (Apple Silicon) and Windows; the audio track is preserved. It&rsquo;s $49.99 one-time.</p>
+
+        <p>Automatic detection matters more with plates than faces. Traffic footage can carry dozens of plates, appearing for a few frames each. Manual masking scales linearly with plate count; detection doesn&rsquo;t. The review queue is the safety net: detectors miss partial plates, glare, and brief appearances, so a human signs off before export.</p>
+
+        <figure>
+          <img src="../assets/img/blog/fig-plate-pipeline.svg" alt="On-device plate redaction pipeline in three steps: bundled AI models detect faces and plates frame by frame on your machine, a review queue lets a human approve, exempt, or adjust every proposal, then the video renders with blur, pixelation, or a black box while the audio is kept; raw footage never leaves your machine" loading="lazy" width="760" height="330" />
+          <figcaption>The on-device redaction loop: detect, review, render &mdash; raw footage never leaves your machine.</figcaption>
+        </figure>
+
+        <p><strong>Good:</strong> dashcam and motovlog channels, fleet and CCTV operators, researchers, FOIA or insurance footage, anyone doing this weekly.</p>
+
+        <p><strong>Trade-off:</strong> it&rsquo;s a paid tool, and it&rsquo;s deliberate about redaction (review queue, consistent output) rather than a quick effects toy.</p>
+
+        <h2>Method 2: A desktop editor with mask tracking</h2>
+
+        <p>If you already edit video, DaVinci Resolve&rsquo;s free tier does this manual tracking well: drop a mask over the plate, blur what&rsquo;s inside it, run the tracker forward, then step through and nudge any frames where the track slips (<a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">Blackmagic&rsquo;s page</a> lists what the paid Studio edition adds on top &mdash; including Magic Mask and optical blur, its smarter assisted tools). Exact menu steps differ by editor, but the loop is the same: mask, track, inspect, fix.</p>
+
+        <p>The catch is scale and certainty. One plate is a five-minute job. Forty plates in an intersection clip is an afternoon. And nothing in a manual workflow tells you a plate was missed &mdash; at second 43, in the mirror, half-visible at the frame edge. You find misses by watching the whole timeline back.</p>
+
+        <p><strong>Good:</strong> editors who already live in the tool, one-off projects, zero budget.</p>
+
+        <p><strong>Trade-off:</strong> manual per plate, slow at volume, no completeness check.</p>
+
+        <h2>Method 3: ffmpeg for locked-off shots</h2>
+
+        <p>If the camera never moves &mdash; a doorbell cam, a fixed parking camera, a tripod shot &mdash; and the plate stays in one region, you don&rsquo;t need tracking. A single ffmpeg command blurs a fixed rectangle:</p>
+
+        <pre>ffmpeg -i input.mp4 -filter_complex \
+"[0:v]crop=280:80:640:700,boxblur=10[b]; \
+ [0:v][b]overlay=640:700:enable='between(t,5,60)'" \
+-c:a copy output.mp4</pre>
+
+        <p>That crops a 280&times;80 region at position (640, 700), blurs it, overlays it back between seconds 5 and 60, and copies the audio untouched. Adjust the geometry for your frame; the filters are documented in the <a href="https://ffmpeg.org/ffmpeg-filters.html" target="_blank" rel="noopener">official ffmpeg filter reference</a>.</p>
+
+        <p><strong>Good:</strong> locked-off shots, scripted batch jobs, servers.</p>
+
+        <p><strong>Trade-off:</strong> the box is dumb. If the car stops short, or a second car crosses the region, the redaction fails silently &mdash; and nobody sees the failure in the output unless they look for it.</p>
+
+        <h2>Method 4: Online tools and mobile apps</h2>
+
+        <p>For a short clip, a browser tool or mobile app is the fastest path: upload, let the automatic plate finder work, export. Several now do AI plate detection with tracking, and some are free to start.</p>
+
+        <p>Read the privacy trade before using one. The tools work by uploading your footage to their servers &mdash; the video leaves your machine before it&rsquo;s redacted. For a motovlog of a public street, that&rsquo;s usually fine. For incident footage, an HR case, or anything with a legal angle, it&rsquo;s the inverted risk again: the clips that most need redaction are the ones you least want on someone else&rsquo;s server. Watermarks and export limits are common on free tiers.</p>
+
+        <p><strong>Good:</strong> speed, zero learning curve, non-sensitive clips.</p>
+
+        <p><strong>Trade-off:</strong> upload-first processing, watermarks, varying tracking quality.</p>
+
+        <h2>How to blur license plates in a video: which method should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Method</th><th>Cost</th><th>Auto plate detection</th><th>Works offline</th><th>Best for</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>On-device redaction software</td><td>$49.99 one-time</td><td>Yes &mdash; plus review queue</td><td>Yes</td><td>Sensitive or repeated work</td></tr>
+                <tr><td>Desktop editor (mask tracking)</td><td>Free&ndash;paid</td><td>No &mdash; manual mask</td><td>Yes</td><td>Editors, one-offs</td></tr>
+                <tr><td>ffmpeg fixed region</td><td>Free</td><td>No &mdash; static box</td><td>Yes</td><td>Locked-off cameras, scripts</td></tr>
+                <tr><td>Online / mobile tools</td><td>Free&ndash;cheap</td><td>Varies by tool</td><td>No</td><td>Quick social clips</td></tr>
+            </tbody>
+        </table>
+
+        <p>If you publish footage regularly, the first row is the one that keeps paying off: detection handles the volume, the review queue catches the misses, and on-device processing keeps raw footage where the responsibility for it lives.</p>
+
+        <h2>Why plates count as personal data</h2>
+
+        <p>It&rsquo;s tempting to treat a plate as public information &mdash; anyone walking past the car can read it. Privacy law mostly doesn&rsquo;t see it that way. Under the UK GDPR, CCTV and video surveillance footage is personal data, and number-plate recognition is treated as part of that: the UK&rsquo;s <a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/cctv-and-video-surveillance/guidance-on-video-surveillance-including-cctv" target="_blank" rel="noopener">ICO video surveillance guidance</a> covers organisations running CCTV, body-worn video, drones, and automatic number plate recognition (ANPR) &mdash; plates, combined with context like time and location, are information that relates to an identifiable person. Purely personal use generally sits outside the regime, but that line is easy to cross: publish the footage publicly and you&rsquo;re no longer purely personal.</p>
+
+        <p>In the US there is no single rule for private publishers of dashcam clips; practice varies by state, platform, and purpose. But the direction is consistent: broadcasters blur plates, FOIA releases and insurance claims treat footage as redactable records, and platforms expect it for anything involving incidents or minors. If your video could end up in a legal, HR, or compliance context, plate blurring isn&rsquo;t cosmetic &mdash; it&rsquo;s the redaction standard, with detection, human review, and consistent application.</p>
+
+        <p>(For the document side of the same problem, see our comparisons of <a href="https://mkarim.us/blog/2026-09-02-best-redaction-software.html">redaction software</a> and <a href="https://mkarim.us/blog/2026-08-28-redact-pdf-without-adobe-pro.html">redacting a PDF without Adobe Pro</a>; and for the logic of why footage shouldn&rsquo;t be uploaded for AI processing at all, see <a href="https://mkarim.us/blog/2026-08-31-redact-pii-before-sending-to-llm.html">redacting PII before sending documents to an LLM</a>.)</p>
+
+        <div class="cta">
+            <p>Video Redactor finds faces and license plates automatically, tracks anything you draw a box around, and renders the redacted video entirely on your own computer &mdash; nothing uploaded. <a href="https://www.mkarim.us/video-redaction/">See how it works.</a></p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Do I legally have to blur license plates in my dashcam video?</h3>
+        <p>Depends on where you are and what you do with the footage. Purely personal use generally sits outside data protection law in the UK; publishing footage publicly, or any business use, changes the analysis, and organisations have formal duties. This isn&rsquo;t legal advice &mdash; when the footage matters, blur the plates and check the applicable rules for your jurisdiction.</p>
+
+        <h3>Can one pass blur both faces and plates?</h3>
+        <p>Yes, with purpose-built tools: Video Redactor detects faces and license plates in the same pass and queues both for your review. In a manual editor workflow they&rsquo;re separate masks, tracked separately, which is part of why manual work doesn&rsquo;t scale.</p>
+
+        <h3>Is a blurred plate recoverable?</h3>
+        <p>A heavy blur or pixelation applied consistently across frames is not practically reversible; a light blur can sometimes be partially attacked with AI enhancement tools. For sensitive footage, use a strong blur or a solid black box &mdash; and check the output, which is what a review queue is for.</p>
+
+        <h3>Why not just crop or cut the frames with plates in them?</h3>
+        <p>Cuts break continuity and audio sync, and in moving footage the plate is rarely alone in the frame &mdash; you&rsquo;d lose the scene you&rsquo;re trying to show. Blurring keeps the video intact and the story watchable. A crop can work for a single still, not for a moving clip.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>, <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-18-blur-faces-in-video.html">previous: how to blur faces in a video</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Clean Up Mac Desktop: 4 Methods That Work (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to clean up mac desktop clutter &mdash; built-in Stacks, folder triage, a Terminal sweep, and on-device AI &mdash; and when each one is worth it." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-22-clean-up-mac-desktop.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 22, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Clean Up Mac Desktop: 4 Methods That Work (2026)</h1>
+
+        <p>The desktop becomes an inbox the day you get a Mac. Screenshots, downloads, emailed PDFs, a folder called &ldquo;stuff&rdquo; &mdash; six months later it&rsquo;s a wall of icons and you can&rsquo;t find last week&rsquo;s invoice in it.</p>
+
+        <p>If you want to clean up mac desktop clutter, there are four approaches that actually work in 2026, and they solve different problems. Apple&rsquo;s built-in Stacks hides the mess. A folder triage moves it somewhere sensible. A Terminal script sweeps files into folders by type. And an on-device AI organizer reads what each file actually is and files it properly &mdash; which is what I ended up building. They differ on effort, safety, and how long the result lasts.</p>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li><strong>Want it tidy in five seconds, nothing moved:</strong> turn on Stacks (View &gt; Use Stacks, or Control-Command-0). Built into macOS.</li>
+            <li><strong>Want the desktop empty and willing to spend 20 minutes:</strong> folder triage &mdash; a handful of real folders, drag, done.</li>
+            <li><strong>Comfortable in Terminal and have hundreds of files:</strong> a sweep script that sorts the desktop into folders by file type.</li>
+            <li><strong>Want files filed by what they ARE, not just their extension, with duplicates handled:</strong> an on-device AI organizer (that&rsquo;s <a href="https://www.mkarim.us/tidymind/">TidyMind</a>, mine &mdash; disclosure below).</li>
+        </ul>
+
+        <h2>Method 1: Stacks &mdash; the five-second fix</h2>
+
+        <p>Stacks is macOS&rsquo;s built-in desktop decluttering. From <a href="https://support.apple.com/guide/mac-help/organize-files-on-your-desktop-mh35846/27/mac/27" target="_blank" rel="noopener">Apple&rsquo;s guide</a>: turn it on with View &gt; Use Stacks (or Control-Command-0) and the desktop&rsquo;s files group into stacks; every new file you save to the desktop drops into the right stack automatically. You can group stacks by kind (images, PDFs), by date (last opened or created), or by Finder tags, and click a stack to expand it.</p>
+
+        <p>What it&rsquo;s good at: instant, reversible, nothing moves on disk. Your 300-item desktop becomes a dozen neat piles.</p>
+
+        <p>What it doesn&rsquo;t do: it doesn&rsquo;t move anything off the desktop and it doesn&rsquo;t find duplicates. Unstack, and you have exactly the same mess. Stacks tidies the view; it doesn&rsquo;t clean the desktop.</p>
+
+        <h2>Method 2: Folder triage &mdash; 20 minutes, lasts months</h2>
+
+        <p>Make three to five folders and drag files into them. On the Desktop itself or in Documents &mdash; Desktop workspaces/Documents/Archive is a common split. The point is not a perfect taxonomy; it&rsquo;s getting everything that isn&rsquo;t active work off the visible desktop.</p>
+
+        <p>This is the method that survives contact with real life if you keep one rule: the desktop is for what you&rsquo;re working on this week. <a href="https://support.apple.com/guide/mac-help/organize-files-with-folders-mh26885/27/mac/27" target="_blank" rel="noopener">Apple&rsquo;s own Finder guide</a> recommends organizing files into folders rather than leaving them loose. For a fuller folder system across the whole Mac, the <a href="https://mkarim.us/blog/2026-09-02-mac-file-organizer.html">mac file organizer</a> guide walks through the structure.</p>
+
+        <p>Effort is the tradeoff: two hundred files means two hundred decisions, and &ldquo;I&rsquo;ll sort it later&rdquo; is how the wall of icons came back.</p>
+
+        <h2>Method 3: A Terminal sweep &mdash; sort by type in one command</h2>
+
+        <p>If you&rsquo;re comfortable in Terminal, a few lines sort the desktop into folders by file type. Preview what&rsquo;s there first:</p>
+
+        <pre><code>cd ~/Desktop
+find . -maxdepth 1 -type f | sort</code></pre>
+
+        <p>Then sweep files into type-named folders &mdash; the <code>find</code> pattern only matches top-level files with that exact extension:</p>
+
+        <pre><code>cd ~/Desktop
+for ext in pdf png jpg jpeg docx xlsx zip mp4; do
+  mkdir -p "$ext"
+  find . -maxdepth 1 -type f -name "*.$ext" -exec mv {} "$ext"/ \;
+done</code></pre>
+
+        <p>Files land in <code>~/Desktop/pdf</code>, <code>~/Desktop/png</code>, and so on &mdash; crude but honest sorting, and trivially undoable by hand.</p>
+
+        <p>Limits worth knowing: it sorts by extension only (a receipt.pdf and a novel.pdf land in the same folder), it skips files with unexpected extensions, and it won&rsquo;t spot that you have four copies of the same file. For a first pass on a three-hundred-file desktop, that&rsquo;s usually fine.</p>
+
+        <h2>Method 4: On-device AI cleanup &mdash; file by content, not extension</h2>
+
+        <p>Full disclosure: I build one of these. <a href="https://www.mkarim.us/tidymind/">TidyMind</a> is an AI file organizer for Mac, and the desktop is the folder it&rsquo;s most useful on. Point it at your desktop and it reads what the files actually are &mdash; on-device, nothing uploaded &mdash; then proposes a folder plan before anything moves.</p>
+
+        <p>Where it goes past the methods above:</p>
+
+        <ul>
+            <li><strong>Content-based filing, not extension-based.</strong> Smart Content mode reads documents and images (OCR) and tells a receipt from a resume from a whiteboard photo &mdash; the distinction Method 3 can&rsquo;t make.</li>
+            <li><strong>AI Renamer.</strong> Camera dumps like IMG_4021.png become readable names with dates, on-device.</li>
+            <li><strong>Duplicate finder.</strong> Stacks and sweeps leave duplicate copies in place; TidyMind finds them and you pick the keeper per group.</li>
+            <li><strong>Nothing moves until you approve.</strong> You review the plan, can drag files between folders to fix it, and undo any session &mdash; files return exactly where they were.</li>
+        </ul>
+
+        <p>Requirements, plainly: Apple Silicon Mac, macOS 15 or later, and the AI models download once on first use, after which it runs fully offline. Scanning and plan review are free; applying changes and renames needs Pro ($14.99/year or $29.99 one-time). TidyMind is the complete redesign of my earlier <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a> &mdash; that one still suits Windows and older macOS machines.</p>
+
+        <h2>The fastest way to clean up mac desktop &mdash; and when to go further</h2>
+
+        <ul>
+            <li><strong>Desktop is messy but you use everything on it:</strong> Stacks. Zero risk, instant.</li>
+            <li><strong>Desktop is a dumping ground and you never look at half of it:</strong> folder triage, or let TidyMind propose the plan and then correct it.</li>
+            <li><strong>Hundreds of files, same-type bulge:</strong> Terminal sweep first pass, then triage the exceptions.</li>
+            <li><strong>&ldquo;I don&rsquo;t know what half these files are&rdquo;:</strong> content-based AI filing is the only method that reads the files for you.</li>
+        </ul>
+
+        <p>If you go the triage or AI route, the same system scales past the desktop &mdash; see <a href="https://mkarim.us/blog/2026-09-09-organize-files-mac.html">how to organize files on mac</a> for the whole-Mac workflow, and the <a href="https://mkarim.us/blog/2026-09-09-duplicate-file-finder-mac.html">duplicate file finder</a> comparison for clearing copy-bloat after the first pass.</p>
+
+        <div class="cta">
+            <p>TidyMind reads what&rsquo;s on your desktop and proposes the filing plan before anything moves &mdash; on-device, fully offline, undo for every session. <a href="https://www.mkarim.us/tidymind/">See how it works.</a></p>
+        </div>
+
+        <h2>FAQ</h2>
+
+        <h3>Does Stacks delete or move my files?</h3>
+        <p>No. Stacks groups what&rsquo;s already on the desktop into collapsible piles. Nothing moves on disk; turn it off and everything is back where it was.</p>
+
+        <h3>Is it safe to let a tool move desktop files?</h3>
+        <p>Use tools that show you the plan before moving and can undo. Review the proposed folders, fix them by dragging, apply, and verify &mdash; the same caution you&rsquo;d use with <code>mv</code> by hand.</p>
+
+        <h3>What&rsquo;s the fastest way to clean up a messy desktop?</h3>
+        <p>Stacks, at five seconds. It won&rsquo;t reduce the file count, but the desktop is immediately usable again.</p>
+
+        <h3>Do I need an app at all?</h3>
+        <p>If sorting by type is enough, no &mdash; Stacks or the Terminal sweep covers it. An app earns its keep when files need to be understood (receipt vs resume), renamed into readable names, or deduplicated.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/tidymind/">TidyMind</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>, <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-21-teams-meeting-transcription.html">previous: teams meeting transcription</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

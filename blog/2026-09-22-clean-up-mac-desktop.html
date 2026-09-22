@@ -51,6 +51,11 @@
 
         <p>If you want to clean up mac desktop clutter, there are four approaches that actually work in 2026, and they solve different problems. Apple&rsquo;s built-in Stacks hides the mess. A folder triage moves it somewhere sensible. A Terminal script sweeps files into folders by type. And an on-device AI organizer reads what each file actually is and files it properly &mdash; which is what I ended up building. They differ on effort, safety, and how long the result lasts.</p>
 
+        <figure>
+          <img src="../assets/img/blog/fig-desktop-method-choice.svg" alt="Decision flow: a desktop that is only visually messy and still in use suits built-in Stacks; a dumping ground you will sort by hand suits folder triage; hundreds of same-type files suit a Terminal sweep script; mystery files that need reading, renaming, or deduplication suit an on-device AI organizer such as TidyMind" loading="lazy" width="760" height="330" />
+          <figcaption>The whole guide as one decision: how you use the desktop picks the method.</figcaption>
+        </figure>
+
         <h2>The short answer</h2>
 
         <ul>
@@ -99,6 +104,11 @@ done</code></pre>
 
         <p>Full disclosure: I build one of these. <a href="https://www.mkarim.us/tidymind/">TidyMind</a> is an AI file organizer for Mac, and the desktop is the folder it&rsquo;s most useful on. Point it at your desktop and it reads what the files actually are &mdash; on-device, nothing uploaded &mdash; then proposes a folder plan before anything moves.</p>
 
+        <figure>
+          <img src="../assets/img/blog/tidymind-review-plan.png" alt="TidyMind review-the-plan screen — 37 files sorted into 8 proposed folders including Receipt Photos, Resumes, and Meeting Notes, each folder card listing its files, with an Apply Plan button at the top" loading="lazy" width="1440" height="900" />
+          <figcaption>The review step: 37 files read and sorted into 8 proposed folders &mdash; receipt photos, resumes, and meeting notes separated by what&rsquo;s in them, not by extension. Nothing moves until you approve.</figcaption>
+        </figure>
+
         <p>Where it goes past the methods above:</p>
 
         <ul>
@@ -108,7 +118,17 @@ done</code></pre>
             <li><strong>Nothing moves until you approve.</strong> You review the plan, can drag files between folders to fix it, and undo any session &mdash; files return exactly where they were.</li>
         </ul>
 
+        <figure>
+          <img src="../assets/img/blog/tidymind-ai-renamer.png" alt="TidyMind AI Renamer review screen &mdash; 7 files scanned, contents read from 7, camera-named files mapped to receipt names like receipt_for_benjamin_ponce with editable fields and a Rename button" loading="lazy" width="1440" height="900" />
+          <figcaption>The AI Renamer at work: camera-dump names like IMG_4021.png become readable ones &mdash; read on-device, editable per file, nothing applied until you approve.</figcaption>
+        </figure>
+
         <p>Requirements, plainly: Apple Silicon Mac, macOS 15 or later, and the AI models download once on first use, after which it runs fully offline. Scanning and plan review are free; applying changes and renames needs Pro ($14.99/year or $29.99 one-time). TidyMind is the complete redesign of my earlier <a href="https://mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a> &mdash; that one still suits Windows and older macOS machines.</p>
+
+        <figure>
+          <img src="../assets/img/blog/fig-tidymind-desktop-pipeline.svg" alt="On-device desktop cleanup pipeline in three steps: TidyMind scans the desktop and reads what each file is, documents and images included, on your machine; the proposed folder plan is reviewed and corrected by you with nothing moving until approval; files are then applied to their folders with per-session undo — the models download once and everything runs offline" loading="lazy" width="760" height="330" />
+          <figcaption>The whole loop: scan and read, review the plan, apply with undo &mdash; the files never leave your machine.</figcaption>
+        </figure>
 
         <h2>The fastest way to clean up mac desktop &mdash; and when to go further</h2>
 

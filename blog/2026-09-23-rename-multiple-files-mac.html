@@ -31,6 +31,9 @@
         ul { padding-left:1.3rem; }
         ol { padding-left:1.3rem; }
         li { margin-bottom:.4rem; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
@@ -55,6 +58,11 @@
             <li><strong>A whole messy folder, not just names:</strong> reorganize first, rename second. Rename is the last step of a cleanup, not the first.</li>
         </ul>
 
+        <figure>
+          <img src="../assets/img/blog/fig-rename-method-choice.svg" alt="Decision flow: files that share the same wrong pattern suit Finder batch rename; numbering or scripted patterns suit a Terminal loop; names that say nothing suit an on-device AI renamer such as TidyMind; a folder that is messy beyond its names should be organized first and renamed last" loading="lazy" width="760" height="330" />
+          <figcaption>The whole guide as one decision: what is wrong with the names picks the method.</figcaption>
+        </figure>
+
         <h2>Method 1: Finder&rsquo;s built-in batch rename</h2>
 
         <p>Finder has shipped a multi-item renamer for years and it&rsquo;s the right first tool. Per <a href="https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-on-mac-mchlp1142/27/mac/27" target="_blank" rel="noopener">Apple&rsquo;s guide</a>: select the items, Control-click one of them, and choose Rename. In the &ldquo;Rename Finder Items&rdquo; pop-up you get three modes:</p>
@@ -64,6 +72,11 @@
             <li><strong>Add text</strong> &mdash; put text before or after the current name, keeping what&rsquo;s already there.</li>
             <li><strong>Format</strong> &mdash; pick a name format and choose whether the index, counter, or date goes before or after the name; enter the name in &ldquo;Custom Format&rdquo; and the starting number. This turns a selection into trip-001.jpg, trip-002.jpg, and so on.</li>
         </ul>
+
+        <figure>
+          <img src="../assets/img/blog/fig-rename-finder-modes.svg" alt="The three modes of Finder's Rename Finder Items pop-up: Replace text changes scan001.pdf into invoice-scan001.pdf; Add text puts text before or after the name, report.pdf becomes report-draft.pdf; Format combines a custom name with a counter, IMG_4021.jpg becomes trip-001.jpg" loading="lazy" width="760" height="330" />
+          <figcaption>Finder&rsquo;s three rename modes, each with the kind of fix it exists for.</figcaption>
+        </figure>
 
         <p>Two of Apple&rsquo;s own warnings are worth repeating because they&rsquo;re the two classic mistakes: don&rsquo;t change filename extensions (a renamed extension can stop the file opening), and don&rsquo;t rename app folders or system items like the Library folder.</p>
 
@@ -90,6 +103,11 @@ done</pre>
         <h2>Method 3: On-device AI renaming &mdash; names from the file&rsquo;s contents</h2>
 
         <p>Full disclosure: I build one of these. <a href="https://www.mkarim.us/tidymind/">TidyMind</a> is an AI file organizer for Mac, and its AI Renamer is the piece that does what the methods above can&rsquo;t: it reads documents and images on-device and writes names based on what the file actually is. The result looks like 2025_03_14_walmart_receipt.png &mdash; dates first when the document shows its own date, a readable subject after. A camera dump stops being IMG_4021-and-friends.</p>
+
+        <figure>
+          <img src="../assets/img/blog/tidymind-ai-renamer.png" alt="TidyMind AI Renamer review screen &mdash; 7 files scanned, contents read from 7, camera-named files mapped to receipt names like receipt_for_benjamin_ponce with editable fields and a Rename button" loading="lazy" width="1440" height="900" />
+          <figcaption>The AI Renamer at work: camera-dump names become readable ones &mdash; read on-device, editable per file, nothing applied until you approve.</figcaption>
+        </figure>
 
         <p>Where it fits next to the other methods:</p>
 

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="Decision flow for renaming multiple files on a Mac: files that share the same wrong pattern suit Finder batch rename; numbering or scripted patterns suit a Terminal loop; names that say nothing suit an on-device AI renamer such as TidyMind; a folder that is messy beyond its names should be organized first and renamed last">
+  <title>Which file-renaming method fits which folder</title>
+  <defs>
+    <marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d6efd"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; fill: #212529; }
+    .q { fill: #0d6efd; }
+    .branch { fill: #ffffff; stroke: #dee2e6; stroke-width: 1.5; }
+    .pick { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; }
+    .t { font-size: 14px; font-weight: 700; }
+    .bt { font-size: 12.5px; font-weight: 700; }
+    .s { font-size: 11px; fill: #6c757d; }
+    .link { stroke: #0d6efd; stroke-width: 1.75; fill: none; }
+  </style>
+
+  <rect class="q" x="280" y="18" width="200" height="44" rx="22"/>
+  <text class="t" x="380" y="46" text-anchor="middle" fill="#ffffff">What's wrong with the names?</text>
+
+  <rect class="branch" x="22" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="107" y="116" text-anchor="middle">Same wrong pattern</text>
+  <text class="s" x="107" y="133" text-anchor="middle">scan001 → invoice-001</text>
+
+  <rect class="branch" x="204" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="289" y="116" text-anchor="middle">Need numbering</text>
+  <text class="s" x="289" y="133" text-anchor="middle">trip-001, trip-002…</text>
+
+  <rect class="branch" x="386" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="471" y="116" text-anchor="middle">Names say nothing</text>
+  <text class="s" x="471" y="133" text-anchor="middle">IMG_4021 and friends</text>
+
+  <rect class="branch" x="568" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="653" y="116" text-anchor="middle">Whole folder messy</text>
+  <text class="s" x="653" y="133" text-anchor="middle">beyond just the names</text>
+
+  <path class="link" d="M330,62 C280,72 190,80 115,90" marker-end="url(#bm)"/>
+  <path class="link" d="M360,62 C340,72 310,80 292,90" marker-end="url(#bm)"/>
+  <path class="link" d="M400,62 C420,72 450,80 468,90" marker-end="url(#bm)"/>
+  <path class="link" d="M430,62 C480,72 570,80 645,90" marker-end="url(#bm)"/>
+
+  <rect class="pick" x="22" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="107" y="218" text-anchor="middle" fill="#0d6efd">Finder batch rename</text>
+  <text class="s" x="107" y="238" text-anchor="middle">built in: select, Control-click,</text>
+  <text class="s" x="107" y="253" text-anchor="middle">Rename — Replace text,</text>
+  <text class="s" x="107" y="268" text-anchor="middle">Add text, Format</text>
+
+  <rect class="pick" x="204" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="289" y="218" text-anchor="middle" fill="#0d6efd">Terminal loop</text>
+  <text class="s" x="289" y="238" text-anchor="middle">dry run first, then rename —</text>
+  <text class="s" x="289" y="253" text-anchor="middle">exact scripted patterns,</text>
+  <text class="s" x="289" y="268" text-anchor="middle">zero new software</text>
+
+  <rect class="pick" x="386" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="471" y="218" text-anchor="middle" fill="#0d6efd">On-device AI Renamer</text>
+  <text class="s" x="471" y="238" text-anchor="middle">reads the file's contents,</text>
+  <text class="s" x="471" y="253" text-anchor="middle">proposes dates-first names</text>
+  <text class="s" x="471" y="268" text-anchor="middle">— TidyMind, mine</text>
+
+  <rect class="pick" x="568" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="653" y="218" text-anchor="middle" fill="#0d6efd">Organize first</text>
+  <text class="s" x="653" y="238" text-anchor="middle">folders before names —</text>
+  <text class="s" x="653" y="253" text-anchor="middle">renaming is the last step</text>
+  <text class="s" x="653" y="268" text-anchor="middle">of a cleanup, not the first</text>
+
+  <path class="link" d="M107,148 L107,190" marker-end="url(#bm)"/>
+  <path class="link" d="M289,148 L289,190" marker-end="url(#bm)"/>
+  <path class="link" d="M471,148 L471,190" marker-end="url(#bm)"/>
+  <path class="link" d="M653,148 L653,190" marker-end="url(#bm)"/>
+</svg>

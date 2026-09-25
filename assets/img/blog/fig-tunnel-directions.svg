@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="Local versus reverse SSH tunnel direction: with ssh -L your Mac opens a local port that reaches a service on the server through the encrypted tunnel; with ssh -R the server opens a port that reaches a service on your Mac through the same encrypted tunnel — the only difference is which side's port gets forwarded">
+  <title>Local and reverse SSH tunnels: same wire, opposite direction</title>
+  <defs>
+    <marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d6efd"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; fill: #212529; }
+    .q { fill: #0d6efd; }
+    .box { fill: #ffffff; stroke: #dee2e6; stroke-width: 1.5; }
+    .wire { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .t { font-size: 14px; font-weight: 700; }
+    .bt { font-size: 12.5px; font-weight: 700; }
+    .s { font-size: 11px; fill: #6c757d; }
+    .link { stroke: #0d6efd; stroke-width: 1.75; fill: none; }
+  </style>
+
+  <rect class="q" x="20" y="54" width="140" height="56" rx="10"/>
+  <text class="t" x="90" y="78" text-anchor="middle" fill="#ffffff">Local</text>
+  <text class="s" x="90" y="96" text-anchor="middle" fill="#ffffff">ssh -L</text>
+
+  <rect class="box" x="190" y="48" width="180" height="68" rx="8"/>
+  <text class="bt" x="280" y="74" text-anchor="middle">Your Mac</text>
+  <text class="s" x="280" y="92" text-anchor="middle">opens localhost:8080</text>
+
+  <rect class="wire" x="415" y="48" width="160" height="68" rx="8"/>
+  <text class="bt" x="495" y="78" text-anchor="middle" fill="#0d6efd">Encrypted tunnel</text>
+  <text class="s" x="495" y="96" text-anchor="middle">driven by ssh</text>
+
+  <rect class="box" x="610" y="48" width="130" height="68" rx="8"/>
+  <text class="bt" x="675" y="74" text-anchor="middle">Server's service</text>
+  <text class="s" x="675" y="92" text-anchor="middle">its own :80</text>
+
+  <path class="link" d="M370,82 L409,82" marker-end="url(#bm)"/>
+  <path class="link" d="M575,82 L604,82" marker-end="url(#bm)"/>
+  <text class="s" x="395" y="136" text-anchor="middle">you reach remote services</text>
+
+  <rect class="q" x="20" y="186" width="140" height="56" rx="10"/>
+  <text class="t" x="90" y="210" text-anchor="middle" fill="#ffffff">Reverse</text>
+  <text class="s" x="90" y="228" text-anchor="middle" fill="#ffffff">ssh -R</text>
+
+  <rect class="box" x="190" y="180" width="180" height="68" rx="8"/>
+  <text class="bt" x="280" y="206" text-anchor="middle">Server</text>
+  <text class="s" x="280" y="224" text-anchor="middle">opens its :8080</text>
+
+  <rect class="wire" x="415" y="180" width="160" height="68" rx="8"/>
+  <text class="bt" x="495" y="210" text-anchor="middle" fill="#0d6efd">Encrypted tunnel</text>
+  <text class="s" x="495" y="228" text-anchor="middle">same wire, other way</text>
+
+  <rect class="box" x="610" y="180" width="130" height="68" rx="8"/>
+  <text class="bt" x="675" y="206" text-anchor="middle">Mac's service</text>
+  <text class="s" x="675" y="224" text-anchor="middle">its :3000</text>
+
+  <path class="link" d="M610,214 L581,214" marker-end="url(#bm)"/>
+  <path class="link" d="M415,214 L376,214" marker-end="url(#bm)"/>
+  <text class="s" x="395" y="268" text-anchor="middle">others reach your Mac — the Mac made the outbound connection</text>
+
+  <text class="s" x="380" y="310" text-anchor="middle">Same encrypted wire in both rows — the only difference is which side's port gets forwarded.</text>
+</svg>

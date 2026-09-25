@@ -31,6 +31,9 @@
         ul { padding-left:1.3rem; }
         ol { padding-left:1.3rem; }
         li { margin-bottom:.4rem; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
@@ -54,6 +57,11 @@
             <li><strong>Type the passphrase once, ever:</strong> <code>ssh-add --apple-use-keychain</code> plus <code>UseKeychain yes</code> in <code>~/.ssh/config</code>. macOS-specific, built in.</li>
             <li><strong>Keys plus hosts, minus typing:</strong> a <code>Host</code> block in <code>~/.ssh/config</code> pins the right key, user, and hostname to a name you can type.</li>
         </ul>
+
+        <figure>
+          <img src="../assets/img/blog/fig-ssh-key-lifecycle.svg" alt="The life of an SSH key created on a Mac: ssh-keygen -t ed25519 makes two files — the private key id_ed25519, which never leaves the Mac, and the public key id_ed25519.pub, which is installed on servers with ssh-copy-id or pasted into services like GitHub; when you connect, the agent offers the key and the Keychain supplies the passphrase" loading="lazy" width="760" height="330" />
+          <figcaption>The whole workflow in one picture: one command makes two files with opposite travel rules.</figcaption>
+        </figure>
 
         <h2>Step 1: Generate the key pair with ssh-keygen</h2>
 
@@ -121,9 +129,19 @@
             <li><strong>Passphrase prompt loop.</strong> If SSH keeps asking for the passphrase, the Keychain line from Step 3 is missing &mdash; <code>UseKeychain yes</code> in the config plus <code>ssh-add --apple-use-keychain</code> once.</li>
         </ul>
 
+        <figure>
+          <img src="../assets/img/blog/fig-ssh-permission-flow.svg" alt="Troubleshooting flow when a server still says Permission denied: run ssh -v and add or pin the key if the wrong one is offered; fix server-side permissions with chmod, never 777; append the public key manually if it never arrived; add UseKeychain yes and ssh-add --apple-use-keychain when the passphrase prompt loops" loading="lazy" width="760" height="330" />
+          <figcaption>Four checks, in the order most people need them &mdash; each one is a command or a config line.</figcaption>
+        </figure>
+
         <h2>If you tunnel daily: the part I built</h2>
 
         <p>Full disclosure: I make a tool in this space. <a href="https://www.mkarim.us/apps/tunnelmate.html">TunnelMate</a> is a menu-bar SSH tunnel manager for macOS &mdash; local and reverse port forwarding without the terminal. To be plain about scope: it doesn&rsquo;t generate keys; your key setup above stays the source of truth. What it adds is driving the same system <code>ssh</code> underneath, so everything you just configured works with it &mdash; your <code>~/.ssh/config</code>, your keys, your agent. It imports endpoints from <code>~/.ssh/config</code> so there&rsquo;s nothing to re-enter, stores passwords and passphrases in the macOS Keychain (never in config files, and logs are scrubbed), supports password, key, or ssh-agent authentication, and shows a health-checked &ldquo;Connected&rdquo; state with automatic reconnect after sleep &mdash; with a host key review sheet before a new server is trusted. It can even share a service from your Mac at a port on your server (a reverse tunnel), health-checked the same way. $9.99 one-time on Gumroad, macOS 14+, signed and notarized. If you only forward a port once a month, the terminal command is the right tool; if the laptop sleeps daily, that gap is the product.</p>
+
+        <figure>
+          <img src="../assets/img/apps/tunnelmate-menubar.png" alt="TunnelMate's menu-bar dropdown listing three tunnel services with switches — two flipped on — plus settings, logs, and quit controls" loading="lazy" width="765" height="436" />
+          <figcaption>Keys configured once, then tunnels from the menu bar: flip a switch, and TunnelMate health-checks the service before showing Connected.</figcaption>
+        </figure>
 
         <h2>Which ssh keys Mac setups you actually need &mdash; quick chooser</h2>
 

@@ -31,6 +31,9 @@
         ul { padding-left:1.3rem; }
         ol { padding-left:1.3rem; }
         li { margin-bottom:.4rem; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
         .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
         .cta p { margin:0; }
         footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
@@ -54,6 +57,11 @@
             <li><strong>A local tunnel (<code>ssh -L</code>)</strong> &mdash; you connect <em>from your Mac out to a service on a server</em>. Classic case: reaching an Ollama instance or a database that only listens on the server itself.</li>
             <li><strong>A reverse tunnel (<code>ssh -R</code>)</strong> &mdash; the direction flips: <em>the server reaches a service on your Mac.</em> Your Mac keeps the service private; only the server&rsquo;s forwarded port points at it.</li>
         </ul>
+
+        <figure>
+          <img src="../assets/img/blog/fig-tunnel-directions.svg" alt="Local versus reverse SSH tunnel direction: with ssh -L your Mac opens a local port that reaches a service on the server through the encrypted tunnel; with ssh -R the server opens a port that reaches a service on your Mac through the same encrypted tunnel — the only difference is which side's port gets forwarded" loading="lazy" width="760" height="330" />
+          <figcaption>Same encrypted wire, opposite directions &mdash; the whole difference between <code>-L</code> and <code>-R</code>.</figcaption>
+        </figure>
 
         <p>That flipped direction is why it is also called <strong>remote port forwarding</strong>, and it solves a specific set of problems:</p>
 
@@ -111,9 +119,19 @@
 
         <p><a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a> is a menu-bar app that manages both directions of this &mdash; local and reverse SSH tunnels &mdash; without the terminal. The reverse half works like this: you pick the service on your Mac and the port it should appear as on your server, flip a switch, and TunnelMate opens the tunnel, <strong>verifies that the shared service actually answers through it, and only then reports Connected</strong>. Server-side port problems come back as plain-language causes instead of silent no-ops.</p>
 
+        <figure>
+          <img src="../assets/img/blog/fig-reverse-share-flow.svg" alt="Sharing a local service through a reverse tunnel in TunnelMate, four steps: pick the service on your Mac; pick the port it gets on your server; flip the switch, which opens the tunnel and verifies the shared service answers; a health-checked Connected state, reported only after the check passes — and the tunnel reconnects itself after sleep, Wi-Fi changes, and drops" loading="lazy" width="760" height="330" />
+          <figcaption>The managed version of the flow above: four choices, a health check before &ldquo;Connected&rdquo;, and self-reconnection afterwards.</figcaption>
+        </figure>
+
         <p>The operational failures above are the parts it automates: tunnels reconnect themselves with backoff after network drops, and they recover after sleep/wake and Wi-Fi changes. Passwords and passphrases stay in the macOS Keychain, unknown or changed host keys open a review sheet before the connection is trusted, and because TunnelMate drives the system <code>ssh</code>, your existing <code>~/.ssh/config</code> and agent setup keep working. Advanced mode still exposes identity files, agent forwarding, keepalives, and custom health checks when you want them.</p>
 
         <p>It is a one-time purchase of $9.99 with free updates to the 1.x series, it is signed with a Developer ID certificate and notarized by Apple, and it runs on macOS 14 (Sonoma) or later. The <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate page</a> walks through the four-step setup with screenshots before you decide.</p>
+
+        <figure>
+          <img src="../assets/img/apps/tunnelmate-wizard.png" alt="TunnelMate's setup wizard windows from the app's onboarding flow" loading="lazy" width="1314" height="701" />
+          <figcaption>The four-step wizard: service name, port, server, username &mdash; then the service lives in your menu bar.</figcaption>
+        </figure>
 
         <div class="cta">
             <p>TunnelMate shares a service from your Mac at a port on your server &mdash; and health-checks it before saying Connected. <a href="https://mkarim.us/apps/tunnelmate.html">Local and reverse SSH tunnels from the menu bar: $9.99 one-time, macOS 14+, signed and notarized.</a></p>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="Troubleshooting flow when a server still says Permission denied after key setup: run ssh -v and add or pin the key if the wrong one is offered; fix server-side permissions with chmod, never 777, when authorized_keys is too open; append the public key manually if it never arrived; add UseKeychain yes and ssh-add --apple-use-keychain when the passphrase prompt loops">
+  <title>Four checks when key authentication fails</title>
+  <defs>
+    <marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d6efd"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; fill: #212529; }
+    .q { fill: #0d6efd; }
+    .branch { fill: #ffffff; stroke: #dee2e6; stroke-width: 1.5; }
+    .pick { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; }
+    .t { font-size: 14px; font-weight: 700; }
+    .bt { font-size: 12.5px; font-weight: 700; }
+    .s { font-size: 11px; fill: #6c757d; }
+    .link { stroke: #0d6efd; stroke-width: 1.75; fill: none; }
+  </style>
+
+  <rect class="q" x="250" y="18" width="260" height="44" rx="22"/>
+  <text class="t" x="380" y="46" text-anchor="middle" fill="#ffffff">Server still says Permission denied?</text>
+
+  <rect class="branch" x="22" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="107" y="116" text-anchor="middle">Wrong key offered</text>
+  <text class="s" x="107" y="133" text-anchor="middle">check with ssh -v</text>
+
+  <rect class="branch" x="204" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="289" y="116" text-anchor="middle">Server-side perms</text>
+  <text class="s" x="289" y="133" text-anchor="middle">authorized_keys too open</text>
+
+  <rect class="branch" x="386" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="471" y="116" text-anchor="middle">Key never arrived</text>
+  <text class="s" x="471" y="133" text-anchor="middle">ssh-copy-id failed</text>
+
+  <rect class="branch" x="568" y="96" width="170" height="52" rx="8"/>
+  <text class="bt" x="653" y="116" text-anchor="middle">Passphrase loop</text>
+  <text class="s" x="653" y="133" text-anchor="middle">asked on every connect</text>
+
+  <path class="link" d="M330,62 C280,72 190,80 115,90" marker-end="url(#bm)"/>
+  <path class="link" d="M360,62 C340,72 310,80 292,90" marker-end="url(#bm)"/>
+  <path class="link" d="M400,62 C420,72 450,80 468,90" marker-end="url(#bm)"/>
+  <path class="link" d="M430,62 C480,72 570,80 645,90" marker-end="url(#bm)"/>
+
+  <rect class="pick" x="22" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="107" y="218" text-anchor="middle" fill="#0d6efd">Add or pin it</text>
+  <text class="s" x="107" y="238" text-anchor="middle">read the offered identities,</text>
+  <text class="s" x="107" y="253" text-anchor="middle">then ssh-add the key or</text>
+  <text class="s" x="107" y="268" text-anchor="middle">pin IdentityFile in config</text>
+
+  <rect class="pick" x="204" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="289" y="218" text-anchor="middle" fill="#0d6efd">chmod on the server</text>
+  <text class="s" x="289" y="238" text-anchor="middle">authorized_keys must not</text>
+  <text class="s" x="289" y="253" text-anchor="middle">be writable by others —</text>
+  <text class="s" x="289" y="268" text-anchor="middle">more chmod, never 777</text>
+
+  <rect class="pick" x="386" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="471" y="218" text-anchor="middle" fill="#0d6efd">Append it manually</text>
+  <text class="s" x="471" y="238" text-anchor="middle">pipe the .pub into</text>
+  <text class="s" x="471" y="253" text-anchor="middle">authorized_keys over an</text>
+  <text class="s" x="471" y="268" text-anchor="middle">existing login</text>
+
+  <rect class="pick" x="568" y="196" width="170" height="84" rx="8"/>
+  <text class="bt" x="653" y="218" text-anchor="middle" fill="#0d6efd">Keychain line missing</text>
+  <text class="s" x="653" y="238" text-anchor="middle">UseKeychain yes in config,</text>
+  <text class="s" x="653" y="253" text-anchor="middle">then ssh-add</text>
+  <text class="s" x="653" y="268" text-anchor="middle">--apple-use-keychain once</text>
+
+  <path class="link" d="M107,148 L107,190" marker-end="url(#bm)"/>
+  <path class="link" d="M289,148 L289,190" marker-end="url(#bm)"/>
+  <path class="link" d="M471,148 L471,190" marker-end="url(#bm)"/>
+  <path class="link" d="M653,148 L653,190" marker-end="url(#bm)"/>
+</svg>

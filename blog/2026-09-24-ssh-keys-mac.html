@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>SSH Keys on Mac: Generate, Store, and Use Them (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="How to create, install, and manage SSH keys on Mac — ssh-keygen, the macOS Keychain, the ~/.ssh/config file, and the fixes when a server still says Permission denied." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-24-ssh-keys-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 24, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>SSH Keys on Mac: Generate, Store, and Use Them (2026)</h1>
+
+        <p>Passwords are how servers get hurt &mdash; brute-forced, reused, leaked. The better login is a pair of files: the ssh keys Mac generates natively with one command, a private file that never leaves your machine and a public half you paste onto any server. On macOS the whole workflow is built in &mdash; ssh-keygen to create the pair, an agent that holds it, and a Keychain that remembers your passphrase. This guide covers generating the pair, installing the public half, storing the passphrase, the <code>~/.ssh/config</code> file that ties keys to hosts, and what to check when a server still answers <code>Permission denied</code>.</p>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li><strong>One key for everyday servers:</strong> <code>ssh-keygen -t ed25519</code>, accept the default path, set a passphrase. Done in under a minute.</li>
+            <li><strong>Install it on a server:</strong> <code>ssh-copy-id user@server</code> &mdash; or paste the <code>.pub</code> file into a service&rsquo;s settings (GitHub, GitLab, your VPS provider).</li>
+            <li><strong>Type the passphrase once, ever:</strong> <code>ssh-add --apple-use-keychain</code> plus <code>UseKeychain yes</code> in <code>~/.ssh/config</code>. macOS-specific, built in.</li>
+            <li><strong>Keys plus hosts, minus typing:</strong> a <code>Host</code> block in <code>~/.ssh/config</code> pins the right key, user, and hostname to a name you can type.</li>
+        </ul>
+
+        <h2>Step 1: Generate the key pair with ssh-keygen</h2>
+
+        <p>Open Terminal and run:</p>
+
+        <pre>ssh-keygen -t ed25519 -C "you@your-mac"</pre>
+
+        <p>Accept the default location (<code>~/.ssh/id_ed25519</code>) and set a passphrase. You now have two files:</p>
+
+        <ul>
+            <li><strong><code>~/.ssh/id_ed25519</code></strong> &mdash; the private key. It never leaves your machine: no emailing it, no committing it to a repo, no pasting it into a chat.</li>
+            <li><strong><code>~/.ssh/id_ed25519.pub</code></strong> &mdash; the public half. This is the one you put on servers and paste into services. It can&rsquo;t be used to log in as you.</li>
+        </ul>
+
+        <p>On the key type: <code>ed25519</code> is the right default for new keys &mdash; short, fast, and modern. Reach for RSA (<code>ssh-keygen -t rsa -b 4096</code>) only when a genuinely old server refuses everything else. Hardware-backed keys (<code>-t ed25519-sk</code>, FIDO security keys) exist too and macOS&rsquo;s OpenSSH supports them; they&rsquo;re worth knowing about, not needed on day one. The full option list is in the <a href="https://man.openbsd.org/ssh-keygen" target="_blank" rel="noopener">ssh-keygen manual</a>.</p>
+
+        <h2>Step 2: Put the public key on the server</h2>
+
+        <p>For a server you log into over SSH, one command installs it:</p>
+
+        <pre>ssh-copy-id user@server</pre>
+
+        <p>That appends your public key to <code>~/.ssh/authorized_keys</code> on the server &mdash; the file of public keys that are allowed to log in as that user. <code>ssh-copy-id</code> ships with macOS, so there&rsquo;s nothing to install.</p>
+
+        <p>For services that take a key instead (GitHub being the obvious one), you paste the public half into the settings page: <code>pbcopy &lt; ~/.ssh/id_ed25519.pub</code> puts it on your clipboard, and <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account" target="_blank" rel="noopener">GitHub&rsquo;s guide to adding an SSH key</a> walks the rest. Same shape everywhere: the service wants the <code>.pub</code> file, never the private one.</p>
+
+        <h2>Step 3: Let the Keychain remember the passphrase</h2>
+
+        <p>A passphrase protects the private key if the laptop is stolen &mdash; but typing it on every connection is what makes people skip it. macOS closes that gap. Add the key to the agent with the Keychain flag:</p>
+
+        <pre>ssh-add --apple-use-keychain</pre>
+
+        <p><code>--apple-use-keychain</code> is an Apple addition to <code>ssh-add</code>: each passphrase is stored in the user&rsquo;s keychain (the flag and its companion <code>--apple-load-keychain</code>, which loads identities using passphrases already in the Keychain, are documented on your Mac&rsquo;s own <code>man ssh-add</code> page). To make every future <code>ssh</code> run look in the Keychain too, add one line to your <code>~/.ssh/config</code>:</p>
+
+        <pre>Host *
+  UseKeychain yes</pre>
+
+        <p>Per Apple&rsquo;s <code>ssh_config</code> man page, <code>UseKeychain</code> controls whether the system searches for passphrases in the keychain when using a key &mdash; and offers to store them when you type one. <code>ssh-add -l</code> lists what the agent currently holds.</p>
+
+        <h2>The ssh config file on Mac: where keys meet hosts</h2>
+
+        <p>The config file lives at <code>~/.ssh/config</code> (create it if it&rsquo;s not there). Its job in a keys workflow: pin the right key to the right host so you never think about it again.</p>
+
+        <pre>Host gpu
+  HostName gpu.lab.university.edu
+  User mkarim
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+  UseKeychain yes</pre>
+
+        <p>Now <code>ssh gpu</code> connects with that user and that key &mdash; and because <code>IdentitiesOnly yes</code> is set, SSH offers only the key you named for that host instead of every key in the agent. That&rsquo;s the fix for the classic &ldquo;too many auth failures&rdquo; error on servers that hang up after a handful of wrong offers. A different key for a different host is the same block with a different <code>IdentityFile</code>.</p>
+
+        <p>The config file is also where a wider setup gets pleasant &mdash; aliases, keep-alives, port forwards. That&rsquo;s a separate topic with its own guide: <a href="https://www.mkarim.us/blog/2026-09-07-ssh-client-mac.html">SSH client on Mac</a> walks the whole file; this section covers only the key-related lines.</p>
+
+        <p>One permission rule matters the day you create the file: SSH is strict about <code>~/.ssh</code>. Private keys and the config file want <code>chmod 600</code>, and the directory itself <code>chmod 700</code> &mdash; read/write for you, nothing for anyone else.</p>
+
+        <h2>When a server still says Permission denied</h2>
+
+        <p>Key auth fails for one of a few checkable reasons:</p>
+
+        <ul>
+            <li><strong>Wrong key offered.</strong> Run <code>ssh -v user@server</code> and read the lines that say which identities are being offered. If your new key isn&rsquo;t in the list, add it to the agent (<code>ssh-add ~/.ssh/id_ed25519</code>) or pin it with <code>IdentityFile</code> in the config.</li>
+            <li><strong>Server-side permissions.</strong> OpenSSH&rsquo;s server refuses a user&rsquo;s <code>authorized_keys</code> outright when the file, <code>~/.ssh</code>, or the home directory are writable by others &mdash; the man page&rsquo;s own wording is that sshd &ldquo;will not allow it to be used unless the StrictModes option has been set to &lsquo;no&rsquo;&rdquo;. The fix is on the server, and it&rsquo;s more <code>chmod</code>, never <code>chmod 777</code>.</li>
+            <li><strong>The key never made it.</strong> <code>cat ~/.ssh/id_ed25519.pub | ssh user@server 'cat &gt;&gt; ~/.ssh/authorized_keys'</code> is the manual <code>ssh-copy-id</code> when that tool can&rsquo;t reach a host.</li>
+            <li><strong>Passphrase prompt loop.</strong> If SSH keeps asking for the passphrase, the Keychain line from Step 3 is missing &mdash; <code>UseKeychain yes</code> in the config plus <code>ssh-add --apple-use-keychain</code> once.</li>
+        </ul>
+
+        <h2>If you tunnel daily: the part I built</h2>
+
+        <p>Full disclosure: I make a tool in this space. <a href="https://www.mkarim.us/apps/tunnelmate.html">TunnelMate</a> is a menu-bar SSH tunnel manager for macOS &mdash; local and reverse port forwarding without the terminal. To be plain about scope: it doesn&rsquo;t generate keys; your key setup above stays the source of truth. What it adds is driving the same system <code>ssh</code> underneath, so everything you just configured works with it &mdash; your <code>~/.ssh/config</code>, your keys, your agent. It imports endpoints from <code>~/.ssh/config</code> so there&rsquo;s nothing to re-enter, stores passwords and passphrases in the macOS Keychain (never in config files, and logs are scrubbed), supports password, key, or ssh-agent authentication, and shows a health-checked &ldquo;Connected&rdquo; state with automatic reconnect after sleep &mdash; with a host key review sheet before a new server is trusted. It can even share a service from your Mac at a port on your server (a reverse tunnel), health-checked the same way. $9.99 one-time on Gumroad, macOS 14+, signed and notarized. If you only forward a port once a month, the terminal command is the right tool; if the laptop sleeps daily, that gap is the product.</p>
+
+        <h2>Which ssh keys Mac setups you actually need &mdash; quick chooser</h2>
+
+        <ul>
+            <li><strong>One laptop, a few servers:</strong> one ed25519 key, <code>ssh-copy-id</code> per server, Keychain line in the config. Ten minutes, forever solved.</li>
+            <li><strong>Work server + personal server + git host:</strong> three keys, one <code>Host</code> block each with <code>IdentityFile</code> and <code>IdentitiesOnly yes</code> &mdash; a leaked or revoked key then costs one block, not your whole setup.</li>
+            <li><strong>A server that forgot your key:</strong> <code>ssh -v</code> first, server-side permissions second &mdash; resist any urge to loosen permissions on the client.</li>
+            <li><strong>Daily tunnels to those hosts:</strong> keys in place once, then TunnelMate for the menu-bar connect/reconnect loop.</li>
+        </ul>
+
+        <h2>FAQ</h2>
+
+        <h3>Where are SSH keys stored on Mac?</h3>
+        <p>In <code>~/.ssh/</code> in your home folder &mdash; by default <code>id_ed25519</code> (private) and <code>id_ed25519.pub</code> (public) for an ed25519 key. Older RSA pairs use <code>id_rsa</code> / <code>id_rsa.pub</code>.</p>
+
+        <h3>ed25519 or RSA for a new key?</h3>
+        <p>ed25519. It&rsquo;s the modern default: small, fast, and accepted by current servers and services. Use RSA 4096 only for old systems that don&rsquo;t recognize anything newer.</p>
+
+        <h3>Do I really need a passphrase on the key?</h3>
+        <p>Yes. The passphrase protects the private key file itself &mdash; if your Mac is lost, a key with no passphrase is usable by whoever holds it. With <code>--apple-use-keychain</code> and <code>UseKeychain yes</code>, you pay for that protection by typing the passphrase once, ever.</p>
+
+        <h3>How do I copy my SSH public key to a server?</h3>
+        <p><code>ssh-copy-id user@server</code> does it in one command; the manual version appends the <code>.pub</code> file&rsquo;s contents to <code>~/.ssh/authorized_keys</code> on the server. Services like GitHub take the same public half pasted into their settings page.</p>
+
+        <h3>Can I reuse one SSH key on every server?</h3>
+        <p>You can, but separate keys per context (personal, work, git host) mean one revoked key or one compromised host doesn&rsquo;t touch the rest &mdash; and <code>~/.ssh/config</code> makes the extra keys free to manage.</p>
+
+        <div class="cta">
+            <p>TunnelMate drives the system <code>ssh</code> you just configured &mdash; menu-bar tunnels that health-check before &ldquo;Connected&rdquo; and reconnect after sleep. <a href="https://www.mkarim.us/apps/tunnelmate.html">Local and reverse port forwarding, $9.99 one-time, macOS 14+, signed and notarized.</a></p>
+        </div>
+
+        <p>Muhammad Karim writes about on-device and local-first software and builds <a href="https://www.mkarim.us/apps/tunnelmate.html">TunnelMate</a>, a menu-bar SSH tunnel manager for macOS that drives the system ssh. Reach him at <a href="mailto:karim@mkarim.us">karim@mkarim.us</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-24-reverse-ssh-tunnel-mac.html">previous: reverse ssh tunnel</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

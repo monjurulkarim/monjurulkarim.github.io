@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Rename Multiple Files on Mac: 4 Ways That Work (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to rename multiple files on Mac — Finder's built-in batch rename, a safe Terminal loop, and on-device AI that reads file contents — with what each is good at." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-23-rename-multiple-files-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 23, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Rename Multiple Files on Mac: 4 Ways That Work (2026)</h1>
+
+        <p>A phone dump lands in your Downloads folder &mdash; IMG_4021.png through IMG_4189.png &mdash; or a folder full of scan001.pdf, scan002.pdf that means nothing six months later. Renaming them one at a time is not a solution. There are four ways to rename multiple files mac users actually have, and they solve different problems: Finder&rsquo;s built-in batch rename for text patterns, a Terminal loop for scripted control, an on-device AI renamer that reads what each file is, and a hybrid: sort first, then rename. They differ on effort, precision, and what the final names can say.</p>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li><strong>Same fix everywhere &mdash; &ldquo;scan&rdquo; &rarr; &ldquo;invoice-2026&rdquo;:</strong> Finder&rsquo;s built-in multi-rename. Select, Control-click, Rename. No installs.</li>
+            <li><strong>Prefix/suffix or numbering, on your own terms:</strong> a Terminal loop. Total control, needs a dry run first.</li>
+            <li><strong>Files you can&rsquo;t identify by name &mdash; camera dumps, receipts, scans:</strong> an on-device AI renamer that reads the contents and writes dates-first names (that&rsquo;s the one I built &mdash; disclosure below).</li>
+            <li><strong>A whole messy folder, not just names:</strong> reorganize first, rename second. Rename is the last step of a cleanup, not the first.</li>
+        </ul>
+
+        <h2>Method 1: Finder&rsquo;s built-in batch rename</h2>
+
+        <p>Finder has shipped a multi-item renamer for years and it&rsquo;s the right first tool. Per <a href="https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-on-mac-mchlp1142/27/mac/27" target="_blank" rel="noopener">Apple&rsquo;s guide</a>: select the items, Control-click one of them, and choose Rename. In the &ldquo;Rename Finder Items&rdquo; pop-up you get three modes:</p>
+
+        <ul>
+            <li><strong>Replace text</strong> &mdash; enter the text to remove in Find, and the replacement in &ldquo;Replace with&rdquo;. This is the move for scan001.pdf &rarr; invoice-scan001.pdf style fixes.</li>
+            <li><strong>Add text</strong> &mdash; put text before or after the current name, keeping what&rsquo;s already there.</li>
+            <li><strong>Format</strong> &mdash; pick a name format and choose whether the index, counter, or date goes before or after the name; enter the name in &ldquo;Custom Format&rdquo; and the starting number. This turns a selection into trip-001.jpg, trip-002.jpg, and so on.</li>
+        </ul>
+
+        <p>Two of Apple&rsquo;s own warnings are worth repeating because they&rsquo;re the two classic mistakes: don&rsquo;t change filename extensions (a renamed extension can stop the file opening), and don&rsquo;t rename app folders or system items like the Library folder.</p>
+
+        <p>What Finder can&rsquo;t do: every mode works on the characters in the existing name. It never looks inside the file. IMG_4021.png contains no information about what the photo shows, so no Find/Replace or numbering scheme can make that name readable.</p>
+
+        <h2>Method 2: A Terminal loop &mdash; full control, run dry first</h2>
+
+        <p>If you&rsquo;re comfortable in Terminal, a small loop renames any set of files with exact control over the pattern. Preview before touching anything:</p>
+
+        <pre>cd ~/Downloads/photos
+for f in *.png; do printf '%s -&gt; trip-%s\n' "$f" "$f"; done</pre>
+
+        <p>Nothing is renamed yet &mdash; that just prints the mapping. When the plan looks right:</p>
+
+        <pre>cd ~/Downloads/photos
+i=1
+for f in *.png; do
+  mv "$f" "$(printf 'trip-%03d.png' "$i")"
+  i=$((i+1))
+done</pre>
+
+        <p>You get trip-001.png, trip-002.png&hellip; in loop order, with zero new software. The same loop handles prefixes and suffixes by editing the <code>mv</code> target. The honest limits: it&rsquo;s mechanical &mdash; names come from the old name and a counter, not from the file&rsquo;s contents; and a bad pattern applies to every match at once, which is exactly why the dry run comes first. If you also need files <em>sorted</em> before renaming, the <a href="https://www.mkarim.us/blog/2026-09-09-organize-files-mac.html">how to organize files on mac</a> workflow covers the whole-Mac pass.</p>
+
+        <h2>Method 3: On-device AI renaming &mdash; names from the file&rsquo;s contents</h2>
+
+        <p>Full disclosure: I build one of these. <a href="https://www.mkarim.us/tidymind/">TidyMind</a> is an AI file organizer for Mac, and its AI Renamer is the piece that does what the methods above can&rsquo;t: it reads documents and images on-device and writes names based on what the file actually is. The result looks like 2025_03_14_walmart_receipt.png &mdash; dates first when the document shows its own date, a readable subject after. A camera dump stops being IMG_4021-and-friends.</p>
+
+        <p>Where it fits next to the other methods:</p>
+
+        <ul>
+            <li><strong>Finder and Terminal rename characters; the AI renamer reads content.</strong> A scan&rsquo;s name says nothing; its contents usually do.</li>
+            <li><strong>Nothing moves until you approve.</strong> You review the rename plan, fix it by dragging, apply &mdash; and undo any session, so files return exactly where they were.</li>
+            <li><strong>Runs fully offline.</strong> On-device models (MLX), no uploads, no accounts, no cloud. Models download once on first use, then it works without a connection.</li>
+            <li><strong>Free to try.</strong> Scanning, analysis, plan review, and rename proposals are free; applying renames needs Pro ($14.99/year or $29.99 one-time).</li>
+        </ul>
+
+        <p>Requirements, plainly: Apple Silicon Mac, macOS 15 or later. TidyMind is the complete redesign of my earlier <a href="https://www.mkarim.us/apps/ai-file-organizer.html">AI File Organizer Pro</a> &mdash; that one still suits Windows and older macOS machines.</p>
+
+        <h2>Which way to rename multiple files mac &mdash; quick chooser</h2>
+
+        <ul>
+            <li><strong>All the files share a fixable pattern:</strong> Finder batch rename &mdash; built-in, reversible with care, done in a minute.</li>
+            <li><strong>Numbering, prefixes, or an exact scripted pattern:</strong> Terminal loop with a dry run.</li>
+            <li><strong>The names say nothing and you can&rsquo;t tell the files apart by name:</strong> content-based AI renaming is the only method that reads the files for you.</li>
+            <li><strong>The folder is messy beyond names:</strong> organize first &mdash; see the <a href="https://www.mkarim.us/blog/2026-09-02-mac-file-organizer.html">mac file organizer</a> guide and the <a href="https://www.mkarim.us/blog/2026-09-22-clean-up-mac-desktop.html">desktop cleanup</a> pass &mdash; then rename as the finishing step. If duplicates surface while you&rsquo;re in there, the <a href="https://www.mkarim.us/blog/2026-09-09-duplicate-file-finder-mac.html">duplicate file finder</a> comparison clears the copy-bloat.</li>
+        </ul>
+
+        <h2>FAQ</h2>
+
+        <h3>Does Finder batch rename work on any Mac?</h3>
+        <p>Yes &mdash; the multi-item renamer (select &rarr; Control-click &rarr; Rename) is built into Finder on every current macOS. <a href="https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-on-mac-mchlp1142/27/mac/27" target="_blank" rel="noopener">Apple&rsquo;s guide</a> documents the Replace text / Add text / Format modes.</p>
+
+        <h3>Is it safe to rename files in bulk?</h3>
+        <p>Keep the extension unchanged, skip app and system folders, and prefer tools that show you the result before applying. Finder shows the change per mode; a Terminal loop should print its mapping first; TidyMind asks you to approve the plan and can undo any session.</p>
+
+        <h3>Can I number files when renaming in bulk?</h3>
+        <p>Yes. Finder&rsquo;s Format mode adds an index or counter with a starting number; in Terminal, a counter variable in the loop does the same.</p>
+
+        <h3>Why not just rename files one at a time?</h3>
+        <p>You can &mdash; but for a hundred photos or scans the name was never the problem, the volume is. Batch methods make the pattern change once instead of a hundred times.</p>
+
+        <div class="cta">
+            <p>TidyMind&rsquo;s AI Renamer reads what each file is and proposes dates-first names &mdash; you approve the plan before anything changes. <a href="https://www.mkarim.us/tidymind/">On-device, fully offline, free to scan: AI file organizer for Mac.</a></p>
+        </div>
+
+        <p>Muhammad Karim writes about on-device ML and builds privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://www.mkarim.us/tidymind/">TidyMind</a>. Reach him at <a href="mailto:karim@mkarim.us">karim@mkarim.us</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-24-ssh-keys-mac.html">previous: ssh keys mac</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

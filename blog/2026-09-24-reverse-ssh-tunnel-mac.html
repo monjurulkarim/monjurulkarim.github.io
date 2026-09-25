@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Reverse SSH Tunnel on Mac: How It Works and How to Set One Up (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="How a reverse SSH tunnel works on Mac: the ssh -R command, why manual tunnels drop after sleep or Wi-Fi changes, and a menu-bar app that keeps them up." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-24-reverse-ssh-tunnel-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 24, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Reverse SSH Tunnel on Mac: How It Works and How to Set One Up (2026)</h1>
+
+        <p><strong>Short answer:</strong> a reverse SSH tunnel lets a remote server reach a service that is running on your Mac. You open one with a command like <code>ssh -R 8080:127.0.0.1:3000 user@your-server</code>, after which requests to port 8080 <strong>on the server</strong> are carried through the SSH connection to port 3000 <strong>on your Mac</strong>. Starting one is a one-liner. The hard part is keeping it alive &mdash; macOS sleep, Wi-Fi changes, and dropped connections all kill it silently &mdash; and that is where most of this guide lives.</p>
+
+        <h2>What a reverse SSH tunnel is</h2>
+
+        <p>An SSH tunnel carries traffic through an encrypted SSH connection instead of exposing a port directly to the network. Direction is the only thing that separates the two kinds:</p>
+
+        <ul>
+            <li><strong>A local tunnel (<code>ssh -L</code>)</strong> &mdash; you connect <em>from your Mac out to a service on a server</em>. Classic case: reaching an Ollama instance or a database that only listens on the server itself.</li>
+            <li><strong>A reverse tunnel (<code>ssh -R</code>)</strong> &mdash; the direction flips: <em>the server reaches a service on your Mac.</em> Your Mac keeps the service private; only the server&rsquo;s forwarded port points at it.</li>
+        </ul>
+
+        <p>That flipped direction is why it is also called <strong>remote port forwarding</strong>, and it solves a specific set of problems:</p>
+
+        <ul>
+            <li>You are building on your Mac and need to <strong>show a running dev server</strong> to a teammate &mdash; through your own VPS, not a third-party tunnel service.</li>
+            <li>An external service needs to <strong>call a webhook</strong> (Stripe, GitHub, n8n) that has to reach your machine, and your Mac has no public address.</li>
+            <li>You want to <strong>reach a Mac at home</strong> from a server you control, without opening a single inbound port on the Mac&rsquo;s router.</li>
+        </ul>
+
+        <p>In all three cases the Mac initiates the outbound SSH connection &mdash; nothing needs to accept inbound connections on your side. The server, which does have a public address, donates one of its ports.</p>
+
+        <h2>Set up a reverse SSH tunnel manually on macOS</h2>
+
+        <p>The built-in <code>ssh</code> client handles everything. The basic form:</p>
+
+        <pre>ssh -R 8080:127.0.0.1:3000 user@your-server</pre>
+
+        <p>Read it right to left: connections to <strong>port 8080 on your-server</strong> are forwarded, through the tunnel, to <strong>port 3000 on your Mac</strong> (the target address is resolved from the Mac&rsquo;s side). Log in, leave the window open, and the forward exists for as long as that session does.</p>
+
+        <p>Two practical additions turn that into the version worth using:</p>
+
+        <pre>ssh -N -R 8080:127.0.0.1:3000 \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=3 \
+    -o ExitOnForwardFailure=yes \
+    user@your-server</pre>
+
+        <ul>
+            <li><code>-N</code> &mdash; no remote shell; the session only carries the tunnel.</li>
+            <li><code>ServerAliveInterval</code> / <code>ServerAliveCountMax</code> &mdash; the Mac pings the server every 30 seconds and gives up after three misses, so a dead tunnel is <em>detected</em> instead of pretending to live.</li>
+            <li><code>ExitOnForwardFailure=yes</code> &mdash; if the server cannot create the forward (port already taken, for example), ssh exits with an error instead of staying connected without it.</li>
+        </ul>
+
+        <p>Two limits worth knowing before you rely on this:</p>
+
+        <ol>
+            <li><strong>The forwarded port binds on the server&rsquo;s loopback by default.</strong> <code>your-server:8080</code> works from the server itself; making it reachable from the outside world takes a server-side <code>GatewayPorts</code> setting in <code>sshd_config</code> &mdash; a deliberate security decision, not a client flag.</li>
+            <li><strong>The tunnel lives as long as the process.</strong> Close the laptop lid, switch from Wi-Fi to a hotspot, or lose the connection, and the forward is gone. <code>-f</code> backgrounds the session and <code>autossh</code> can restart it, and a <code>launchd</code> job can hold it open at login &mdash; it works, but now you are maintaining a small distributed system to share one port.</li>
+        </ol>
+
+        <h2>Why manual reverse tunnels break</h2>
+
+        <p>Every failure above is survivable once. In practice they arrive together, on a schedule you do not control:</p>
+
+        <ul>
+            <li><strong>Sleep/wake.</strong> macOS suspends the ssh process; the server notices the dead connection and drops the forward. After wake, the forward does not come back on its own.</li>
+            <li><strong>Network changes.</strong> Wi-Fi to Ethernet, Wi-Fi to hotspot &mdash; the TCP session dies and takes the forward with it.</li>
+            <li><strong>Port conflicts on the server.</strong> Something else grabbed 8080 while you were gone. Without <code>ExitOnForwardFailure</code>, ssh stays connected and you get the worst outcome: a session that looks fine and forwards nothing.</li>
+            <li><strong>No verification.</strong> The command returning success means the <em>session</em> started &mdash; not that your service actually answers <em>through</em> the tunnel. The failure you care about is silent.</li>
+        </ul>
+
+        <p>That last one is the real cost. A reverse tunnel is infrastructure, and infrastructure you have to babysit is infrastructure you will find broken in front of an audience.</p>
+
+        <h2>A managed option on macOS: TunnelMate</h2>
+
+        <p><a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a> is a menu-bar app that manages both directions of this &mdash; local and reverse SSH tunnels &mdash; without the terminal. The reverse half works like this: you pick the service on your Mac and the port it should appear as on your server, flip a switch, and TunnelMate opens the tunnel, <strong>verifies that the shared service actually answers through it, and only then reports Connected</strong>. Server-side port problems come back as plain-language causes instead of silent no-ops.</p>
+
+        <p>The operational failures above are the parts it automates: tunnels reconnect themselves with backoff after network drops, and they recover after sleep/wake and Wi-Fi changes. Passwords and passphrases stay in the macOS Keychain, unknown or changed host keys open a review sheet before the connection is trusted, and because TunnelMate drives the system <code>ssh</code>, your existing <code>~/.ssh/config</code> and agent setup keep working. Advanced mode still exposes identity files, agent forwarding, keepalives, and custom health checks when you want them.</p>
+
+        <p>It is a one-time purchase of $9.99 with free updates to the 1.x series, it is signed with a Developer ID certificate and notarized by Apple, and it runs on macOS 14 (Sonoma) or later. The <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate page</a> walks through the four-step setup with screenshots before you decide.</p>
+
+        <div class="cta">
+            <p>TunnelMate shares a service from your Mac at a port on your server &mdash; and health-checks it before saying Connected. <a href="https://mkarim.us/apps/tunnelmate.html">Local and reverse SSH tunnels from the menu bar: $9.99 one-time, macOS 14+, signed and notarized.</a></p>
+        </div>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What is a reverse SSH tunnel used for?</h3>
+        <p>Exposing a service that lives on a machine without a public address: a dev server on your Mac shown to teammates through your VPS, a webhook target that external services can call, or a home machine you reach from a server. The public server donates its address; the private machine initiates the connection outward.</p>
+
+        <h3>Is a reverse SSH tunnel safe?</h3>
+        <p>The traffic is encrypted inside SSH, and by default the forwarded port binds only to the server&rsquo;s loopback &mdash; reachable from the server, not the internet. It stays that way unless you deliberately change it: exposing the port publicly takes a server-side <code>GatewayPorts</code> change, and you should verify host keys so you are tunneling to <em>your</em> server and no other.</p>
+
+        <h3>Reverse tunnel vs. local tunnel &mdash; what is the difference?</h3>
+        <p>Direction. A local tunnel (<code>-L</code>) brings a remote service to your machine; a reverse tunnel (<code>-R</code>) makes a local service reachable from the remote side. Same encryption, opposite pointing.</p>
+
+        <h3>Why does my reverse tunnel die when my Mac sleeps?</h3>
+        <p>macOS suspends the ssh process and the connection underneath it times out; the server drops the forward, and nothing restarts it after wake. Keepalives make the death <em>detectable</em>, autossh or a launchd job can restart it, and a tunnel manager handles the reconnect as part of its job.</p>
+
+        <p>Related reading: <a href="https://mkarim.us/blog/2026-09-07-ssh-client-mac.html">SSH Client on Mac: Keys, Config, and Tunnels</a> covers the client side &mdash; keys, <code>~/.ssh/config</code>, and host management &mdash; that this guide builds on.</p>
+
+        <p>I'm Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>, <a href="https://mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://mkarim.us/apps/tunnelmate.html">TunnelMate</a>. Questions about your setup are welcome at <a href="mailto:karim@mkarim.us">karim@mkarim.us</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://mkarim.us/blog/2026-09-22-clean-up-mac-desktop.html">previous: clean up mac desktop</a></span>
+            <span><a href="https://mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

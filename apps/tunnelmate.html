@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>TunnelMate: SSH Tunnel Manager for Mac — Muhammad Karim</title>
-    <meta name="description" content="Set up an SSH tunnel on a Mac without the terminal. TunnelMate is a menu-bar SSH tunnel manager: pick your service, flip a switch, connected. $9.99 one-time, macOS 14+." />
+    <meta name="description" content="Set up local and reverse SSH tunnels on a Mac without the terminal. TunnelMate is a menu-bar SSH tunnel manager: pick your service, flip a switch, connected. $9.99 one-time, macOS 14+." />
     <link rel="canonical" href="https://mkarim.us/apps/tunnelmate.html" />
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
     <!-- Bootstrap core CSS (matches site theme) -->
@@ -55,7 +55,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <h1 class="mb-2">TunnelMate: SSH Tunnels <span class="text-brand">From Your Menu Bar</span></h1>
-                    <p class="lead font-weight-bold">Local port forwarding without the terminal — pick your service, flip a switch, connected.</p>
+                    <p class="lead font-weight-bold">Local and reverse port forwarding without the terminal — pick your service, flip a switch, connected.</p>
                     <p class="mb-4">Setting up an SSH tunnel on a Mac usually means a long <code class="shell">ssh -N -L</code> command every morning, a terminal window you can't close, and no idea whether the tunnel actually works until something fails. TunnelMate is a menu-bar SSH tunnel manager for macOS that does it for you: a four-step wizard, one switch, and a <strong>Connected</strong> status that only appears when the service on the other end actually answers.</p>
                     <a class="btn btn-brand btn-lg mr-2 mb-2" href="https://monjurulkarim.gumroad.com/l/hiqccd" target="_blank" rel="noopener">Buy on Gumroad — $9.99 one-time</a>
                     <p class="small text-muted mt-3 mb-0">One-time purchase &middot; Free updates to the 1.x series &middot; Requires macOS 14 or later.</p>
@@ -80,7 +80,8 @@
             <h2 class="mb-4">What it does — and who it is for</h2>
             <div class="row">
                 <div class="col-lg-6">
-                    <p>TunnelMate manages SSH local port forwarding: it forwards a port on your Mac (say, <code class="shell">localhost:11434</code>) to a service running on a remote server, so local tools can reach it as if it were local. That is the part it automates — the wizard, the connection, the reconnection, and the verification that the service actually responds through the tunnel.</p>
+                    <p>TunnelMate manages SSH port forwarding in both directions. Local forwarding takes a service on a remote server (say, <code class="shell">localhost:11434</code>) and makes it reachable on your Mac. Reverse forwarding goes the other way: it shares a service running on your Mac — a dev server, a demo, a webhook target — at a port on your remote server, so teammates and webhooks can reach it. That is the part it automates — the wizard, the connection, the reconnection, and the verification that the service actually responds through the tunnel.</p>
+                    <p>Sharing a service works like the local direction in reverse: pick the service on your Mac, pick the port it should appear as on your server, and flip a switch. TunnelMate opens the tunnel, verifies the shared service actually answers through it before it reports Connected, and translates server-side port problems into plain-language causes. Tunnels reconnect themselves with backoff after network drops and recover after sleep/wake and Wi-Fi changes, so a demo or webhook target you left running is still reachable the next morning.</p>
                     <p>It is not another SSH client and it does not replace your terminal. It drives the system <code class="shell">ssh</code> already on your Mac, so everything your terminal can reach — your existing <code class="shell">~/.ssh/config</code>, keys, and agent — TunnelMate can tunnel.</p>
                 </div>
                 <div class="col-lg-6">
@@ -177,6 +178,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <ul class="feature-list">
+                        <li><strong>Reverse tunnels</strong> — share a service from your Mac at a port on your server; health-checked before "Connected"</li>
                         <li><strong>Set-and-forget tunnels</strong> — automatic reconnection with backoff; recovery after sleep/wake</li>
                         <li><strong>Real health checks</strong> — "Connected" only when the remote service actually responds</li>
                         <li><strong>Saved servers</strong> — reuse endpoints across services; import from <code class="shell">~/.ssh/config</code></li>
@@ -204,6 +206,9 @@
             <dl class="mb-0">
                 <dt>How do I set up an SSH tunnel on a Mac?</dt>
                 <dd>The built-in way is a command like <code class="shell">ssh -N -L 11434:127.0.0.1:11434 user@host</code>, kept running in a terminal. TunnelMate wraps that in a menu-bar app: a four-step wizard (service name, port, server, username), then a switch you flip. It launches the tunnel, health-checks it, and shows Connected only when the remote service answers.</dd>
+
+                <dt>Does TunnelMate do reverse tunnels?</dt>
+                <dd>Yes. Alongside local port forwarding, TunnelMate can share a service from your Mac at a port on your server — a dev server, a demo, or a webhook target. Like every tunnel it manages, a reverse tunnel shows Connected only after a health check confirms the shared service actually answers, and it reconnects itself after sleep, network changes, and drops.</dd>
 
                 <dt>Is TunnelMate an SSH client?</dt>
                 <dd>No — it is a tunnel manager. It drives the system <code class="shell">ssh</code> on your Mac, so it works with everything your terminal ssh already uses: your <code class="shell">~/.ssh/config</code>, identity files, and ssh-agent. You keep your terminal for everything else.</dd>
@@ -250,6 +255,7 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
+        {"@type": "Question", "name": "Does TunnelMate do reverse tunnels?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Alongside local port forwarding, TunnelMate can share a service from your Mac at a port on your server — a dev server, a demo, or a webhook target. It health-checks the shared service before showing Connected and reconnects after sleep, network changes, and drops."}},
         {"@type": "Question", "name": "How do I set up an SSH tunnel on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "The built-in way is a command like ssh -N -L 11434:127.0.0.1:11434 user@host kept running in a terminal. TunnelMate wraps that in a menu-bar app: a four-step wizard, then a switch you flip. It launches the tunnel, health-checks it, and shows Connected only when the remote service answers."}},
         {"@type": "Question", "name": "Is TunnelMate an SSH client?", "acceptedAnswer": {"@type": "Answer", "text": "No — it is a tunnel manager. It drives the system ssh on your Mac, so it works with your ~/.ssh/config, identity files, and ssh-agent. You keep your terminal for everything else."}},
         {"@type": "Question", "name": "Where are my passwords and keys stored?", "acceptedAnswer": {"@type": "Answer", "text": "Passwords and passphrases go into the macOS Keychain — never into config files — and TunnelMate scrubs secrets from its logs."}},
@@ -285,7 +291,7 @@
                 </div>
             </div>
             <hr style="border-color:#495057;" />
-            <p class="mb-0 small">© 2026 Muhammad Karim. TunnelMate — SSH tunnels from your menu bar: local port forwarding without the terminal.</p>
+            <p class="mb-0 small">© 2026 Muhammad Karim. TunnelMate — SSH tunnels from your menu bar: local and reverse port forwarding without the terminal.</p>
         </div>
     </footer>
 

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>How to Extract Audio from a Video on Mac (4 Methods, 2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="Four ways to pull the audio out of a video on a Mac — the built-in afconvert, ffmpeg stream copy, VLC, and recording system audio — and when each wins." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-25-extract-audio-from-video-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 25, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>How to Extract Audio from a Video on Mac (4 Methods, 2026)</h1>
+
+        <p>You have a video file and you want just the sound &mdash; for a podcast clip, an edit, or transcription. There are four reliable ways to extract audio from video on a Mac, and the right one depends on what the file is and where the sound should end up.</p>
+
+        <p>This guide covers the one-line Terminal routes first (they are the fastest and the only truly lossless ones), then a free GUI, then the case no file-based tool solves: audio that only exists as live playback. The capture side of the job &mdash; recording what your Mac is playing &mdash; has its own hub guide, <a href="https://www.mkarim.us/blog/2026-09-01-record-audio-on-mac.html">how to record audio on a Mac</a>; this one is about files you already have.</p>
+
+        <h2>How to extract audio from video on Mac: the short answer</h2>
+
+        <ul>
+            <li><strong>Audio already in the file, you want it untouched</strong> &rarr; ffmpeg with stream copy (<code>-c:a copy</code>). No re-encoding, no quality change.</li>
+            <li><strong>No extra installs allowed</strong> &rarr; macOS&rsquo;s built-in <code>afconvert</code> in one line. Works with common movie files like .mp4; rejects .mkv.</li>
+            <li><strong>You prefer clicking to typing</strong> &rarr; VLC&rsquo;s Convert/Save dialog.</li>
+            <li><strong>The audio only exists while it plays</strong> (a stream, a live call, an app that won&rsquo;t export) &rarr; record your Mac&rsquo;s system audio. AudioRecord does this in one click, straight to WAV or M4A.</li>
+        </ul>
+
+        <h2>Method 1: afconvert &mdash; already on your Mac, one line</h2>
+
+        <p>macOS ships <code>afconvert</code> (Audio File Convert) with the system. It reads the audio track of a QuickTime-compatible movie file and writes a plain audio file:</p>
+
+        <pre>afconvert -f m4af -d aac lecture.mp4 lecture.m4a</pre>
+
+        <ul>
+            <li><code>-f m4af</code> picks the M4A container; <code>-d aac</code> the AAC data format.</li>
+            <li>Tested on this Mac (macOS 15.6): an .mp4 with AAC audio converts in under a second, and the output is a normal audio-only .m4a any player opens.</li>
+            <li>Limits, tested on the same Mac: it would not open an .mkv. If the source is a container macOS doesn&rsquo;t natively read, use Method 2.</li>
+            <li>Read the full options with <code>man afconvert</code>.</li>
+        </ul>
+
+        <p>Best for: common .mp4/.mov files, zero setup. (See it documented on any Mac with <code>man afconvert</code> &mdash; Apple doesn&rsquo;t publish a web version.)</p>
+
+        <h2>Method 2: ffmpeg &mdash; the lossless route</h2>
+
+        <p>ffmpeg is the tool to reach for when you want the audio exactly as it is in the file, with no re-encode:</p>
+
+        <pre>ffmpeg -i input.mp4 -vn -c:a copy output.m4a</pre>
+
+        <ul>
+            <li><code>-vn</code> skips the video stream &mdash; the <a href="https://ffmpeg.org/ffmpeg.html" target="_blank" rel="noopener">ffmpeg documentation</a> describes <code>-vn</code> as skipping &ldquo;inclusion of video, audio, subtitle and data streams&rdquo; you don&rsquo;t select, and here it applies to video.</li>
+            <li><code>-c:a copy</code> copies the existing audio stream into the new container. Because the audio is never re-encoded, quality is bit-identical to the source track, and a 2-hour file extracts in seconds.</li>
+            <li>The output extension follows the source codec: AAC audio &rarr; .m4a. If the source codec doesn&rsquo;t fit the container you name, either pick a matching one or re-encode:</li>
+        </ul>
+
+        <pre>ffmpeg -i input.mp4 -vn -c:a libmp3lame -q:a 4 output.mp3</pre>
+
+        <p>Tested on this Mac with ffmpeg 8: both commands produced valid files (verified with <code>afinfo</code> &mdash; one audio track, correct duration, no video stream).</p>
+
+        <p>Best for: MKV and anything else ffmpeg reads, exact-quality extraction, batch jobs. Install via Homebrew (<code>brew install ffmpeg</code>).</p>
+
+        <h2>Method 3: VLC &mdash; the free GUI route</h2>
+
+        <p>If you&rsquo;d rather not open Terminal, VLC (free, open source) converts a video&rsquo;s audio track through its Convert/Save dialog: open the file, pick Convert, choose an audio profile such as &ldquo;Audio - MP3&rdquo;, set the destination, and start. <a href="https://wiki.videolan.org/Convert/" target="_blank" rel="noopener">VideoLAN&rsquo;s own wiki</a> documents the Convert/Save flow as the GUI way to transcode.</p>
+
+        <p>The trade-off versus Method 2: VLC&rsquo;s profiles re-encode, so it is not a lossless path, and it is slower for long files. Best for: one-off jobs when you already use VLC.</p>
+
+        <h2>Method 4: when there is no file &mdash; record system audio</h2>
+
+        <p>Everything above assumes the sound is inside a file you can open. It often isn&rsquo;t: a stream that won&rsquo;t let you download, a live call, an app with no export. In that case the honest method is to capture what your Mac is playing while it plays.</p>
+
+        <p>That is exactly what <strong><a href="https://www.mkarim.us/apps/audiorecord.html">AudioRecord</a></strong>, an app I built, does: one click records all system audio (optionally with your microphone mixed in) into a single WAV (lossless) or M4A file. Play the video, stop the recording, and the audio is yours &mdash; no re-encoding artifacts from a screen recorder&rsquo;s video track, because it never touches video. (The deeper internal-audio walkthrough &mdash; including the virtual-audio-device routing &mdash; is its own guide: <a href="https://www.mkarim.us/blog/2026-09-01-record-internal-audio-mac.html">record internal audio on a Mac</a>.)</p>
+
+        <p>It runs on macOS 14 or later and works from the menu bar. It is a real-time method &mdash; a 30-minute video takes 30 minutes &mdash; so for files you control, Methods 1&ndash;2 are faster.</p>
+
+        <p><strong>Next step after extracting:</strong> if the audio is a meeting, lecture, or interview, <strong><a href="https://www.mkarim.us/apps/meetingmint.html">MeetingMint</a></strong> (also mine) imports any audio file &mdash; a voice memo, a Zoom or Teams recording, a lecture &mdash; and produces clean minutes on-device. Posts <a href="https://www.mkarim.us/blog/2026-09-14-transcribe-interview-mac.html">#16 (interviews)</a> and <a href="https://www.mkarim.us/blog/2026-09-21-teams-meeting-transcription.html">#19 (Teams meetings)</a> walk the full transcription comparisons if that&rsquo;s your end goal.</p>
+
+        <h2>Which method should you use?</h2>
+
+        <table>
+            <thead>
+                <tr><th>Situation</th><th>Use</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>.mp4/.mov, no tools installed</td><td>Method 1 &mdash; afconvert</td><td>Built into macOS, one line</td></tr>
+                <tr><td>Want the original audio quality</td><td>Method 2 &mdash; ffmpeg <code>-c:a copy</code></td><td>No re-encode, bit-identical</td></tr>
+                <tr><td>MKV or odd container</td><td>Method 2 &mdash; ffmpeg</td><td>afconvert won&rsquo;t open MKV (tested)</td></tr>
+                <tr><td>GUI preferred</td><td>Method 3 &mdash; VLC</td><td>Click-through profiles</td></tr>
+                <tr><td>Audio only exists as playback</td><td>Method 4 &mdash; AudioRecord</td><td>Captures live system audio</td></tr>
+            </tbody>
+        </table>
+
+        <h2>FAQ</h2>
+
+        <h3>Does extracting audio reduce quality?</h3>
+        <p>Only if something re-encodes it. ffmpeg&rsquo;s stream copy never re-encodes &mdash; the bytes of the audio track are the same ones the video carried. GUI converters and MP3 exports re-encode by design, which costs a little quality in exchange for a format you need.</p>
+
+        <h3>Should I extract to M4A or MP3?</h3>
+        <p>Keep the original codec when you can: most .mp4 files carry AAC, so an .m4a copy is the faithful version. Produce an MP3 only when a player, editor, or upload form specifically requires it.</p>
+
+        <h3>Can I extract audio from an MKV on a Mac?</h3>
+        <p>Not with afconvert &mdash; tested on macOS 15.6, it refuses the file. ffmpeg reads MKV directly, and the same <code>-vn -c:a copy</code> pattern applies (name an output container that suits the audio codec, usually .m4a for AAC or .mka to keep any codec).</p>
+
+        <h3>Can I grab audio from a stream instead of a file?</h3>
+        <p>File-based tools only work on files. For anything that exists only as playback, record system audio (Method 4) &mdash; and record only content you have the rights to use.</p>
+
+        <div class="cta">
+            <p>AudioRecord captures your Mac&rsquo;s system audio &mdash; and your microphone, mixed in &mdash; straight to WAV or M4A from the menu bar. <a href="https://www.mkarim.us/apps/audiorecord.html">Record system audio on Mac, free, macOS 14+.</a></p>
+        </div>
+
+        <p>Muhammad Karim writes about on-device and local-first software and builds <a href="https://www.mkarim.us/apps/audiorecord.html">AudioRecord</a> (system + mic audio recording) and <a href="https://www.mkarim.us/apps/meetingmint.html">MeetingMint</a> (on-device AI meeting notes). Reach him at <a href="mailto:karim@mkarim.us">karim@mkarim.us</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://www.mkarim.us/blog/2026-09-24-reverse-ssh-tunnel-mac.html">previous: reverse ssh tunnel</a></span>
+            <span><a href="https://www.mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

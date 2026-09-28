@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Transcription Software for Mac: An Honest Comparison (2026) &mdash; Muhammad Karim</title>
+    <meta name="description" content="An honest comparison of transcription software for Mac: built-in tools, Whisper, Otter, human services, and on-device apps &mdash; scored on privacy and accuracy." />
+    <meta name="author" content="Muhammad Karim, Ph.D." />
+    <link rel="canonical" href="https://mkarim.us/blog/2026-09-28-transcription-software-mac.html" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --ink:#212529; --muted:#6c757d; --line:#dee2e6; --accent:#0d6efd; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:'Muli',-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink); line-height:1.7; background:#fff; }
+        .wrap { max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
+        .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:1.5rem; }
+        .crumbs a { color:var(--muted); text-decoration:none; }
+        .crumbs a:hover { color:var(--ink); }
+        .meta { color:var(--muted); font-size:.9rem; margin:0 0 .5rem; }
+        h1 { font-size:2rem; line-height:1.25; margin:0 0 1rem; font-weight:800; }
+        h2 { font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:800; }
+        h3 { font-size:1.05rem; margin:1.5rem 0 .5rem; font-weight:800; }
+        p { margin:0 0 1rem; }
+        a { color:var(--accent); }
+        pre { background:#f8f9fa; border:1px solid var(--line); border-radius:6px; padding:1rem; overflow-x:auto; font-size:.85rem; }
+        code { font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace; }
+        p > code, li > code { background:#f1f3f5; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+        table { border-collapse:collapse; width:100%; margin:1rem 0 1.5rem; font-size:.95rem; }
+        th, td { border:1px solid var(--line); padding:.55rem .7rem; text-align:left; vertical-align:top; }
+        thead th { background:#f8f9fa; }
+        ul { padding-left:1.3rem; }
+        ol { padding-left:1.3rem; }
+        li { margin-bottom:.4rem; }
+        figure { margin:1.75rem 0; }
+        figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:8px; }
+        figcaption { color:var(--muted); font-size:.85rem; margin-top:.45rem; }
+        .cta { border:1px solid var(--line); border-left:4px solid var(--accent); background:#f8f9fa; border-radius:6px; padding:1rem 1.25rem; margin:1.75rem 0; }
+        .cta p { margin:0; }
+        footer.site { margin-top:3.5rem; border-top:1px solid var(--line); padding-top:1.25rem; font-size:.85rem; color:var(--muted); display:flex; flex-wrap:wrap; gap:.35rem 1.25rem; justify-content:space-between; }
+        footer.site a { color:var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="crumbs"><a href="https://mkarim.us/">mkarim.us</a> / blog</nav>
+
+        <p class="meta">September 28, 2026 &middot; Muhammad Karim, Ph.D.</p>
+        <h1>Transcription Software for Mac: An Honest Comparison (2026)</h1>
+
+        <p>Most &ldquo;best transcription software for Mac&rdquo; lists are written by the companies selling the tools. Every pick links to a signup page, and the one question that should decide your choice &mdash; <em>where does your audio go while it&rsquo;s being transcribed?</em> &mdash; never comes up. This comparison is organized around that question instead.</p>
+
+        <p>Full disclosure up front: I build one of the tools below. The rest of the list is held to the same standard I hold my own work to &mdash; no invented scores, no affiliate links, and every claim kept to what the vendor&rsquo;s own materials say. If you&rsquo;re hunting for transcription software for Mac in 2026, the honest answer is that the right pick depends on where your audio may live and who the transcript is for.</p>
+
+        <h2>The short answer</h2>
+
+        <ul>
+            <li><strong>Transcribing your own voice into any text field:</strong> macOS dictation and Apple Notes &mdash; free, built in.</li>
+            <li><strong>Batch-transcribing audio files you already have, free:</strong> OpenAI&rsquo;s Whisper, run locally from the terminal.</li>
+            <li><strong>Meetings, hands-off:</strong> a joining bot like Otter &mdash; convenient, cloud-based.</li>
+            <li><strong>A transcript good enough for court or publication:</strong> a human service like Rev &mdash; slowest and priciest, highest accuracy ceiling.</li>
+            <li><strong>Interviews and meetings that must stay on your machine, with notes instead of a wall of text:</strong> an on-device app &mdash; that&rsquo;s the slot my MeetingMint fills, disclosed below.</li>
+        </ul>
+
+        <figure>
+          <img src="../assets/img/blog/fig-transcription-method-choice.svg" alt="Decision flow for transcription software on Mac: dictating your own voice live into any app suits macOS dictation; audio files you already have suit Whisper in the terminal; recurring hands-off meetings suit a joining bot like Otter; when the transcript itself is the deliverable a human service like Rev wins; audio that must never leave your machine suits an on-device app like MeetingMint" loading="lazy" width="760" height="330" />
+          <figcaption>Five jobs, five tools &mdash; the rest of this post is the reasoning behind each branch.</figcaption>
+        </figure>
+
+        <h2>What Mac transcription software has to get right</h2>
+
+        <p>Three things separate real transcription tools from a demo video:</p>
+
+        <ol>
+            <li><strong>Accuracy on your actual audio.</strong> Accents, crosstalk, and field recordings punish weak models. Whatever you pick, test it on ten minutes of your real material before committing &mdash; marketing samples are always clean studio audio.</li>
+            <li><strong>Speaker labels and timestamps.</strong> A transcript you can cite (&ldquo;who said this, at what minute&rdquo;) is worth several times a wall of text. Not every tool labels speakers; check before you record a three-person interview.</li>
+            <li><strong>Where the audio is processed.</strong> Cloud tools upload your recording; on-device tools don&rsquo;t. For client calls, medical or legal material, and unpublished research, this is the deciding property &mdash; the same logic as <a href="https://www.mkarim.us/blog/2026-08-31-redact-pii-before-sending-to-llm.html">redacting PII before sending documents to an LLM</a>, applied to spoken audio instead of documents.</li>
+        </ol>
+
+        <figure>
+          <img src="../assets/img/blog/fig-transcription-privacy.svg" alt="Where transcription audio goes: on-device tools process the mic or file input on your Mac with Whisper and a local language model and return transcript and minutes with nothing uploaded; cloud tools upload the meeting or recording to a vendor whose servers produce the transcript that comes back — the deciding question is where the audio is processed, not accuracy" loading="lazy" width="760" height="330" />
+          <figcaption>The deciding question isn&rsquo;t accuracy &mdash; it&rsquo;s which row your recording lives on.</figcaption>
+        </figure>
+
+        <h2>Built-in: macOS dictation and Apple Notes</h2>
+
+        <p>Before installing anything, know what your Mac already does. <a href="https://support.apple.com/guide/mac-help/mh40584/mac" target="_blank" rel="noopener">macOS dictation</a> converts speech to text live, in any app with a text field &mdash; you talk, text appears, and per Apple&rsquo;s guide, dictated text such as messages and notes is processed on your device rather than sent to Siri servers. It&rsquo;s ideal for dictating email or notes, and it&rsquo;s a real productivity tool, not a toy.</p>
+
+        <p>Apple Notes goes further for recordings: on supported Macs it can transcribe a voice memo after the fact, and you can search the text. Both are covered in my guide to <a href="https://www.mkarim.us/blog/2026-09-14-transcribe-interview-mac.html">transcribing interview recordings on a Mac</a>, including where the built-ins stop.</p>
+
+        <p><strong>Good:</strong> dictation of your own voice; quick memo transcription; a $0 budget.</p>
+
+        <p><strong>Limits:</strong> dictation is live-only (it doesn&rsquo;t transcribe files), and the built-ins don&rsquo;t label speakers or export clean, timestamped transcripts.</p>
+
+        <h2>Whisper &mdash; the free, open-source workhorse</h2>
+
+        <p><a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper</a> is OpenAI&rsquo;s open-source speech recognition model, and it&rsquo;s the engine inside a surprising share of commercial transcription apps &mdash; including one further down this list. Run from the terminal, it transcribes audio files on your Mac, offline, in dozens of languages, at no cost beyond setup.</p>
+
+        <p>The trade is the interface: you&rsquo;ll use the Terminal, pick a model size, and wait &mdash; larger models are more accurate and slower. For a researcher or journalist comfortable with a command line, it&rsquo;s the best free option that exists. For everyone else, the apps below wrap the same capability in a window.</p>
+
+        <p><strong>Good:</strong> files you already have; offline processing; zero cost; no upload.</p>
+
+        <p><strong>Limits:</strong> command-line setup; no speaker labels out of the box; raw text output, not formatted minutes.</p>
+
+        <h2>Otter &mdash; the meeting bot</h2>
+
+        <p><a href="https://otter.ai" target="_blank" rel="noopener">Otter</a> joins Zoom, Meet, or Teams calls as a participant and produces a searchable, speaker-labeled transcript automatically. Setup is minutes, there&rsquo;s a free tier, and the transcript lands in your inbox before the meeting ends. For open, non-sensitive meetings it&rsquo;s the lowest-effort option in this list.</p>
+
+        <p>The cost is structural, not cosmetic: another participant is on the call, and the audio is processed in Otter&rsquo;s cloud. I covered the built-in alternative in my <a href="https://www.mkarim.us/blog/2026-09-21-teams-meeting-transcription.html">Teams meeting transcription guide</a> &mdash; the same cloud-vs-control trade applies there.</p>
+
+        <p><strong>Good:</strong> recurring meetings, cross-platform, hands-off.</p>
+
+        <p><strong>Limits:</strong> a bot in the participant list; cloud processing; subscription for real usage.</p>
+
+        <h2>Rev &mdash; when the transcript itself is the deliverable</h2>
+
+        <p><a href="https://rev.com" target="_blank" rel="noopener">Rev</a> is the human-in-the-loop option: upload a recording, and a professional transcriber returns a speaker-labeled, timestamped transcript (Rev also sells a cheaper AI tier). This is the route for legal, compliance, and published research &mdash; anywhere the wording itself matters and an AI draft isn&rsquo;t defensible.</p>
+
+        <p><strong>Good:</strong> evidentiary or contractual accuracy; poor audio; dense technical vocabulary.</p>
+
+        <p><strong>Limits:</strong> priced per audio minute, turnaround measured in hours to days, and your recording sits with a third party. Overkill for meeting minutes.</p>
+
+        <h2>Interview transcription software: the researcher&rsquo;s checklist</h2>
+
+        <p>&ldquo;Interview transcription software&rdquo; is its own buying decision &mdash; journalists, UX researchers, and academics search for it separately, and the checklist differs from meetings:</p>
+
+        <ul>
+            <li><strong>Files, not bots.</strong> The interview happened yesterday; you need a transcript of a recording, not a live caption.</li>
+            <li><strong>Speaker labels you can cite.</strong> &ldquo;Participant 3, 42:17&rdquo; or the quote doesn&rsquo;t make it into the paper.</li>
+            <li><strong>Timestamps that survive export.</strong> For coding and quotation.</li>
+            <li><strong>Privacy that survives the ethics board.</strong> Human-participant data usually can&rsquo;t be uploaded to a random cloud service &mdash; on-device processing sidesteps the consent headache entirely.</li>
+        </ul>
+
+        <p>For that last point: MeetingMint (below) imports an interview recording and returns a transcript with timestamp-cited chat &mdash; ask it a question and it answers with the exact moment the answer was said. For the capture side, any recorder works; if the interview is happening on this Mac, <a href="https://www.mkarim.us/apps/audiorecord.html">AudioRecord</a> captures mic and system audio, and my <a href="https://www.mkarim.us/blog/2026-09-01-record-audio-on-mac.html">guide to recording audio on a Mac</a> covers the built-in routes. (If your interview is a video file, I have a separate guide to <a href="https://www.mkarim.us/blog/2026-09-25-extract-audio-from-video-mac.html">extracting its audio track</a>.)</p>
+
+        <h2>MeetingMint &mdash; ours, disclosed: on-device transcription plus minutes</h2>
+
+        <p>The disclosure paragraph: I build MeetingMint. It&rsquo;s on this list for one specific position &mdash; the interview-and-meetings slot where the audio must not leave your machine and you want decisions and action items, not just a transcript.</p>
+
+        <p>What it does, concretely: press record to capture your microphone, or drag in an audio file you already have &mdash; calls, lectures, interviews, a recording of any length. On-device Whisper transcribes it; a small language model running locally on your Mac turns the transcript into structured minutes &mdash; summary, decisions, action items &mdash; in 90+ languages. You can chat with the transcript, and answers cite the timestamps they came from. Nothing is uploaded; the models download once and after that everything runs on your machine.</p>
+
+        <figure>
+          <img src="../assets/img/apps/meetingmint-minutes.png" alt="MeetingMint generated meeting minutes — action items, decisions, and key points from an on-device transcript" loading="lazy" width="1600" height="984" />
+          <figcaption>The output MeetingMint optimizes for: minutes &mdash; decisions and action items &mdash; rather than a wall of raw text.</figcaption>
+        </figure>
+
+        <p>Two honest limits. It captures the microphone or imports files &mdash; it does not capture system audio; pair it with AudioRecord when you need the other side of a call, and the file imports in. And it produces meeting-style notes, not formatted legal transcripts &mdash; when the wording itself is the deliverable, that&rsquo;s still Rev territory. The free tier covers five meetings; Pro is a subscription or a one-time purchase.</p>
+
+        <h2>The comparison at a glance</h2>
+
+        <table>
+            <thead>
+                <tr><th>Tool</th><th>Runs</th><th>Speaker labels</th><th>Input</th><th>Audio leaves your Mac?</th><th>Price model</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>macOS dictation / Apple Notes</td><td>On device</td><td>No</td><td>Live voice</td><td>No</td><td>Free (built in)</td></tr>
+                <tr><td>Whisper (terminal)</td><td>On device</td><td>No (raw)</td><td>Files</td><td>No</td><td>Free, open source</td></tr>
+                <tr><td>Otter</td><td>Cloud</td><td>Yes</td><td>Live meetings</td><td>Yes (upload)</td><td>Free tier + subscription</td></tr>
+                <tr><td>Rev</td><td>Human/AI cloud</td><td>Yes</td><td>Files</td><td>Yes (upload)</td><td>Per audio minute</td></tr>
+                <tr><td>MeetingMint (ours)</td><td>On device</td><td>Via timestamped chat</td><td>Mic + file import</td><td>No</td><td>Free tier + one-time or subscription</td></tr>
+            </tbody>
+        </table>
+
+        <h2>Which Mac transcription software should you use?</h2>
+
+        <ul>
+            <li><strong>Dictating thoughts right now</strong> &mdash; the built-in dictation; open any text field and start.</li>
+            <li><strong>A folder of recordings, no budget</strong> &mdash; Whisper in the terminal.</li>
+            <li><strong>Weekly team meetings that aren&rsquo;t sensitive</strong> &mdash; Otter or your platform&rsquo;s built-in transcript.</li>
+            <li><strong>The transcript is evidence</strong> &mdash; Rev, or your jurisdiction&rsquo;s equivalent human service.</li>
+            <li><strong>Interviews, client calls, research audio that can&rsquo;t leave the machine &mdash; and you want minutes, not a wall of text</strong> &mdash; that&rsquo;s the MeetingMint slot; <a href="https://www.mkarim.us/apps/meetingmint.html">see how it works</a>.</li>
+        </ul>
+
+        <h2>FAQ</h2>
+
+        <h3>What is the best free transcription software for Mac?</h3>
+        <p>For transcribing audio files you already have: Whisper, run locally &mdash; free, offline, and accurate. For live dictation of your own voice: macOS dictation. Both are genuinely free; most &ldquo;free&rdquo; cloud tools gate minutes behind a trial.</p>
+
+        <h3>Is AI transcription accurate enough for interviews?</h3>
+        <p>As a first draft, yes &mdash; modern models handle clear audio well. But treat every AI transcript as a draft: spot-check names, numbers, and any quote you&rsquo;ll publish. When the transcript is legal or contractual evidence, use a human service.</p>
+
+        <h3>How do I transcribe a recording without uploading it?</h3>
+        <p>Use a tool that processes on-device: Whisper in the terminal, or MeetingMint for transcripts-plus-minutes. The recording never leaves your Mac &mdash; which matters for human-participant research, client calls, and anything under NDA.</p>
+
+        <div class="cta">
+            <p>MeetingMint turns any meeting or interview recording into structured AI minutes &mdash; summary, decisions, action items &mdash; with on-device processing and nothing uploaded. <a href="https://www.mkarim.us/apps/meetingmint.html">See how it works.</a></p>
+        </div>
+
+        <p>I&rsquo;m Muhammad Karim &mdash; transportation researcher; I build privacy-first, local-first tools: <a href="https://www.mkarim.us/apps/meetingmint.html">MeetingMint</a>, <a href="https://www.mkarim.us/apps/audiorecord.html">AudioRecord</a>, <a href="https://www.mkarim.us/video-redaction/">Video Redactor</a>, <a href="https://www.mkarim.us/apps/privateredact.html">PrivateRedact</a>, <a href="https://www.mkarim.us/apps/self-hosted-rag.html">Self-Hosted RAG</a>.</p>
+
+        <footer class="site">
+            <span><a href="https://mkarim.us/">mkarim.us</a> &middot; <a href="https://www.mkarim.us/blog/2026-09-25-extract-audio-from-video-mac.html">previous: extract audio from video</a></span>
+            <span><a href="https://www.mkarim.us/apps/">apps</a> &middot; <a href="mailto:karim@mkarim.us">contact</a></span>
+        </footer>
+    </div>
+
+    <!-- Analytics (GoatCounter, consistent with site) -->
+    <script data-goatcounter="https://monjurulkarim.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

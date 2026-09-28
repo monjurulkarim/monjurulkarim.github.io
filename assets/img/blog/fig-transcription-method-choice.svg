@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="Decision flow for transcription software on Mac: dictating your own voice live into any app suits macOS dictation; audio files you already have suit Whisper in the terminal; recurring hands-off meetings suit a joining bot like Otter; when the transcript itself is the deliverable a human service like Rev wins; audio that must never leave your machine suits an on-device app like MeetingMint">
+  <title>Which transcription tool fits which job</title>
+  <defs>
+    <marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d6efd"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; fill: #212529; }
+    .q { fill: #0d6efd; }
+    .branch { fill: #ffffff; stroke: #dee2e6; stroke-width: 1.5; }
+    .pick { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; }
+    .t { font-size: 14px; font-weight: 700; }
+    .bt { font-size: 12.5px; font-weight: 700; }
+    .s { font-size: 11px; fill: #6c757d; }
+    .link { stroke: #0d6efd; stroke-width: 1.75; fill: none; }
+  </style>
+
+  <rect class="q" x="255" y="18" width="250" height="44" rx="22"/>
+  <text class="t" x="380" y="46" text-anchor="middle" fill="#ffffff">What are you transcribing?</text>
+
+  <rect class="branch" x="10" y="96" width="140" height="52" rx="8"/>
+  <text class="bt" x="80" y="116" text-anchor="middle">Your own voice,</text>
+  <text class="s" x="80" y="133" text-anchor="middle">live, into any app</text>
+
+  <rect class="branch" x="160" y="96" width="140" height="52" rx="8"/>
+  <text class="bt" x="230" y="116" text-anchor="middle">Audio files you</text>
+  <text class="s" x="230" y="133" text-anchor="middle">already have, free</text>
+
+  <rect class="branch" x="310" y="96" width="140" height="52" rx="8"/>
+  <text class="bt" x="380" y="116" text-anchor="middle">Team meetings,</text>
+  <text class="s" x="380" y="133" text-anchor="middle">recurring, hands-off</text>
+
+  <rect class="branch" x="460" y="96" width="140" height="52" rx="8"/>
+  <text class="bt" x="530" y="116" text-anchor="middle">The transcript is</text>
+  <text class="s" x="530" y="133" text-anchor="middle">the deliverable</text>
+
+  <rect class="branch" x="610" y="96" width="140" height="52" rx="8"/>
+  <text class="bt" x="680" y="116" text-anchor="middle">Must never leave</text>
+  <text class="s" x="680" y="133" text-anchor="middle">your machine</text>
+
+  <path class="link" d="M310,62 C240,72 140,80 88,90" marker-end="url(#bm)"/>
+  <path class="link" d="M335,62 C310,72 265,80 236,90" marker-end="url(#bm)"/>
+  <path class="link" d="M380,62 L380,90" marker-end="url(#bm)"/>
+  <path class="link" d="M425,62 C450,72 495,80 524,90" marker-end="url(#bm)"/>
+  <path class="link" d="M450,62 C520,72 620,80 672,90" marker-end="url(#bm)"/>
+
+  <rect class="pick" x="10" y="196" width="140" height="92" rx="8"/>
+  <text class="bt" x="80" y="218" text-anchor="middle" fill="#0d6efd">macOS dictation</text>
+  <text class="s" x="80" y="238" text-anchor="middle">built in; live voice,</text>
+  <text class="s" x="80" y="253" text-anchor="middle">partly processed</text>
+  <text class="s" x="80" y="268" text-anchor="middle">on your device</text>
+
+  <rect class="pick" x="160" y="196" width="140" height="92" rx="8"/>
+  <text class="bt" x="230" y="218" text-anchor="middle" fill="#0d6efd">Whisper</text>
+  <text class="s" x="230" y="238" text-anchor="middle">in the terminal —</text>
+  <text class="s" x="230" y="253" text-anchor="middle">free, open source,</text>
+  <text class="s" x="230" y="268" text-anchor="middle">raw text output</text>
+
+  <rect class="pick" x="310" y="196" width="140" height="92" rx="8"/>
+  <text class="bt" x="380" y="218" text-anchor="middle" fill="#0d6efd">Otter (bot)</text>
+  <text class="s" x="380" y="238" text-anchor="middle">joins the call;</text>
+  <text class="s" x="380" y="253" text-anchor="middle">cloud processing,</text>
+  <text class="s" x="380" y="268" text-anchor="middle">free tier + sub</text>
+
+  <rect class="pick" x="460" y="196" width="140" height="92" rx="8"/>
+  <text class="bt" x="530" y="218" text-anchor="middle" fill="#0d6efd">Rev (human)</text>
+  <text class="s" x="530" y="238" text-anchor="middle">per audio minute;</text>
+  <text class="s" x="530" y="253" text-anchor="middle">highest accuracy</text>
+  <text class="s" x="530" y="268" text-anchor="middle">ceiling</text>
+
+  <rect class="pick" x="610" y="196" width="140" height="92" rx="8"/>
+  <text class="bt" x="680" y="218" text-anchor="middle" fill="#0d6efd">MeetingMint</text>
+  <text class="s" x="680" y="238" text-anchor="middle">ours, disclosed;</text>
+  <text class="s" x="680" y="253" text-anchor="middle">on-device minutes,</text>
+  <text class="s" x="680" y="268" text-anchor="middle">timestamped chat</text>
+
+  <path class="link" d="M80,148 L80,190" marker-end="url(#bm)"/>
+  <path class="link" d="M230,148 L230,190" marker-end="url(#bm)"/>
+  <path class="link" d="M380,148 L380,190" marker-end="url(#bm)"/>
+  <path class="link" d="M530,148 L530,190" marker-end="url(#bm)"/>
+  <path class="link" d="M680,148 L680,190" marker-end="url(#bm)"/>
+</svg>

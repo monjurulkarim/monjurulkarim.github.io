@@ -60,6 +60,11 @@
             <li><strong>The audio only exists while it plays</strong> (a stream, a live call, an app that won&rsquo;t export) &rarr; record your Mac&rsquo;s system audio. AudioRecord does this in one click, straight to WAV or M4A.</li>
         </ul>
 
+        <figure>
+          <img src="../assets/img/blog/fig-extract-audio-method-choice.svg" alt="Decision flow for extracting audio from a video on Mac: a file in an MP4 or MOV with no installs allowed suits the built-in afconvert one-liner; any file including MKV where quality must not change suits ffmpeg stream copy; preferring clicking to typing suits VLC's Convert/Save dialog; audio that only exists as live playback suits recording system audio with AudioRecord" loading="lazy" width="760" height="330" />
+          <figcaption>Four ways in: match the situation to the method &mdash; the file type, the quality bar, and whether the sound is even in a file yet.</figcaption>
+        </figure>
+
         <h2>Method 1: afconvert &mdash; already on your Mac, one line</h2>
 
         <p>macOS ships <code>afconvert</code> (Audio File Convert) with the system. It reads the audio track of a QuickTime-compatible movie file and writes a plain audio file:</p>
@@ -89,6 +94,11 @@
 
         <pre>ffmpeg -i input.mp4 -vn -c:a libmp3lame -q:a 4 output.mp3</pre>
 
+        <figure>
+          <img src="../assets/img/blog/fig-extract-audio-track.svg" alt="What extracting audio means: a video file is a container holding a video track and an audio track; the stream-copy route moves the audio track out untouched for a bit-identical M4A, while the re-encode route decodes the track and writes new bytes for an MP3 at a small quality cost — only re-encoding changes the sound" loading="lazy" width="760" height="330" />
+          <figcaption>What &ldquo;extracting&rdquo; means: the audio track rides inside the container. Stream copy moves it out untouched; re-encoding rewrites it.</figcaption>
+        </figure>
+
         <p>Tested on this Mac with ffmpeg 8: both commands produced valid files (verified with <code>afinfo</code> &mdash; one audio track, correct duration, no video stream).</p>
 
         <p>Best for: MKV and anything else ffmpeg reads, exact-quality extraction, batch jobs. Install via Homebrew (<code>brew install ffmpeg</code>).</p>
@@ -104,6 +114,11 @@
         <p>Everything above assumes the sound is inside a file you can open. It often isn&rsquo;t: a stream that won&rsquo;t let you download, a live call, an app with no export. In that case the honest method is to capture what your Mac is playing while it plays.</p>
 
         <p>That is exactly what <strong><a href="https://www.mkarim.us/apps/audiorecord.html">AudioRecord</a></strong>, an app I built, does: one click records all system audio (optionally with your microphone mixed in) into a single WAV (lossless) or M4A file. Play the video, stop the recording, and the audio is yours &mdash; no re-encoding artifacts from a screen recorder&rsquo;s video track, because it never touches video. (The deeper internal-audio walkthrough &mdash; including the virtual-audio-device routing &mdash; is its own guide: <a href="https://www.mkarim.us/blog/2026-09-01-record-internal-audio-mac.html">record internal audio on a Mac</a>.)</p>
+
+        <figure>
+          <img src="../assets/img/apps/audiorecord-interface.png" alt="AudioRecord interface — recording view with live level meters for the microphone and system audio sources" loading="lazy" width="1199" height="940" />
+          <figcaption>AudioRecord mid-recording: separate level meters for the mic and the system audio &mdash; the playback side of a video, captured straight to file.</figcaption>
+        </figure>
 
         <p>It runs on macOS 14 or later and works from the menu bar. It is a real-time method &mdash; a 30-minute video takes 30 minutes &mdash; so for files you control, Methods 1&ndash;2 are faster.</p>
 

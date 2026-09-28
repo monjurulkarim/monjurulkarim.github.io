@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-label="What extracting audio means: a video file is a container holding a video track and an audio track; the stream-copy route moves the audio track out untouched for a bit-identical M4A, while the re-encode route decodes the track and writes new bytes for an MP3 at a small quality cost — only re-encoding changes the sound">
+  <title>Stream copy versus re-encode: what extraction does to the sound</title>
+  <defs>
+    <marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d6efd"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; fill: #212529; }
+    .q { fill: #0d6efd; }
+    .box { fill: #ffffff; stroke: #dee2e6; stroke-width: 1.5; }
+    .wire { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .track-v { fill: #f1f3f5; stroke: #dee2e6; stroke-width: 1; }
+    .track-a { fill: #eef4ff; stroke: #0d6efd; stroke-width: 1.25; }
+    .t { font-size: 14px; font-weight: 700; }
+    .bt { font-size: 12.5px; font-weight: 700; }
+    .s { font-size: 11px; fill: #6c757d; }
+    .x { font-size: 10.5px; fill: #6c757d; }
+    .link { stroke: #0d6efd; stroke-width: 1.75; fill: none; }
+  </style>
+
+  <text class="bt" x="20" y="34" fill="#0d6efd">Stream copy — lossless</text>
+  <rect class="box" x="20" y="44" width="190" height="86" rx="8"/>
+  <text class="bt" x="115" y="63" text-anchor="middle">Video file</text>
+  <rect class="track-v" x="34" y="70" width="162" height="22" rx="4"/>
+  <text class="x" x="115" y="84" text-anchor="middle">video track</text>
+  <rect class="track-a" x="34" y="96" width="162" height="22" rx="4"/>
+  <text class="x" x="115" y="110" text-anchor="middle" style="fill:#0d6efd">audio track</text>
+
+  <path class="link" d="M215,88 L249,88" marker-end="url(#bm)"/>
+  <rect class="wire" x="255" y="62" width="220" height="52" rx="8"/>
+  <text class="bt" x="365" y="84" text-anchor="middle" fill="#0d6efd">ffmpeg -vn -c:a copy</text>
+  <text class="s" x="365" y="102" text-anchor="middle">copies the track as-is</text>
+
+  <path class="link" d="M480,88 L514,88" marker-end="url(#bm)"/>
+  <rect class="box" x="520" y="44" width="220" height="86" rx="8"/>
+  <text class="bt" x="630" y="72" text-anchor="middle">Audio file (.m4a)</text>
+  <text class="s" x="630" y="92" text-anchor="middle">the same AAC bytes,</text>
+  <text class="s" x="630" y="108" text-anchor="middle">bit-identical</text>
+
+  <text class="bt" x="20" y="176" fill="#0d6efd">Re-encode — lossy</text>
+  <rect class="box" x="20" y="186" width="190" height="86" rx="8"/>
+  <text class="bt" x="115" y="205" text-anchor="middle">Video file</text>
+  <rect class="track-v" x="34" y="212" width="162" height="22" rx="4"/>
+  <text class="x" x="115" y="226" text-anchor="middle">video track</text>
+  <rect class="track-a" x="34" y="238" width="162" height="22" rx="4"/>
+  <text class="x" x="115" y="252" text-anchor="middle" style="fill:#0d6efd">audio track</text>
+
+  <path class="link" d="M215,230 L249,230" marker-end="url(#bm)"/>
+  <rect class="wire" x="255" y="204" width="220" height="52" rx="8"/>
+  <text class="bt" x="365" y="226" text-anchor="middle" fill="#0d6efd">convert / export</text>
+  <text class="s" x="365" y="244" text-anchor="middle">decodes, then re-encodes</text>
+
+  <path class="link" d="M480,230 L514,230" marker-end="url(#bm)"/>
+  <rect class="box" x="520" y="186" width="220" height="86" rx="8"/>
+  <text class="bt" x="630" y="214" text-anchor="middle">Audio file (.mp3)</text>
+  <text class="s" x="630" y="234" text-anchor="middle">new bytes — a little</text>
+  <text class="s" x="630" y="250" text-anchor="middle">quality traded for format</text>
+
+  <text class="s" x="380" y="312" text-anchor="middle">A video file is a container — extracting copies the audio track out; only re-encoding changes the sound.</text>
+</svg>
